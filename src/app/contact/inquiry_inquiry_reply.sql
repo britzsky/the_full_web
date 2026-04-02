@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS `tb_inquiry` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `business_name` VARCHAR(150) NOT NULL,
+  `manager_name` VARCHAR(120) NOT NULL,
+  `phone_number` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `current_meal_price` VARCHAR(100) NOT NULL,
+  `desired_meal_price` VARCHAR(100) NOT NULL,
+  `daily_meal_count` VARCHAR(100) NOT NULL,
+  `meal_type` VARCHAR(80) NOT NULL,
+  `business_type` VARCHAR(80) NOT NULL,
+  `switching_reason` TEXT NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `inquiry_content` MEDIUMTEXT NOT NULL,
+  `answer_yn` VARCHAR(1) NOT NULL DEFAULT 'N',
+  `submitted_at` VARCHAR(40) NOT NULL,
+  `source` VARCHAR(80) NOT NULL,
+  `erp_sync_target` VARCHAR(120) NOT NULL,
+  `user_id` VARCHAR(40) NULL,
+  `mod_id` VARCHAR(40) NULL,
+  `created_at` VARCHAR(40) NOT NULL,
+  `updated_at` VARCHAR(40) NOT NULL,
+  `del_yn` VARCHAR(1) NOT NULL DEFAULT 'N',
+  `del_dt` VARCHAR(40) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `tb_inquiry_reply` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `inquiry_id` BIGINT UNSIGNED NOT NULL,
+  `content` MEDIUMTEXT NOT NULL,
+  `user_id` VARCHAR(40) NOT NULL,
+  `reg_dt` VARCHAR(40) NOT NULL,
+  `mod_id` VARCHAR(40) NULL,
+  `mod_dt` VARCHAR(40) NULL,
+  `del_yn` VARCHAR(1) NOT NULL DEFAULT 'N',
+  `del_dt` VARCHAR(40) NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_inquiry_reply_inquiry_id` (`inquiry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

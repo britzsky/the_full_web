@@ -1,0 +1,295 @@
+﻿/* ---------------- 채용 ---------------- */
+
+/* 채용 페이지 배경/스크롤 공통 설정 */
+.recruit-page {
+  background-color: #ffffff;
+  scrollbar-gutter: stable;
+}
+
+/* 채용 페이지 헤더 톤(밝은 배경 대응) */
+.recruit-page .site-header-light {
+  border-bottom: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+}
+
+/* 채용 페이지 각 화면 공통 프레임(한 화면 한 섹션) */
+.recruit-screen {
+  height: 100svh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 채용 페이지 첫 화면 헤더 높이 확보 */
+.recruit-screen-with-header {
+  padding-top: calc(156px + 0.1rem);
+}
+
+/* 채용 페이지 섹션 본문 수직 중앙 정렬 */
+.recruit-screen-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
+/* 채용 페이지 본문 공통 최대 너비 */
+.recruit-screen-inner {
+  width: min(100%, 1320px);
+  margin: 0 auto;
+}
+
+/* 1번 화면: 인재상 본문 상단 여백 */
+#recruit-talent .recruit-screen-body {
+  padding-top: clamp(1rem, 2.3vh, 1.8rem);
+}
+
+/* 1번 화면: 인재상 3열 레이아웃 */
+.recruit-talent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(2rem, 4vw, 4.2rem);
+}
+
+/* 1번 화면: 인재상 카드 */
+.recruit-talent-card {
+  display: grid;
+  justify-items: center;
+  gap: clamp(2rem, 3.8vh, 3rem);
+  text-align: center;
+}
+
+/* 1번 화면: 인재상 컬러 블랍 공통 */
+.recruit-talent-badge {
+  --recruit-badge-size: clamp(124px, 10.2vw, 190px);
+  width: var(--recruit-badge-size);
+  height: var(--recruit-badge-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--recruit-badge-color);
+  color: #ffffff;
+  font-size: clamp(24px, 1.45vw, 34px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* 1번 화면: 블랍 모양(가치창출) */
+.recruit-talent-badge-value {
+  border-radius: 52% 48% 52% 48% / 44% 58% 42% 56%;
+}
+
+/* 1번 화면: 블랍 모양(자기계발) */
+.recruit-talent-badge-growth {
+  border-radius: 56% 44% 58% 42% / 54% 50% 50% 46%;
+}
+
+/* 1번 화면: 블랍 모양(상호존중) */
+.recruit-talent-badge-respect {
+  border-radius: 48% 52% 50% 50% / 42% 56% 44% 58%;
+}
+
+/* 1번 화면: 인재상 설명문 */
+.recruit-talent-copy {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(14px, 0.98vw, 18px);
+  line-height: 1.68;
+  letter-spacing: -0.01em;
+  white-space: pre-line;
+}
+
+/* 2번 화면: 채용절차 본문 폭 */
+.recruit-process-inner {
+  width: min(100%, 1280px);
+}
+
+/* 2번 화면: 채용절차 4열 레이아웃 */
+.recruit-process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 2.8vw, 2.8rem);
+}
+
+/* 2번 화면: 채용절차 카드 */
+.recruit-process-card {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1rem, 2.1vh, 1.4rem);
+  text-align: center;
+}
+
+/* 2번 화면: 채용절차 아이콘 블랍 공통 */
+.recruit-process-badge {
+  width: clamp(150px, 12.2vw, 220px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  background-color: #45b3c7;
+  color: #ffffff;
+}
+
+/* 2번 화면: 블랍 모양(지원서 접수) */
+.recruit-process-badge-1 {
+  border-radius: 53% 47% 49% 51% / 44% 58% 42% 56%;
+}
+
+/* 2번 화면: 블랍 모양(서류전형) */
+.recruit-process-badge-2 {
+  border-radius: 58% 42% 57% 43% / 51% 56% 44% 49%;
+}
+
+/* 2번 화면: 블랍 모양(면접) */
+.recruit-process-badge-3 {
+  border-radius: 51% 49% 55% 45% / 47% 53% 47% 53%;
+}
+
+/* 2번 화면: 블랍 모양(최종합격) */
+.recruit-process-badge-4 {
+  border-radius: 50% 50% 46% 54% / 44% 57% 43% 56%;
+}
+
+/* 2번 화면: 아이콘 크기 */
+.recruit-process-icon {
+  width: clamp(58px, 4.8vw, 82px);
+  height: clamp(58px, 4.8vw, 82px);
+  object-fit: contain;
+  /* 원본이 검정 계열이어도 채용절차 섹션에서는 흰색 라인으로 통일 */
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+/* 2번 화면: 단계 제목 */
+.recruit-process-title {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(18px, 1.22vw, 24px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* 3번 화면: 전형안내 본문 폭 */
+.recruit-detail-inner {
+  width: min(100%, 1220px);
+}
+
+/* 3번 화면: 전형안내 목록 래퍼 */
+.recruit-detail-list {
+  border-top: 1px solid #d4d4d4;
+}
+
+/* 3번 화면: 전형안내 각 행 */
+.recruit-detail-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 270px) minmax(0, 1fr);
+  /* 각 행 텍스트가 상/하 구분선 사이 중앙에 오도록 세로 정렬 */
+  align-items: center;
+  gap: clamp(1.2rem, 2.3vw, 2.7rem);
+  /* 기존보다 상하 간격을 줄이되 행 간 시각 간격은 동일하게 유지 */
+  min-height: clamp(168px, 22vh, 220px);
+  padding: clamp(1.5rem, 3vh, 2.25rem) clamp(0.8rem, 1.2vw, 1.2rem);
+  border-bottom: 1px solid #d4d4d4;
+}
+
+/* 3번 화면: 전형명 */
+.recruit-detail-label {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(22px, 1.5vw, 30px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* 3번 화면: 전형 설명 그룹 */
+.recruit-detail-content {
+  display: grid;
+  gap: clamp(0.5rem, 1vh, 0.8rem);
+  padding-top: 0;
+}
+
+/* 3번 화면: 전형 설명 문장 */
+.recruit-detail-line {
+  margin: 0;
+  color: #1e1e1e;
+  font-size: clamp(14px, 0.98vw, 18px);
+  line-height: 1.64;
+  letter-spacing: -0.01em;
+}
+
+/* 3번 화면: 강조 문구 */
+.recruit-detail-line strong {
+  color: #111111;
+  font-weight: 700;
+}
+
+/* 태블릿/작은 데스크톱: 본문 스케일 보정 */
+@media (max-width: 1200px) {
+  .recruit-talent-copy {
+    font-size: clamp(14px, 1.1vw, 17px);
+  }
+
+  .recruit-process-title {
+    font-size: clamp(17px, 1.5vw, 22px);
+  }
+
+  .recruit-detail-label {
+    font-size: clamp(20px, 1.8vw, 28px);
+  }
+
+  .recruit-detail-line {
+    font-size: clamp(14px, 1.1vw, 17px);
+  }
+}
+
+/* 태블릿 구간: 2열/단일열 전환 */
+@media (max-width: 1024px) {
+  .recruit-talent-grid {
+    grid-template-columns: 1fr;
+    width: min(100%, 640px);
+    margin: 0 auto;
+  }
+
+  .recruit-process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: clamp(1.8rem, 3vh, 2.2rem);
+  }
+
+  .recruit-detail-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: clamp(0.95rem, 1.8vh, 1.2rem);
+    min-height: 0;
+  }
+}
+
+/* 모바일 구간: 헤더 높이/타이포 보정 */
+@media (max-width: 768px) {
+  .recruit-screen-with-header {
+    padding-top: calc(126px + 0.1rem);
+  }
+
+  .recruit-process-grid {
+    grid-template-columns: 1fr;
+    width: min(100%, 380px);
+    margin: 0 auto;
+  }
+
+  .recruit-talent-copy {
+    font-size: clamp(13px, 3.7vw, 16px);
+  }
+
+  .recruit-process-title {
+    font-size: clamp(16px, 4.8vw, 20px);
+  }
+
+  .recruit-detail-label {
+    font-size: clamp(18px, 5.2vw, 24px);
+  }
+
+  .recruit-detail-line {
+    font-size: clamp(13px, 3.7vw, 16px);
+  }
+}

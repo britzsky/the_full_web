@@ -1,0 +1,1049 @@
+/* ---------------- 홍보 ---------------- */
+
+/* 홍보 화면: 페이지 전체 스크롤 컨테이너 영역 */
+.promotion-page {
+  scrollbar-gutter: stable;
+  background-color: #ffffff;
+}
+
+/* 홍보 화면: 상단 헤더 고정 높이 영역 */
+.promotion-header-shell {
+  min-height: 156px;
+  background-color: #ffffff;
+}
+
+/* 홍보 화면: 스크린리더 전용 접근성 텍스트 영역 */
+.promotion-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 홍보 화면: 상단 히어로 비주얼 영역 */
+.promotion-hero {
+  position: relative;
+  min-height: clamp(320px, 44svh, 470px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* 홍보 화면: 상세 페이지 히어로 높이 조정 영역 */
+.promotion-hero-detail {
+  min-height: clamp(260px, 34svh, 360px);
+}
+
+/* 홍보 화면: 작성 페이지 히어로 높이 조정 영역 */
+.promotion-hero-form {
+  min-height: clamp(250px, 32svh, 340px);
+}
+
+/* 홍보 화면: 히어로 배경 이미지 표시 영역 */
+.promotion-hero-image {
+  object-fit: cover;
+  object-position: center 46%;
+}
+
+/* 홍보 화면: 히어로 배경 오버레이 영역 */
+.promotion-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.57), rgba(0, 0, 0, 0.52)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  z-index: 1;
+}
+
+/* 홍보 화면: 히어로 카피 텍스트 정렬 영역 */
+.promotion-hero-copy {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(70px, 8.8svh, 106px);
+  text-align: center;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* 홍보 화면: 히어로 메인 제목 영역 */
+.promotion-hero-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(28px, 3.3vw, 48px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+/* 홍보 화면: 히어로 부제목 영역 */
+.promotion-hero-subtitle {
+  margin: clamp(0.55rem, 1.6vh, 0.92rem) 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(14px, 1.1vw, 17px);
+  font-weight: 500;
+  line-height: 1.32;
+}
+
+/* 홍보 화면: 목록/상세/작성 섹션 공통 배경 영역 */
+.promotion-list-section, .promotion-detail-section, .promotion-form-section {
+  background-color: #ffffff;
+}
+
+/* 홍보 화면: 게시글 목록 섹션 여백 영역 */
+.promotion-list-section {
+  padding: clamp(2.1rem, 4.6vh, 3rem) 0 clamp(3.5rem, 7vh, 5rem);
+}
+
+/* 홍보 화면: 상세/작성 섹션 여백 영역 */
+.promotion-detail-section, .promotion-form-section {
+  padding: clamp(2.1rem, 4.8vh, 3.2rem) 0 clamp(3.5rem, 7.2vh, 5.2rem);
+}
+
+/* 홍보 화면: 본문 최대 너비 컨테이너 영역 */
+.promotion-content-wrap {
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* 홍보 화면: 섹션 제목 텍스트 영역 */
+.promotion-section-title {
+  margin: 0;
+  color: #111111;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* 홍보 화면: 목록 헤더 정렬 영역 */
+.promotion-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+/* 홍보 화면: 게시글 검색 폼 정렬 영역 */
+.promotion-search-form {
+  margin-top: clamp(0.95rem, 2.2vh, 1.45rem);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+/* 홍보 화면: 검색 입력/버튼 공통 기본 스타일 영역 */
+.promotion-search-select, .promotion-search-input, .promotion-search-button {
+  min-height: 46px;
+  border: 1px solid rgba(39, 29, 19, 0.25);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1;
+}
+
+/* 홍보 화면: 검색 구분 선택 박스 영역 */
+.promotion-search-select {
+  width: 164px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+  text-align-last: center;
+  padding-inline: 1rem 2.5rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #111111 50%),
+    linear-gradient(135deg, #111111 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.34rem) 50%,
+    calc(100% - 1rem) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* 홍보 화면: 검색어 입력 박스 영역 */
+.promotion-search-input {
+  width: min(100%, 380px);
+  border-radius: 9999px;
+  padding-inline: 1rem;
+  background-color: #ffffff;
+}
+
+/* 홍보 화면: 검색어 입력 플레이스홀더 영역 */
+.promotion-search-input::placeholder {
+  color: #7b7b7b;
+}
+
+/* 홍보 화면: 검색 실행 버튼 영역 */
+.promotion-search-button {
+  min-width: 88px;
+  border: none;
+  background-color: var(--promotion-search-button-bg-color);
+  color: #ffffff;
+  padding-inline: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 홍보 화면: 공통 버튼 기본 스타일 영역 */
+.promotion-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.58rem 1.1rem;
+  border-radius: 0;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1;
+  font-weight: 700;
+  transition: opacity 0.2s ease;
+}
+
+/* 홍보 화면: 공통 버튼 hover 상태 영역 */
+.promotion-button:hover {
+  opacity: 0.88;
+}
+
+/* 홍보 화면: 강조형 버튼 스타일 영역 */
+.promotion-button-dark {
+  border: 1px solid transparent;
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+}
+
+/* 홍보 화면: 목록 글작성 버튼 영역(검색 버튼과 별도 토큰으로 분리) */
+.promotion-search-write {
+  min-height: 46px;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background-color: var(--promotion-write-button-bg-color);
+  color: #ffffff;
+  padding-inline: 1.05rem;
+  white-space: nowrap;
+}
+
+/* 홍보 화면: 아웃라인 버튼 스타일 영역 */
+.promotion-button-outline {
+  border: 1px solid rgba(39, 29, 19, 0.28);
+  background-color: #ffffff;
+  color: #111111;
+}
+
+/* 홍보 화면: 목록 테이블 스크롤 래퍼 영역 */
+.promotion-table-wrap {
+  margin-top: clamp(0.95rem, 2.2vh, 1.45rem);
+  overflow-x: auto;
+}
+
+/* 홍보 화면: 게시글 목록 테이블 영역 */
+.promotion-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  border-top: 1px solid rgba(39, 29, 19, 0.35);
+}
+
+/* 홍보 화면: 목록 테이블 헤더 셀 영역 */
+.promotion-table thead th {
+  height: 56px;
+  border-bottom: 1px solid rgba(39, 29, 19, 0.14);
+  color: #111111;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: clamp(14px, 0.95vw, 16px);
+  font-weight: 700;
+}
+
+/* 홍보 화면: 목록 테이블 본문 셀 영역 */
+.promotion-table tbody td {
+  height: 68px;
+  border-bottom: 1px solid rgba(39, 29, 19, 0.12);
+  color: #111111;
+  text-align: center;
+  font-size: clamp(14px, 0.95vw, 16px);
+  font-weight: 500;
+  padding-inline: 0.7rem;
+}
+
+/* 홍보 화면: 목록 테이블 번호 열 너비 영역 */
+.promotion-table th:nth-child(1), .promotion-table td:nth-child(1) {
+  width: 9%;
+}
+
+/* 홍보 화면: 목록 테이블 제목 열 너비 영역 */
+.promotion-table th:nth-child(2), .promotion-table td:nth-child(2) {
+  width: 50%;
+}
+
+/* 홍보 화면: 목록 테이블 작성자 열 너비 영역 */
+.promotion-table th:nth-child(3), .promotion-table td:nth-child(3) {
+  width: 14%;
+}
+
+/* 홍보 화면: 목록 테이블 작성일 열 너비 영역 */
+.promotion-table th:nth-child(4), .promotion-table td:nth-child(4) {
+  width: 14%;
+}
+
+/* 홍보 화면: 목록 테이블 관리 열 너비 영역 */
+.promotion-table th:nth-child(5), .promotion-table td:nth-child(5) {
+  width: 12%;
+}
+
+/* 홍보 화면: 목록 제목 셀 정렬 영역 */
+.promotion-title-cell {
+  text-align: left !important;
+  padding-left: clamp(0.95rem, 1.8vw, 1.4rem) !important;
+}
+
+/* 홍보 화면: 목록 제목 링크 영역 */
+.promotion-title-link {
+  color: #111111;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 홍보 화면: 목록 행 액션 버튼 묶음 영역 */
+.promotion-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* 홍보 화면: 목록 행 액션 버튼 공통 스타일 영역 */
+.promotion-row-action-link, .promotion-row-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  min-height: 30px;
+  border: 1px solid rgba(39, 29, 19, 0.24);
+  background-color: #ffffff;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.25rem 0.4rem;
+}
+
+/* 홍보 화면: 목록 행 액션 버튼 클릭 영역 */
+.promotion-row-action-button {
+  cursor: pointer;
+}
+
+/* 홍보 화면: 목록 행 액션 버튼 비활성 영역 */
+.promotion-row-action-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* 홍보 화면: 목록 빈 데이터 안내 행 영역 */
+.promotion-empty-row {
+  text-align: center !important;
+  color: #7a7a7a !important;
+}
+
+/* 홍보 화면: 상세 본문 카드 외곽 영역 */
+.promotion-detail-card {
+  border-top: 1px solid rgba(39, 29, 19, 0.35);
+  border-bottom: 1px solid rgba(39, 29, 19, 0.16);
+}
+
+/* 홍보 화면: 상세 제목/메타 헤더 영역 */
+.promotion-detail-header {
+  padding: clamp(1.1rem, 2.6vh, 1.7rem) 0 clamp(0.95rem, 2.2vh, 1.3rem);
+  border-bottom: 1px solid rgba(39, 29, 19, 0.13);
+}
+
+/* 홍보 화면: 상세 제목 텍스트 영역 */
+.promotion-detail-title {
+  margin: 0;
+  color: #111111;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* 홍보 화면: 상세 작성자/작성일 메타 영역 */
+.promotion-detail-meta {
+  margin-top: clamp(0.8rem, 1.9vh, 1.1rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #6f6f6f;
+  font-size: clamp(16px, 1.1vw, 17px);
+  font-weight: 500;
+}
+
+/* 홍보 화면: 상세 작성자/작성일 라벨(검정색 고정) */
+.promotion-detail-meta-label {
+  color: #111111;
+  font-weight: 700;
+}
+
+/* 홍보 화면: 상세 작성자명/작성일 값(메타 기본색 유지) */
+.promotion-detail-meta-value {
+  color: inherit;
+  font-weight: 500;
+}
+
+/* 홍보 화면: 상세 메타 구분선 영역 */
+.promotion-detail-meta-divider {
+  width: 1px;
+  height: 18px;
+  background-color: rgba(39, 29, 19, 0.18);
+}
+
+/* 홍보 화면: 상세 본문 텍스트 영역 */
+.promotion-detail-content {
+  margin-top: clamp(1.6rem, 3.4vh, 2.4rem);
+  min-height: clamp(210px, 28vh, 320px);
+  color: rgba(17, 17, 17, 0.78);
+  font-size: clamp(16px, 1.05vw, 18px);
+  line-height: 1.95;
+}
+
+/* 홍보 화면: 상세 본문 문단 영역 */
+.promotion-detail-paragraph {
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* 홍보 화면: 상세 본문 문단 간격 영역 */
+.promotion-detail-paragraph + .promotion-detail-paragraph {
+  margin-top: 0.7rem;
+}
+
+/* 홍보 화면: 상세 본문 이미지 래퍼 영역 */
+.promotion-detail-image-wrap {
+  margin: clamp(1.25rem, 2.7vh, 1.8rem) 0;
+}
+
+/* 홍보 화면: 상세 본문 이미지 표시 영역 */
+.promotion-detail-image {
+  display: block;
+  width: auto;
+  max-width: min(100%, 860px);
+  height: auto;
+  margin: clamp(1.25rem, 2.7vh, 1.8rem) 0;
+  border: 1px solid rgba(39, 29, 19, 0.18);
+}
+
+/* 홍보 화면: 상세 HTML 본문 래퍼 영역 */
+.promotion-detail-html {
+  color: inherit;
+  font: inherit;
+  font-family: "NanumSquare", sans-serif;
+  line-height: inherit;
+}
+
+/* 홍보 화면: 상세 HTML 첫 요소 여백 보정 영역 */
+.promotion-detail-html > *:first-child {
+  margin-top: 0;
+}
+
+/* 홍보 화면: 상세 HTML 마지막 요소 여백 보정 영역 */
+.promotion-detail-html > *:last-child {
+  margin-bottom: 0;
+}
+
+/* 홍보 화면: 상세 HTML 문단 텍스트 영역 */
+.promotion-detail-html p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* 홍보 화면: 상세 HTML 문단 간격 영역 */
+.promotion-detail-html p + p {
+  margin-top: 0.7rem;
+}
+
+/* 홍보 화면: 상세 HTML 목록 영역 */
+.promotion-detail-html ul, .promotion-detail-html ol {
+  margin: 0.7rem 0 0.7rem 1.25rem;
+}
+
+/* 홍보 화면: 상세 HTML 목록 항목 간격 영역 */
+.promotion-detail-html li + li {
+  margin-top: 0.24rem;
+}
+
+/* 홍보 화면: 상세 HTML 링크 영역 */
+.promotion-detail-html a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 홍보 화면: 상세 HTML 이미지 영역 */
+.promotion-detail-html img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 860px);
+  height: auto;
+  margin: clamp(1.25rem, 2.7vh, 1.8rem) 0;
+  border: 1px solid rgba(39, 29, 19, 0.18);
+}
+
+/* 홍보 화면: 상세 HTML figure 이미지 래퍼 영역(CKEditor 리사이즈 반영) */
+.promotion-detail-html figure.image {
+  margin: clamp(1.25rem, 2.7vh, 1.8rem) 0;
+  max-width: min(100%, 860px);
+}
+
+/* 홍보 화면: 상세 HTML figure 이미지 표시 영역(CKEditor 리사이즈 반영) */
+.promotion-detail-html figure.image img {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 홍보 화면: 상세 HTML 이미지 좌측 정렬 영역(CKEditor 정렬 반영) */
+.promotion-detail-html.ck-content .image.image-style-align-left {
+  float: left;
+  margin-right: clamp(0.75rem, 1.7vw, 1.25rem);
+  margin-left: 0;
+}
+
+/* 홍보 화면: 상세 HTML 이미지 우측 정렬 영역(CKEditor 정렬 반영) */
+.promotion-detail-html.ck-content .image.image-style-align-right {
+  float: right;
+  margin-left: clamp(0.75rem, 1.7vw, 1.25rem);
+  margin-right: 0;
+}
+
+/* 홍보 화면: 상세 HTML 이미지 가운데 정렬 영역(CKEditor 정렬 반영) */
+.promotion-detail-html.ck-content .image.image-style-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 홍보 화면: 작성/수정 폼 헤더 영역 */
+.promotion-form-header {
+  margin-bottom: clamp(1.15rem, 2.4vh, 1.6rem);
+}
+
+/* 홍보 화면: 상세 하단 액션 버튼 영역 */
+.promotion-detail-actions {
+  margin-top: clamp(1.7rem, 3.8vh, 2.7rem);
+  padding-bottom: clamp(1.2rem, 2.6vh, 1.8rem);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.52rem;
+}
+
+/* 홍보 화면: 상세 이전글/다음글 네비게이션 영역 */
+.promotion-detail-nav {
+  margin-top: clamp(1.3rem, 3vh, 2rem);
+  border-top: 1px solid rgba(39, 29, 19, 0.12);
+}
+
+/* 홍보 화면: 상세 이전글/다음글 행 영역 */
+.promotion-detail-nav-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 120px;
+  align-items: center;
+  min-height: 68px;
+  border-bottom: 1px solid rgba(39, 29, 19, 0.1);
+}
+
+/* 홍보 화면: 상세 이전글/다음글 라벨 셀 영역 */
+.promotion-detail-nav-label {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background-color: #ffffff;
+  font-size: clamp(15px, 0.95vw, 16px);
+  font-weight: 700;
+}
+
+/* 홍보 화면: 상세 이전글/다음글 제목 셀 공통 영역 */
+.promotion-detail-nav-link, .promotion-detail-nav-empty {
+  padding-inline: 1.25rem;
+  font-size: clamp(15px, 0.95vw, 16px);
+}
+
+/* 홍보 화면: 상세 이전글/다음글 링크 영역 */
+.promotion-detail-nav-link {
+  color: #111111;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 홍보 화면: 상세 이전글/다음글 빈값 안내 영역 */
+.promotion-detail-nav-empty {
+  color: #888888;
+}
+
+/* 홍보 화면: 상세 이전글/다음글 날짜 셀 영역 */
+.promotion-detail-nav-date {
+  justify-self: end;
+  padding-right: 0.9rem;
+  color: #8b97a2;
+  font-size: clamp(15px, 0.95vw, 16px);
+}
+
+/* 홍보 화면: 글작성/수정 폼 전체 영역 */
+.promotion-editor-form {
+  width: min(100%, 1060px);
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.35rem, 2.8vh, 2rem);
+}
+
+/* 홍보 화면: 제목/작성자 입력 그리드 영역 */
+.promotion-form-grid {
+  display: grid;
+  grid-template-columns: clamp(120px, 13vw, 170px) minmax(0, 1fr);
+  column-gap: clamp(1rem, 2vw, 1.5rem);
+  row-gap: clamp(0.95rem, 2vh, 1.2rem);
+  align-items: center;
+}
+
+/* 홍보 화면: 작성 폼 섹션 블록 영역 */
+.promotion-form-block {
+  display: grid;
+  gap: 0.7rem;
+}
+
+/* 홍보 화면: 폼 항목 라벨 텍스트 영역 */
+.promotion-form-label {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(15px, 1vw, 17px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* 홍보 화면: 텍스트 입력 필드 공통 영역 */
+.promotion-form-field, .promotion-form-textarea {
+  width: 100%;
+  border: 1px solid rgba(39, 29, 19, 0.33);
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.35;
+  padding: 0.55rem 0.72rem;
+}
+
+/* 홍보 화면: 단일 입력 필드 높이 영역 */
+.promotion-form-field {
+  min-height: 44px;
+}
+
+/* 홍보 화면: CKEditor 래퍼 영역 */
+.promotion-form-ckeditor-shell {
+  width: 100%;
+}
+
+/* 홍보 화면: CKEditor 로딩 표시 영역 */
+.promotion-ckeditor-loading {
+  min-height: clamp(260px, 38vh, 430px);
+  border: 1px solid rgba(39, 29, 19, 0.33);
+  background-color: #ffffff;
+  color: #7b7b7b;
+  font-family: "NanumSquare", sans-serif;
+  font-size: clamp(14px, 0.95vw, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 홍보 화면: CKEditor 툴바 영역 */
+.promotion-form-ckeditor-shell .ck.ck-toolbar {
+  border-color: rgba(39, 29, 19, 0.28);
+  background-color: #ffffff;
+  font-family: "NanumSquare", sans-serif;
+}
+
+/* 홍보 화면: CKEditor 편집 본문 영역 */
+.promotion-form-ckeditor-shell .ck-editor__editable_inline {
+  min-height: clamp(220px, 34vh, 330px);
+  background-color: #ffffff;
+  color: #111111;
+  font-family: "NanumSquare", sans-serif;
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.6;
+  border-color: rgba(39, 29, 19, 0.33);
+}
+
+/* 홍보 화면: CKEditor 편집 본문 포커스 테두리 영역 */
+.promotion-form-ckeditor-shell .ck.ck-editor__main > .ck-editor__editable:focus {
+  border-color: rgba(39, 29, 19, 0.5);
+}
+
+/* 홍보 화면: CKEditor 본문 문단 간격 영역 */
+.promotion-form-ckeditor-shell .ck-content p {
+  margin: 0;
+}
+
+/* 홍보 화면: CKEditor 본문 문단 간격 보정 영역 */
+.promotion-form-ckeditor-shell .ck-content p + p {
+  margin-top: 0.7rem;
+}
+
+/* 홍보 화면: CKEditor 본문 목록 간격 영역 */
+.promotion-form-ckeditor-shell .ck-content ul,
+.promotion-form-ckeditor-shell .ck-content ol {
+  margin: 0.7rem 0 0.7rem 1.2rem;
+}
+
+/* 홍보 화면: CKEditor 본문 링크 스타일 영역 */
+.promotion-form-ckeditor-shell .ck-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 홍보 화면: CKEditor 본문 figure 이미지 래퍼 영역 */
+.promotion-form-ckeditor-shell .ck-content .image {
+  max-width: min(100%, 860px);
+}
+
+/* 홍보 화면: CKEditor 본문 figure 이미지 표시 영역 */
+.promotion-form-ckeditor-shell .ck-content .image img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 홍보 화면: CKEditor 본문 이미지 좌측 정렬 영역 */
+.promotion-form-ckeditor-shell .ck-content .image.image-style-align-left,
+.promotion-form-ckeditor-shell .ck-content .image.image-style-block-align-left {
+  float: left;
+  clear: none;
+  margin-left: 0;
+  margin-right: clamp(0.75rem, 1.7vw, 1.25rem);
+}
+
+/* 홍보 화면: CKEditor 본문 이미지 우측 정렬 영역 */
+.promotion-form-ckeditor-shell .ck-content .image.image-style-align-right,
+.promotion-form-ckeditor-shell .ck-content .image.image-style-block-align-right {
+  float: right;
+  clear: none;
+  margin-right: 0;
+  margin-left: clamp(0.75rem, 1.7vw, 1.25rem);
+}
+
+/* 홍보 화면: CKEditor 본문 이미지 가운데 정렬 영역 */
+.promotion-form-ckeditor-shell .ck-content .image.image-style-align-center,
+.promotion-form-ckeditor-shell .ck-content .image.image-style-block-align-center {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 홍보 화면: CKEditor 본문 원본 이미지 표시 영역 */
+.promotion-form-ckeditor-shell .ck-content img {
+  max-width: min(100%, 860px);
+  height: auto;
+}
+
+/* 홍보 화면: 이미지 파일 입력 숨김 영역 */
+.promotion-form-file-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 홍보 화면: 이미지 파일 선택 행 영역 */
+.promotion-form-file-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* 홍보 화면: 선택 파일 상태 표시 영역 */
+.promotion-form-file-display {
+  margin: 0;
+  min-height: 44px;
+  border: 1px solid rgba(39, 29, 19, 0.33);
+  background-color: #ffffff;
+  color: #111111;
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.35;
+  padding: 0.55rem 0.72rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 홍보 화면: 선택 파일 없음 표시 영역 */
+.promotion-form-file-display-empty {
+  color: #7b7b7b;
+}
+
+/* 홍보 화면: 파일 선택 트리거 버튼 영역 */
+.promotion-form-file-trigger {
+  min-height: 44px;
+  border: 1px solid transparent;
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+  font-size: clamp(14px, 0.95vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 홍보 화면: 파일 선택 트리거 버튼 hover 영역 */
+.promotion-form-file-trigger:hover {
+  opacity: 0.88;
+}
+
+/* 홍보 화면: 파일 선택 트리거 버튼 비활성 영역 */
+.promotion-form-file-trigger:disabled {
+  opacity: 0.68;
+  cursor: not-allowed;
+}
+
+/* 홍보 화면: 이미지 첨부 안내 문구 영역 */
+.promotion-form-file-help {
+  margin: 0.35rem 0 0;
+  color: #6f6f6f;
+  font-size: clamp(13px, 0.9vw, 14px);
+  line-height: 1.4;
+}
+
+/* 홍보 화면: 첨부 이미지 미리보기 목록 영역 */
+.promotion-form-image-list {
+  margin-top: 0.65rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 124px));
+  align-items: start;
+  justify-content: start;
+  gap: 0.75rem;
+}
+
+/* 홍보 화면: 첨부 이미지 카드 영역 */
+.promotion-form-image-item {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 124px;
+  border: 1px solid rgba(39, 29, 19, 0.2);
+  background-color: #ffffff;
+  padding: 0.42rem;
+  display: grid;
+  gap: 0.4rem;
+  overflow: hidden;
+}
+
+/* 홍보 화면: 첨부 이미지 썸네일 프레임 영역 */
+.promotion-form-image-thumb-wrap {
+  aspect-ratio: 3 / 4;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 홍보 화면: 첨부 이미지 썸네일 표시 영역 */
+.promotion-form-image-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* 홍보 화면: 첨부 이미지 메타 정보 영역 */
+.promotion-form-image-meta {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* 홍보 화면: 첨부 이미지 파일 정보 묶음 영역 */
+.promotion-form-image-info {
+  min-width: 0;
+  display: grid;
+  gap: 0.14rem;
+}
+
+/* 홍보 화면: 첨부 이미지 로컬 경로 표시 영역 */
+.promotion-form-image-path {
+  min-width: 0;
+  color: #6a6a6a;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 홍보 화면: 첨부 이미지 파일명 표시 영역 */
+.promotion-form-image-name {
+  min-width: 0;
+  color: #111111;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 홍보 화면: 첨부 이미지 삭제 버튼 영역 */
+.promotion-form-image-remove {
+  border: 1px solid rgba(39, 29, 19, 0.28);
+  background-color: #ffffff;
+  color: #111111;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  min-height: 34px;
+  padding: 0 0.42rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 홍보 화면: 첨부 이미지 삭제 버튼 비활성 영역 */
+.promotion-form-image-remove:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* 홍보 화면: 레거시 텍스트영역 높이/리사이즈 영역 */
+.promotion-form-textarea {
+  min-height: clamp(220px, 34vh, 330px);
+  resize: vertical;
+}
+
+/* 홍보 화면: 입력 필드 플레이스홀더 영역 */
+.promotion-form-field::placeholder, .promotion-form-textarea::placeholder {
+  color: #7b7b7b;
+  font-size: clamp(15px, 1vw, 17px);
+}
+
+/* 홍보 화면: 폼 하단 액션 정렬 영역 */
+.promotion-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* 홍보 화면: 폼 하단 우측 버튼 묶음 영역 */
+.promotion-form-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 홍보 화면: 태블릿 이하 반응형 조정 영역 */
+@media (max-width: 1024px) {
+  /* 홍보 화면: 상단 히어로 비주얼 영역 */
+  .promotion-hero {
+    min-height: clamp(330px, 49svh, 520px);
+  }
+
+  /* 홍보 화면: 상세 페이지 히어로 높이 조정 영역 */
+  .promotion-hero-detail {
+    min-height: clamp(250px, 33svh, 360px);
+  }
+
+  /* 홍보 화면: 작성 페이지 히어로 높이 조정 영역 */
+  .promotion-hero-form {
+    min-height: clamp(230px, 30svh, 320px);
+  }
+
+  /* 홍보 화면: 히어로 메인 제목 영역 */
+  .promotion-hero-title {
+    font-size: clamp(24px, 7.8vw, 38px);
+  }
+
+  /* 홍보 화면: 목록 헤더 정렬 영역 */
+  .promotion-list-header {
+    align-items: flex-start;
+  }
+
+  /* 홍보 화면: 게시글 검색 폼 정렬 영역 */
+  .promotion-search-form {
+    justify-content: stretch;
+    flex-wrap: wrap;
+  }
+
+  /* 홍보 화면: 검색 구분 선택 박스 영역 */
+  .promotion-search-select {
+    width: 154px;
+  }
+
+  /* 홍보 화면: 검색어 입력 박스 영역 */
+  .promotion-search-input {
+    width: min(100%, 460px);
+    flex: 1;
+  }
+
+  /* 홍보 화면: 게시글 목록 테이블 영역 */
+  .promotion-table {
+    min-width: 860px;
+  }
+
+  /* 홍보 화면: 상세 제목 텍스트 영역 */
+  .promotion-detail-title {
+    font-size: var(--section-title-font-size);
+  }
+
+  /* 홍보 화면: 상세 본문 텍스트 영역 */
+  .promotion-detail-content {
+    font-size: clamp(15px, 3.8vw, 17px);
+    line-height: 1.8;
+  }
+
+  /* 홍보 화면: 상세 이전글/다음글 행 영역 */
+  .promotion-detail-nav-row {
+    grid-template-columns: 95px minmax(0, 1fr) 92px;
+  }
+
+  /* 홍보 화면: 제목/작성자 입력 그리드 영역 */
+  .promotion-form-grid {
+    grid-template-columns: 1fr;
+    row-gap: 0.7rem;
+  }
+
+  /* 홍보 화면: 폼 하단 액션 정렬 영역 */
+  .promotion-form-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  /* 홍보 화면: 폼 하단 우측 버튼 묶음 영역 */
+  .promotion-form-actions-right {
+    margin-left: 0;
+  }
+
+}
+
+/* 홍보 화면: 모바일 반응형 조정 영역 */
+@media (max-width: 768px) {
+  /* 홍보 화면: 상단 헤더 고정 높이 영역 */
+  .promotion-header-shell {
+    min-height: 126px;
+  }
+}

@@ -1,0 +1,475 @@
+/* ---------------- 고객문의 ---------------- */
+
+.contact-page {
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+  background-color: #ffffff;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero */
+.contact-hero {
+  position: relative;
+  min-height: clamp(390px, 52svh, 540px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-image */
+.contact-hero-image {
+  object-fit: cover;
+  object-position: center 44%;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-overlay */
+.contact-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.54)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.22));
+  z-index: 1;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-copy */
+.contact-hero-copy {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(76px, 9.6svh, 114px);
+  text-align: center;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-title */
+.contact-hero-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(20px, 2.5vw, 34px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-line */
+.contact-hero-line {
+  display: block;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-line-sub */
+.contact-hero-line-sub {
+  margin-top: clamp(0.78rem, 1.7vh, 1.15rem);
+  transform: translateY(6px);
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-content-wrap */
+.contact-content-wrap {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-section */
+.contact-quality-section {
+  background-color: #ffffff;
+  padding: clamp(3.2rem, 7.2vh, 5.2rem) 0 clamp(2.2rem, 4.4vh, 3rem);
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-section .contact-content-wrap */
+.contact-quality-section .contact-content-wrap {
+  width: min(100%, 1180px);
+  padding-inline: clamp(0.85rem, 2.8vw, 1.55rem);
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-section-title */
+.contact-section-title {
+  margin: 0;
+  color: #111111;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table-wrap */
+.contact-quality-table-wrap {
+  margin-top: clamp(1.2rem, 2.7vh, 1.85rem);
+  overflow-x: auto;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table */
+.contact-quality-table {
+  display: grid;
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  min-width: 720px;
+  grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
+  gap: 4px;
+  background-color: #ffffff;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-row-group */
+.contact-quality-row-group {
+  display: contents;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-cell */
+.contact-quality-cell {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.7rem;
+  background-color: #dbd8d3;
+  color: #111111;
+  text-align: center;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1.34;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table > .contact-quality-cell-head:nth-child(1) */
+.contact-quality-table > .contact-quality-cell-head:nth-child(1) {
+  border-top-left-radius: 0.9rem;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table > .contact-quality-cell-head:nth-child(2) */
+.contact-quality-table > .contact-quality-cell-head:nth-child(2) {
+  border-top-right-radius: 0.9rem;
+}
+
+.contact-quality-cell-head,
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-cell-side */
+.contact-quality-cell-side {
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-cell-head */
+.contact-quality-cell-head {
+  font-weight: 700;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-cell-side */
+.contact-quality-cell-side {
+  font-weight: 700;
+}
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-cell:not(.contact-quality-cell-head):not(.contact-quality-cell-side) */
+.contact-quality-cell:not(.contact-quality-cell-head):not(.contact-quality-cell-side) {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-section */
+.contact-form-section {
+  background-color: #ffffff;
+  padding: clamp(2.8rem, 6vh, 4rem) 0 clamp(3.6rem, 8vh, 5.6rem);
+}
+
+.contact-form-section .contact-content-wrap {
+  width: min(100%, 1180px);
+  padding-inline: clamp(0.85rem, 2.8vw, 1.55rem);
+}
+
+.contact-form-title {
+  margin: 0;
+}
+
+.contact-form-notice {
+  width: min(100%, 900px);
+  margin: clamp(1rem, 2.2vh, 1.4rem) auto 0;
+  color: #111111;
+  font-size: clamp(16px, 1.08vw, 18px);
+  font-weight: 600;
+  line-height: 1.42;
+}
+
+.contact-form-divider {
+  width: min(100%, 900px);
+  height: 4px;
+  margin: clamp(0.6rem, 1.4vh, 0.95rem) auto clamp(2rem, 4vh, 2.8rem);
+  border: 0;
+  background-color: #111111;
+}
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-inquiry-form */
+.contact-inquiry-form {
+  /* 고객문의 라벨/입력 줄 사이의 공통 세로 간격 */
+  --contact-row-gap: 1.2rem;
+  --contact-label-col: clamp(140px, 15vw, 190px);
+  --contact-col-gap: clamp(1rem, 2vw, 1.5rem);
+  /* 데스크톱 100% 확대에서 글자 선명도가 떨어지지 않도록 기본 폰트 크기를 한 단계 상향 */
+  --contact-label-size: clamp(16px, 1.08vw, 18px);
+  --contact-field-height: 42px;
+  width: min(100%, 900px);
+  margin: 0 auto;
+  display: grid;
+  /* 업장 구분~이유 블록 간격을 그리드 행간과 동일하게 유지 */
+  gap: var(--contact-row-gap);
+}
+
+/* 문의 입력 항목 2열(라벨/필드) 그리드 레이아웃 */
+.contact-form-grid {
+  display: grid;
+  gap: var(--contact-row-gap);
+}
+
+/* 문의 항목 한 줄(라벨/필드) 고정 레이아웃 */
+.contact-form-row {
+  display: grid;
+  grid-template-columns: var(--contact-label-col) minmax(0, 1fr);
+  column-gap: var(--contact-col-gap);
+  align-items: center;
+}
+
+/* 연락처 3칸 입력 레이아웃 */
+.contact-form-phone-composite {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.58rem;
+  min-height: var(--contact-field-height);
+}
+
+/* 이메일 2칸 입력 + 도메인 선택 레이아웃 */
+.contact-form-email-composite {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(132px, 160px);
+  align-items: center;
+  column-gap: 0.58rem;
+  min-height: var(--contact-field-height);
+}
+
+/* 연락처/이메일 구분 기호(-, @) */
+.contact-form-divider-symbol {
+  color: #111111;
+  font-size: var(--contact-label-size);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.contact-form-phone-prefix {
+  min-width: 0;
+}
+
+.contact-form-phone-part {
+  min-width: 0;
+}
+
+.contact-form-email-domain-select {
+  min-width: 132px;
+}
+
+/* 긴 단일 항목(이유/문의내용) 블록 컨테이너 */
+.contact-form-block {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* 현 위탁사 불만/변경 이유 블록은 원래처럼 라벨 아래 입력칸 배치 */
+.contact-form-block-switching {
+  margin-top: 0;
+  gap: 0.5rem;
+}
+
+/* '업장 구분' 다음 첫 단일 블록(현~이유) 시작점을 한 칸 더 아래로 */
+.contact-form-grid + .contact-form-block-switching {
+  margin-top: calc(var(--contact-row-gap) * 0.5);
+}
+
+/* 단일 블록(현~이유/제목/문의내용)은 라벨 높이를 자동으로 두어 입력박스를 위로 당김 */
+.contact-form-block .contact-form-label {
+  min-height: 0;
+  align-items: flex-start;
+}
+
+/* 문의 폼 라벨 텍스트 공통 스타일 */
+.contact-form-label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  min-height: var(--contact-field-height);
+  color: #111111;
+  font-size: var(--contact-label-size);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.contact-form-field,
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-textarea */
+.contact-form-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid rgba(39, 29, 19, 0.44);
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #111111;
+  font-family: "NanumSquare", sans-serif;
+  font-size: var(--contact-label-size);
+  font-weight: 500;
+  line-height: 1.3;
+  padding: 0.56rem 0.72rem;
+}
+
+/* 구분 드롭다운 화살표를 기본보다 안쪽(왼쪽)으로 이동 */
+select.contact-form-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2343382F' stroke-width='1.5' d='M1 1.5l5 5l5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 12px 8px;
+  background-position: calc(100% - 1.85rem) center;
+  padding-right: 2.65rem;
+}
+
+/* 한 줄 입력 필드 최소 높이 */
+.contact-form-field {
+  height: var(--contact-field-height);
+}
+
+/* 포커스 시 외곽선/테두리 렌더링 흔들림 방지 */
+.contact-form-field:focus,
+.contact-form-textarea:focus {
+  outline: none;
+  border-width: 2.5px;
+  border-color: rgba(39, 29, 19, 0.62);
+  box-shadow: none;
+}
+
+/* 제출 시 필수값 누락 항목은 포커스 두께와 동일한 빨간 테두리로 강조 */
+.contact-inquiry-form.contact-inquiry-form-show-validation .contact-form-field:invalid,
+.contact-inquiry-form.contact-inquiry-form-show-validation .contact-form-textarea:invalid,
+.contact-inquiry-form.contact-inquiry-form-show-validation .contact-form-field:invalid:focus,
+.contact-inquiry-form.contact-inquiry-form-show-validation .contact-form-textarea:invalid:focus {
+  border-width: 2.5px;
+  border-color: #d04f4f;
+}
+
+/* 문의 내용 textarea 기본 높이/리사이즈 */
+.contact-form-textarea {
+  min-height: clamp(250px, 24vh, 350px);
+  resize: vertical;
+}
+
+/* 현 위탁사 불만/변경 이유 textarea 높이 */
+.contact-form-switching-textarea {
+  min-height: clamp(125px, 12vh, 175px);
+}
+
+.contact-form-field::placeholder,
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-textarea::placeholder */
+.contact-form-textarea::placeholder {
+  font-size: var(--contact-label-size);
+  color: #7b7b7b;
+}
+
+/* 긴 입력 2개는 왼쪽 컬럼 시작선까지 확장 */
+.contact-form-block .contact-form-field,
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-block .contact-form-textarea */
+.contact-form-block .contact-form-textarea {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* 제출 영역(상태문구/버튼) 우측 정렬 */
+.contact-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* 문의 제출 버튼 기본 스타일 */
+.contact-form-submit {
+  border: none;
+  border-radius: 9999px;
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+  min-width: 132px;
+  min-height: 44px;
+  padding: 0.65rem 1.4rem;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-submit:hover */
+.contact-form-submit:hover {
+  opacity: 0.88;
+}
+
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-submit:disabled */
+.contact-form-submit:disabled {
+  opacity: 0.68;
+  cursor: not-allowed;
+}
+
+/* 고객문의 화면: @media (max-width: 1024px) 반응형 조정 */
+@media (max-width: 1024px) {
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero */
+  .contact-hero {
+    min-height: clamp(430px, 56svh, 560px);
+  }
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-title */
+  .contact-hero-title {
+    font-size: clamp(19px, 3.9vw, 28px);
+  }
+
+/* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table */
+  .contact-quality-table {
+    min-width: 700px;
+  }
+
+/* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-inquiry-form */
+  .contact-inquiry-form {
+    /* 모바일 포커스 확대/점프 방지를 위해 최소 16px 유지 */
+    --contact-label-size: clamp(16px, 2.2vw, 17px);
+  }
+
+  .contact-form-notice {
+    font-size: clamp(15px, 2.2vw, 17px);
+  }
+
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-row */
+  .contact-form-row {
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+  }
+
+  .contact-form-phone-composite {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: 0.5rem;
+  }
+
+  .contact-form-email-composite {
+    grid-template-columns: minmax(0, 1.25fr) auto minmax(0, 0.75fr);
+    row-gap: 0.5rem;
+  }
+
+  .contact-form-email-domain-select {
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: min(100%, 160px);
+  }
+
+  .contact-form-block .contact-form-field,
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-block .contact-form-textarea */
+  .contact-form-block .contact-form-textarea {
+    width: 100%;
+    margin-left: 0;
+  }
+
+/* 고객문의 화면: 고객문의 입력 폼 - .contact-form-submit */
+  .contact-form-submit {
+    font-size: 18px;
+    min-width: 120px;
+    min-height: 40px;
+  }
+}

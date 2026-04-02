@@ -1,0 +1,393 @@
+/* ---------------- 회사소개 ---------------- */
+
+/* 회사소개 페이지 공통 변수/배경 */
+.company-page {
+  background-color: #ffffff;
+  scrollbar-gutter: stable;
+  padding-bottom: calc(clamp(3.2rem, 5.2vh, 4.2rem) + env(safe-area-inset-bottom));
+}
+
+/* 회사소개 페이지 헤더 톤 */
+.company-page .site-header-light {
+  border-bottom: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+}
+
+/* 회사소개 각 화면 공통 레이아웃 */
+.company-screen {
+  padding: clamp(2.2rem, 4.5vh, 3.8rem) 0;
+  background-color: #ffffff;
+}
+
+/* 첫 화면은 헤더 높이만큼 본문 시작 위치 확보 */
+.company-screen-with-header {
+  padding-top: calc(156px + clamp(3.2rem, 5.8vh, 4.1rem));
+}
+
+/* 회사소개 본문 수직 중앙 배치 */
+.company-screen-body {
+  display: block;
+}
+
+/* 회사소개 본문 최대 폭 컨테이너 */
+.company-screen-inner {
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1rem, 2vh, 1.6rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* 1번 화면: 대표 인사 문구 배치 */
+.company-greeting-inner {
+  width: min(100%, 1060px);
+  margin: 0 auto;
+}
+
+/* 1번 화면: 대표 인사 이미지/문구 2열 레이아웃 */
+.company-greeting-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.2rem, 2.4vw, 3.4rem);
+  width: 100%;
+}
+
+/* 1번 화면: 대표 인사 이미지 프레임 */
+.company-greeting-image-frame {
+  position: relative;
+  width: min(100%, 350px);
+  justify-self: end;
+  aspect-ratio: 4 / 3.75;
+  overflow: hidden;
+}
+
+/* 1번 화면: 대표 인사 이미지 표시 */
+.company-greeting-image {
+  object-fit: contain;
+}
+
+/* 1번 화면: 대표 인사 문구 묶음 영역 */
+.company-greeting-copy {
+  display: grid;
+  width: min(100%, 700px);
+  justify-self: start;
+  gap: clamp(1.4rem, 2.9vh, 2.2rem);
+}
+
+/* 1번 화면: 대표 인사 문단 텍스트 */
+.company-greeting-paragraph {
+  margin: 0;
+  color: #333333;
+  white-space: pre-line;
+  font-size: clamp(14px, 0.95vw, 17px);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+}
+
+/* 1번 화면: CEO 텍스트 + 서명 이미지 정렬 */
+.company-greeting-signature {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: clamp(0.45rem, 0.9vw, 0.7rem);
+  width: fit-content;
+  max-width: 100%;
+  margin-top: clamp(0.2rem, 0.8vh, 0.6rem);
+  margin-left: auto;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 1번 화면: CEO 텍스트(폰트) */
+.company-greeting-signature-label {
+  color: #2f2f2f;
+  font-size: clamp(15px, 1vw, 19px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+/* 1번 화면: CEO 서명 이미지 */
+.company-greeting-signature-image {
+  display: block;
+  width: clamp(100px, 8vw, 140px);
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* 2번 화면: 비전/미션 영역 래퍼 */
+.company-vm-inner {
+  width: min(100%, 1120px);
+}
+
+/* 1번 화면과 2번 화면 사이 간격 */
+#company-vision-mission {
+  margin-top: clamp(1.4rem, 3.2vh, 2.6rem);
+}
+
+/* 2번 화면과 3번 화면 사이 간격 */
+#company-brand {
+  margin-top: clamp(1.2rem, 2.8vh, 2.2rem);
+}
+
+/* 2번 화면 비전/미션 2열 배치 */
+.company-vm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.4rem, 3vw, 4rem);
+}
+
+/* 2번 화면 비전/미션 카드 */
+.company-vm-item {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: clamp(1rem, 2vh, 1.4rem);
+}
+
+/* 2번 화면 아이콘 프레임 */
+.company-vm-icon-frame {
+  position: relative;
+  width: clamp(58px, 4.2vw, 82px);
+  height: clamp(58px, 4.2vw, 82px);
+}
+
+/* 2번 화면 아이콘 표시 */
+.company-vm-icon {
+  object-fit: contain;
+}
+
+/* 2번 화면 제목(비전/미션) */
+.company-vm-title {
+  margin: 0;
+  color: #2f2f2f;
+  font-size: clamp(32px, 2.8vw, 38px);
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* 2번 화면 본문 설명 */
+.company-vm-copy {
+  margin: 0;
+  width: min(100%, 470px);
+  color: #3f3f3f;
+  white-space: pre-line;
+  font-size: clamp(14px, 0.95vw, 17px);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+/* 3번 화면: 로고/브랜드 컬러 영역 */
+.company-brand-inner {
+  transform: none;
+  gap: clamp(2.6rem, 4.8vh, 3.8rem);
+}
+
+/* 3번 화면 로고 이미지 프레임 */
+.company-logo-frame {
+  position: relative;
+  width: min(100%, 380px);
+  margin: 0 auto;
+  aspect-ratio: 64 / 33;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* 3번 화면 로고 이미지 표시 */
+.company-logo-image {
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(0.15rem, 0.4vw, 0.35rem);
+}
+
+/* 3번 화면 회사 소개 문구 */
+.company-intro-description {
+  margin: clamp(1.1rem, 2.4vh, 1.9rem) auto 0;
+  width: min(100%, 1120px);
+  color: #444444;
+  text-align: center;
+  white-space: pre-line;
+  font-size: clamp(14px, 0.95vw, 17px);
+  line-height: 1.58;
+  letter-spacing: -0.01em;
+}
+
+/* 3번 화면 핵심가치 3열 배치 */
+.company-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.6rem, 3.2vw, 3rem);
+  align-items: start;
+  margin-top: clamp(1.2rem, 2.8vh, 2.2rem);
+}
+
+/* 3번 화면 각 핵심가치 카드 */
+.company-value-item {
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.85rem, 1.8vh, 1.5rem);
+  text-align: center;
+}
+
+/* 3번 화면 컬러 원형 포인트 */
+.company-value-dot {
+  width: clamp(56px, 5vw, 65px);
+  height: clamp(56px, 5vw, 65px);
+  border-radius: 9999px;
+}
+
+/* 3번 화면 HEX 컬러 코드 */
+.company-value-hex {
+  color: #2f2f2f;
+  font-size: clamp(18px, 1.38vw, 28px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 3번 화면 가치 설명 문구 */
+.company-value-copy {
+  margin: 0;
+  color: #444444;
+  font-size: clamp(14px, 0.95vw, 17px);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+/* 태블릿/작은 데스크톱: 회사소개 본문 스케일 보정 */
+@media (max-width: 1200px) {
+/* 태블릿/작은 데스크톱: 대표 인사 영역 폭 조정 */
+  .company-greeting-inner {
+    width: min(100%, 1050px);
+  }
+
+/* 태블릿/작은 데스크톱: 대표 이미지 프레임 폭 축소 */
+  .company-greeting-image-frame {
+    width: min(100%, 340px);
+  }
+
+/* 태블릿/작은 데스크톱: 대표 인사 문구 폭 조정 */
+  .company-greeting-copy {
+    width: min(100%, 580px);
+  }
+}
+
+/* 태블릿 구간: 2번 화면 1열 전환 */
+@media (max-width: 1024px) {
+/* 태블릿 구간: 비전/미션 카드 1열 전환 */
+  .company-vm-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2.1rem, 4vh, 2.8rem);
+  }
+
+  /* 태블릿 구간: 인사말과 비전/미션 사이 간격 축소 */
+  #company-vision-mission {
+    margin-top: clamp(1rem, 2.6vh, 1.8rem);
+  }
+
+  /* 태블릿 구간: 비전/미션과 브랜드 구간 간격 축소 */
+  #company-brand {
+    margin-top: clamp(0.9rem, 2.2vh, 1.6rem);
+  }
+}
+
+/* 모바일 구간: 핵심가치도 1열로 단순화 */
+@media (max-width: 768px) {
+/* 모바일 구간: 첫 화면 헤더 오프셋 축소 */
+  .company-screen-with-header {
+    padding-top: calc(126px + 2.2rem);
+  }
+
+/* 모바일 구간: 대표 인사 영역 1열 전환 */
+  .company-greeting-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+/* 모바일 구간: 대표 이미지 프레임 축소 */
+  .company-greeting-image-frame {
+    width: min(100%, 320px);
+  }
+
+/* 모바일 구간: 대표 인사 문구 폭 확장 */
+  .company-greeting-copy {
+    width: min(100%, 860px);
+  }
+
+/* 모바일 구간: 대표 인사 문구 간격 축소 */
+  .company-greeting-copy {
+    gap: 1.2rem;
+  }
+
+/* 모바일 구간: 대표 인사 문단 글자 크기 축소 */
+  .company-greeting-paragraph {
+    font-size: clamp(13px, 3.8vw, 16px);
+  }
+
+/* 모바일 구간: CEO 서명 행 폭/간격 보정 */
+  .company-greeting-signature {
+    gap: 0.45rem;
+    margin-top: 0.2rem;
+  }
+
+/* 모바일 구간: CEO 서명 이미지 크기 보정 */
+  .company-greeting-signature-image {
+    width: clamp(116px, 32vw, 154px);
+  }
+
+/* 모바일 구간: 핵심가치 1열 스택 */
+  .company-values-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+/* 모바일 구간: 브랜드 소개 문구 가독성 보정 */
+  .company-intro-description {
+    margin-top: clamp(0.85rem, 2vh, 1.3rem);
+    font-size: clamp(13px, 3.7vw, 16px);
+    line-height: 1.5;
+  }
+
+  /* 모바일 구간: 비전/미션과 브랜드 구간 간격 축소 */
+  #company-brand {
+    margin-top: clamp(0.8rem, 1.8vh, 1.3rem);
+  }
+
+/* 모바일 구간: 핵심가치 문구 가독성 보정 */
+  .company-value-copy {
+    font-size: clamp(13px, 3.7vw, 16px);
+  }
+
+/* 모바일 구간: 비전/미션 문구 가독성 보정 */
+  .company-vm-copy {
+    font-size: clamp(13px, 3.7vw, 16px);
+  }
+
+  /* 모바일 구간: 비전/미션 아이콘 크기 축소 */
+  .company-vm-icon-frame {
+    width: clamp(52px, 14vw, 68px);
+    height: clamp(52px, 14vw, 68px);
+  }
+}
+
+/* 작은 데스크톱(가로 데스크톱 + 낮은 높이)에서 회사소개 3번 화면을 조금 더 위로 */
+@media (max-height: 900px) and (min-width: 769px) {
+/* 낮은 높이 데스크톱: 브랜드 영역 간격 압축 */
+  .company-brand-inner {
+    transform: none;
+    gap: clamp(1.9rem, 3.2vh, 2.5rem);
+  }
+
+/* 낮은 높이 데스크톱: 로고 프레임 폭 조정 */
+  .company-logo-frame {
+    width: min(100%, 540px);
+  }
+}
+
+

@@ -1,0 +1,50 @@
+{
+  "name": "saascandy_project",
+  "version": "1.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3001",
+    "clean:next": "node scripts/clean-next-safe.cjs",
+    "clean:next:force": "node scripts/clean-next-safe.cjs --force",
+    "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "start:lan": "next start -H 0.0.0.0 -p 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-react": "^11.0.1",
+    "@headlessui/react": "^2.1.8",
+    "@iconify/react": "^5.0.1",
+    "@tailwindcss/postcss": "^4.1.7",
+    "axios": "^1.7.2",
+    "ckeditor5": "^47.6.1",
+    "date-fns": "^3.4.0",
+    "gray-matter": "^4.0.3",
+    "motion": "^11.15.0",
+    "mysql2": "^3.18.1",
+    "next": "^15.3.2",
+    "next-auth": "^4.24.11",
+    "next-themes": "^0.3.0",
+    "nextjs-toploader": "^3.7.15",
+    "nodemailer": "^8.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.4.1",
+    "react-slick": "^0.30.2",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
+    "slick-carousel": "^1.8.1"
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.11",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
+    "postcss": "^8",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5"
+  }
+}

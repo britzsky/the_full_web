@@ -1,0 +1,847 @@
+/* Tailwind CSS 기본 레이어 로드 */
+@import 'tailwindcss';
+/* CKEditor5 기본 스타일 로드 */
+@import "ckeditor5/ckeditor5.css";
+
+/* ---------------- 공통 ---------------- */
+
+/* 가변 Pretendard 폰트 */
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
+  src: url('/fonts/PretendardVariable.woff2') format('woff2');
+}
+
+/* 나눔스퀘어 Light */
+@font-face {
+  font-family: 'NanumSquare';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/NanumSquareL.woff2') format('woff2');
+}
+
+/* 나눔스퀘어 Regular/Medium */
+@font-face {
+  font-family: 'NanumSquare';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/NanumSquareR.woff2') format('woff2');
+}
+
+/* 나눔스퀘어 Bold */
+@font-face {
+  font-family: 'NanumSquare';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/NanumSquareB.woff2') format('woff2');
+}
+
+/* 나눔스퀘어 ExtraBold/Black */
+@font-face {
+  font-family: 'NanumSquare';
+  font-style: normal;
+  font-weight: 800 900;
+  font-display: swap;
+  src: url('/fonts/NanumSquareEB.woff2') format('woff2');
+}
+
+/* 연혁(연도) 숫자용 폰트 */
+@font-face {
+  font-family: 'HanwhaB';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/01HanwhaB.ttf') format('truetype');
+}
+
+/* 다크모드 variant 지정 */
+@custom-variant dark (&:is(.dark *));
+
+/* Tailwind 테마 토큰 정의 */
+@theme {
+  /* 공통 그림자 */
+  --shadow-card-shadow:
+    rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+
+  /* 컬러 팔레트 */
+  --color-primary: #ee7b11;
+  --color-secondary: #effbff;
+  --color-warning: #ee7b11;
+  --color-grey: #f9f9fb;
+  --color-dark: #141414;
+  --color-Dark-primary: #001c68;
+  --color-cream: #fff4ce;
+  --color-darkcream: #ffdfaf;
+  --color-success: #37a05b;
+  --color-Snowy-sky: #2753c9;
+  --color-lightyellow: #ffd44d;
+  --color-Smoke: #f1f1f5;
+  --color-darkmode: #081738;
+  --color-darklight: #000f30;
+  --color-midnight_text: #102d47;
+  --color-Sky-mist-blue: #aec8df;
+  --color-darkborder: #192a4a;
+  --color-border_color: #224767;
+  --color-blue: #1642b9;
+
+  /* 반응형 브레이크포인트 */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+
+  /* 커스텀 폰트 크기/줄높이 */
+  --text-22: 1.375rem;
+  --text-22--line-height: 2rem;
+  --text-28: 1.75rem;
+  --text-28--line-height: 2.25rem;
+  --text-32: 2rem;
+  --text-32--line-height: 2.5rem;
+  --text-36: 2.25rem;
+  --text-36--line-height: 2.625rem;
+  --text-40: 2.5rem;
+  --text-40--line-height: 3rem;
+  --text-65: 4.063rem;
+  --text-65--line-height: 4.875rem;
+
+  /* 커스텀 spacing 값 */
+  --spacing-17: 4.375rem;
+  --spacing-50: 50rem;
+  --spacing-3_438: 3.438rem;
+  --spacing-1_875: 1.875rem;
+  --spacing-1_563: 1.563rem;
+  --spacing-2_188: 2.188rem;
+  --spacing-2_375: 2.375rem;
+  --spacing-1_125: 1.125rem;
+  --spacing-9_375: 9.375rem;
+  --spacing-40\%: 40%;
+  --spacing-60\%: 60%;
+  --spacing-10_625: 10.625rem;
+  --spacing-11_563: 11.563rem;
+  --spacing-7_5: 7.5rem;
+  --spacing-3_125: 3.125rem;
+
+  /* z-index 값 */
+  --z-index-1: 1;
+  --z-index-999: 999;
+
+  /* inset 퍼센트 유틸 값 */
+  --inset-8\%: 8%;
+  --inset-12\%: 12%;
+  --inset-15\%: 15%;
+  --inset-20\%: 20%;
+  --inset-31\%: 31%;
+  --inset-38\%: 38%;
+  --inset-40\%: 40%;
+  --inset-42\%: 42%;
+  --inset-45\%: 45%;
+  --inset-48\%: 48%;
+  --inset-52\%: 52%;
+  --inset-63\%: 63%;
+  --inset-75\%: 75%;
+
+  /* 컨테이너 최대 너비 */
+  --container-xl: 1320px;
+}
+
+/* 페이지 커스텀 토큰(메인 본문 바) */
+:root {
+  --section-title-font-size: clamp(18px, 1.28vw, 22px);
+  --section-title-pad-left-mobile: 1.5rem;
+  --section-title-pad-left-desktop: 15rem;
+  --section-title-pad-top: clamp(1.2rem, 2.6vh, 1.9rem);
+
+  /* 메인 본문 바 기본 색상 */
+  /* --main-body-bar-color: #281D13; */
+  /* --main-body-bar-color: #586E34; */
+  --main-body-bar-color: #27391C;
+  --main-body-bar-height: 0.875rem;
+
+  /* 공통 결과/확인 모달 포인트선/버튼 색상(메인 바 기본색 연동) */
+  /* 공통 모달: 상단 포인트선 색상 */
+  --action-modal-accent-color: var(--main-body-bar-color);
+  /* 공통 모달: 상단 포인트선 두께 */
+  --action-modal-accent-strip-height: 14px;
+  /* 공통 모달: 상단 포인트선 Y축 시작 위치 */
+  --action-modal-accent-strip-offset-top: 16px;
+  /* 공통 모달: 상단 포인트선 좌우 여백(작을수록 더 넓게 보임) */
+  --action-modal-accent-strip-inset-x: 0.88rem;
+  /* 공통 모달: 확인 버튼 배경색 */
+  --action-modal-button-bg-color: var(--main-body-bar-color);
+
+  /* 홍보 목록 검색/글작성 버튼 색상(메인 바 연동, 역할 분리) */
+  --promotion-search-button-bg-color: var(--main-body-bar-color);
+  --promotion-write-button-bg-color: var(--main-body-bar-color);
+
+  /* 사업영역 1번 화면 1~6 카드 배경색(메인 바 기본색 통일) */
+  --business-overview-card-bg-1: var(--main-body-bar-color);
+  --business-overview-card-bg-2: var(--main-body-bar-color);
+  --business-overview-card-bg-3: var(--main-body-bar-color);
+  --business-overview-card-bg-4: var(--main-body-bar-color);
+  --business-overview-card-bg-5: var(--main-body-bar-color);
+  --business-overview-card-bg-6: var(--main-body-bar-color);
+  --business-value-card-bg: var(--business-overview-card-bg-1);
+  --business-value-card-text: #ffffff;
+
+  /* 급식서비스 검정 셀/표는 메인 고객~솔루션 바 색과 동일하게 연동 */
+  --catering-dark-cell-color: var(--main-body-bar-color);
+  --catering-table-dark-color: var(--main-body-bar-color);
+
+  /* 급식서비스 2번 화면 3단 배경색(가운데는 기본색, 좌우만 어둡게/밝게 단계화) */
+  --catering-stage-mid-color: var(--main-body-bar-color);
+  --catering-stage-base-color: color-mix(in oklab, var(--catering-stage-mid-color) 84%, #000000 16%);
+  --catering-stage-light-color: color-mix(in oklab, var(--catering-stage-mid-color) 84%, #ffffff 16%);
+}
+
+/* 기본 엘리먼트 스타일 */
+@layer base {
+  /* html/body 기본 글꼴 렌더링 품질 설정 */
+  html,
+  body {
+    font-family: 'NanumSquare', sans-serif;
+    font-synthesis: none;
+    /* 작은 화면 축소 구간에서도 글자 가독성이 떨어지지 않도록 렌더링 품질 보정 */
+    text-rendering: optimizeLegibility;
+    text-size-adjust: 100%;
+    font-kerning: normal;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  /* 전역 요소 기본 폰트 상속 및 테두리 기본색 */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    font-family: inherit;
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/* 컴포넌트 공통 스타일 */
+@layer components {
+  /* body 기본 타이포/스크롤 설정 */
+  body {
+    @apply text-base overflow-x-hidden font-normal;
+    background-color: #ffffff;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* form 요소 기본 스타일 */
+  textarea,
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  select {
+    @apply block outline-hidden text-base font-normal text-midnight_text m-0 rounded-lg w-full placeholder:text-[#668199];
+  }
+
+  /* 제목 태그 기본 스타일 */
+  h1 {
+    @apply md:text-65 text-28 font-bold text-white dark:text-white;
+  }
+
+  h2 {
+    @apply md:text-40 text-2xl font-bold text-midnight_text dark:text-white;
+  }
+
+  h3 {
+    @apply md:text-28 text-lg font-bold text-white dark:text-primary;
+  }
+
+  h4 {
+    @apply text-2xl font-bold text-midnight_text dark:text-primary;
+  }
+
+  h5 {
+    @apply text-22 font-medium text-midnight_text dark:text-white/60;
+  }
+
+}
+
+/* 위로 떠오르는 텍스트 애니메이션 */
+@keyframes rise-up {
+  from {
+    transform: translate3d(0, 12px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+/* rise-up 애니메이션 적용 클래스 */
+.rise-text {
+  display: inline-block;
+  vertical-align: baseline;
+  will-change: transform, opacity;
+  animation: rise-up 0.6s ease-out 1.0s both;
+}
+
+/* 오른쪽으로 슬라이드되는 텍스트 애니메이션 */
+@keyframes slide-right {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* slide-right 애니메이션 적용 클래스 */
+.slide-in-right {
+  display: inline-block;
+  animation: slide-right 0.6s ease-out 0.9s both;
+}
+
+/* ---------------- 메인 ---------------- */
+
+/* 메인 본문 상단 바(색상/두께는 :root 변수 사용) */
+.main-body-bar {
+  width: 100%;
+  height: var(--main-body-bar-height);
+  background-color: var(--main-body-bar-color);
+}
+
+/* 메인 각 섹션 제목 텍스트 스타일 */
+.main-section-title {
+  margin-top: 0;
+  color: #000000;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left !important;
+}
+
+/* 메인 스크롤 영역: 다른 페이지와 동일한 스크롤 거터 확보 */
+.main-page {
+  scrollbar-gutter: stable;
+}
+
+/* 메인 섹션 제목 공통 래퍼 */
+.main-section-title-wrap {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-top: var(--section-title-pad-top);
+  padding-left: var(--section-title-pad-left-mobile);
+  padding-right: 0.75rem;
+}
+
+/* 섹션 본문 세로 중앙 정렬 래퍼 */
+.main-section-body-flex {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* 제목 상단 패딩 증가분만큼 본문 시작점을 보정해 본문이 같이 내려가지 않도록 유지 */
+.main-section-title-wrap + .main-section-body-flex {
+  margin-top: clamp(-0.5rem, -1.1vh, -0.75rem);
+}
+
+/* 회사 소개 본문 영역(해상도에 따라 여백/간격 자동 조정) */
+.main-services-wrap {
+  margin-top: 0;
+  display: grid;
+  row-gap: clamp(1.95rem, 3.8vh, 3rem);
+}
+
+/* 메인 고객~솔루션 카드 위치 */
+@media (min-width: 768px) {
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap > article#company */
+  .main-services-wrap > article#company {
+    transform: translateY(-0.55rem);
+  }
+
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap > article#service */
+  .main-services-wrap > article#service {
+    transform: translateY(0.55rem);
+  }
+}
+
+/* 소셜 본문 영역(해상도에 따라 상단 간격 자동 조정) */
+.main-social-wrap {
+  margin-top: 0;
+}
+
+/* 연혁 본문 영역(해상도에 따라 상단 간격/블록 간격 자동 조정) */
+.main-history-wrap {
+  margin-top: 0;
+  display: grid;
+  row-gap: clamp(1.25rem, 2.8vh, 2rem);
+}
+
+/* 서비스 이미지 영역 높이 자동 축소 */
+.main-service-media-frame {
+  height: clamp(132px, 21vh, 205px);
+}
+
+/* 작은 화면에서는 고객~솔루션 이미지 3개를 공통으로 조금 더 아래 배치 */
+@media (max-width: 767px) {
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap .service-media */
+  .main-services-wrap .service-media {
+    margin-top: clamp(0.55rem, 1.8vh, 0.95rem);
+  }
+
+  /* 작은 화면 소셜 카드 이미지를 조금 더 크게 표시 */
+  .main-social-card {
+    max-width: clamp(150px, 45vw, 230px);
+  }
+
+  /* 작은 화면에서는 좌우 패딩/카드 간격을 줄여 카드 실폭이 커지도록 보정 */
+  .main-social-wrap {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-grid */
+  .main-social-grid {
+    column-gap: clamp(0.45rem, 1.8vw, 0.7rem);
+  }
+}
+
+/* 소셜 카드 그리드 간격 자동 조정 */
+.main-social-grid {
+  column-gap: clamp(0.85rem, 1.8vw, 2rem);
+  row-gap: clamp(0.95rem, 2.2vh, 2rem);
+}
+
+/* 소셜 카드 크기 자동 축소 */
+.main-social-card {
+  max-width: clamp(162px, 18.8vw, 252px);
+}
+
+/* 소셜 오버레이 문구 길이/줄 수 제한 */
+.main-social-overlay-copy {
+  width: 100%;
+  max-height: 72%;
+  overflow: hidden;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
+}
+
+/* 지도 영역 높이 자동 축소 */
+.main-map-frame {
+  min-height: clamp(188px, 30vh, 260px);
+}
+
+/* 메인 본문 제목(서비스 카드 제목) */
+.main-body-title {
+  margin-top: clamp(0.5rem, 1vh, 0.75rem);
+  color: #2b2b2b;
+  font-size: clamp(18px, 2.2vh, 24px);
+  font-weight: 500;
+}
+
+/* 메인 본문 내용(서비스 카드 설명) */
+.main-body-copy {
+  margin-top: clamp(0.5rem, 0.95vh, 0.75rem);
+  color: #2b2b2b;
+  font-size: clamp(12px, 1.5vh, 14px);
+  font-weight: 400;
+  line-height: clamp(20px, 2.35vh, 24px);
+}
+
+/* 메인 본문 강조 텍스트 공통(본문/공용 강조 컴포넌트) */
+.main-body-copy strong,
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .common-emphasis-copy strong */
+.common-emphasis-copy strong {
+  color: inherit;
+  font-size: clamp(13px, 1.7vh, 16px);
+  font-weight: 700;
+  line-height: inherit;
+}
+
+/* 메인 연혁 텍스트 */
+.main-history-year {
+  padding-top: 0.125rem;
+  color: #000000;
+  text-align: center;
+  font-family: 'HanwhaB', 'NanumSquare', sans-serif;
+  font-size: clamp(24px, 3.4vh, 36px);
+  line-height: 1;
+}
+
+/* 메인 연혁 한 줄 설명 텍스트 */
+.main-history-line {
+  color: #2b2b2b;
+  font-size: clamp(11px, 1.35vh, 13px);
+  font-weight: 400;
+  line-height: 1.32;
+}
+
+/* 메인 오시는 길 정보 텍스트 */
+.main-location-info {
+  display: grid;
+  width: 100%;
+  gap: clamp(0.5rem, 1vh, 0.75rem);
+  color: #2b2b2b;
+  font-size: clamp(12px, 1.45vh, 14px);
+  line-height: 1.35;
+}
+
+/* 메인 오시는 길 라벨 텍스트 */
+.main-location-label {
+  width: 100%;
+  color: #2b2b2b;
+}
+
+/* 메인 오시는 길 값 텍스트 */
+.main-location-value {
+  color: #2b2b2b;
+}
+
+/* 메인 오시는 길 제목만 연혁 대비 소폭 상향 배치(본문은 고정) */
+.main-location-title-wrap {
+  margin-top: clamp(-0.75rem, -1.4vh, -0.45rem);
+}
+
+/* 메인 데스크톱 구간(768 이상) 제목 여백 보정 */
+@media (min-width: 768px) {
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .main-section-title-wrap */
+  .main-section-title-wrap {
+    padding-left: var(--section-title-pad-left-desktop);
+    padding-right: 1.5rem;
+  }
+
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .main-section-title */
+  .main-section-title {
+    margin-top: 0.5rem;
+  }
+}
+
+/* 화면 높이가 낮은 모니터에서 카드/이미지/본문이 자동으로 더 줄어들도록 보정 */
+@media (max-height: 900px) {
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-service-media-frame */
+  .main-service-media-frame {
+    height: clamp(116px, 18vh, 180px);
+  }
+
+  /* 작은 높이 화면에서는 소셜 카드 축소 폭을 완화해 카드가 너무 작아지지 않도록 보정 */
+  .main-social-card {
+    max-width: clamp(150px, 21vh, 228px);
+  }
+
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .main-body-copy */
+  .main-body-copy {
+    font-size: clamp(11px, 1.3vh, 13px);
+    line-height: clamp(18px, 2.05vh, 21px);
+  }
+}
+
+/* 화면 높이가 더 낮은 환경에서는 섹션 간격과 지도 높이도 추가로 압축 */
+@media (max-height: 780px) {
+  .main-services-wrap,
+/* 전역 공통 스타일: 메인 연혁 섹션 - .main-history-wrap */
+  .main-history-wrap {
+    row-gap: clamp(0.9rem, 2.1vh, 1.4rem);
+  }
+
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-grid */
+  .main-social-grid {
+    row-gap: clamp(0.75rem, 1.4vh, 1.2rem);
+  }
+
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .main-map-frame */
+  .main-map-frame {
+    min-height: clamp(160px, 24vh, 220px);
+  }
+}
+
+/* 작은 데스크톱(1024~1599)에서만 소셜 카드 이미지를 확대 */
+@media (min-width: 1024px) and (max-width: 1599px) {
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-wrap */
+  .main-social-wrap {
+    max-width: 1240px !important;
+  }
+
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-grid */
+  .main-social-grid {
+    column-gap: clamp(0.3rem, 0.52vw, 0.56rem);
+  }
+
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-wrap .main-social-card */
+  .main-social-wrap .main-social-card {
+    max-width: clamp(158px, 14.5vw, 234px) !important;
+  }
+}
+
+/* 작은 화면에서는 소셜 카드가 다른 높이 보정 규칙보다 우선해 조금 더 크게 보이도록 고정 */
+@media (max-width: 767px) {
+/* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-wrap .main-social-card */
+  .main-social-wrap .main-social-card {
+    max-width: clamp(150px, 45vw, 230px) !important;
+  }
+}
+
+/* 디스플레이용 폰트 클래스 */
+.font-display {
+  font-family: 'NanumSquare', sans-serif;
+}
+
+/* 본문용 폰트 클래스 */
+.font-body {
+  font-family: 'NanumSquare', sans-serif;
+}
+
+/* 연혁 년도 전용 폰트 클래스 */
+.font-year {
+  font-family: 'HanwhaB', 'NanumSquare', sans-serif;
+  font-weight: 400;
+}
+
+/* 블로그 상세 공통 간격 */
+.blog-details p,
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .blog-details hr */
+.blog-details hr {
+  @apply mb-8;
+}
+
+/* 블로그 상세 구분선 다크모드 색 */
+.blog-details hr {
+  @apply dark:border-darkborder;
+}
+
+/* 블로그 상세 강조 텍스트 */
+.blog-details strong {
+  @apply font-bold dark:text-white;
+}
+
+/* 블로그 상세 목록 스타일 */
+.blog-details ul {
+  @apply mb-8 list-inside list-disc space-y-3;
+}
+
+/* 블로그 상세 숫자 목록 스타일 */
+.blog-details ol {
+  @apply mb-8 list-inside list-decimal space-y-3;
+}
+
+/* 블로그 상세 제목 스타일 */
+.blog-details h1 {
+  @apply mb-8 text-3xl font-bold text-midnight_text dark:text-white sm:text-4xl md:text-[40px] leading-tight md:leading-[1.28];
+}
+
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .blog-details h2 */
+.blog-details h2 {
+  @apply mb-8 text-2xl font-bold text-midnight_text dark:text-white sm:text-3xl md:text-[35px] md:leading-[1.28];
+}
+
+/* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .blog-details h3 */
+.blog-details h3 {
+  @apply mb-6 text-2xl font-bold dark:text-white sm:text-[28px] sm:leading-[40px];
+}
+
+/* 블로그 상세 본문/목록 텍스트 컬러 */
+.blog-details p {
+  @apply text-dark/50 dark:text-white/50
+}
+
+/* 블로그 상세 목록 항목 텍스트 컬러 */
+.blog-details ul li {
+  @apply text-dark/50 dark:text-white/50
+}
+
+/* 블로그 상세 링크 hover 색상 */
+.blog-details ul li a {
+  @apply hover:text-primary
+}
+
+/* ---------------- 공통 헤더 ---------------- */
+
+/* 공통 헤더 */
+.site-header {
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding-inline: 1rem;
+}
+
+/* 헤더를 첫 화면 위에 겹쳐 배치 */
+.site-header-overlay {
+  position: absolute;
+  top: 0;
+}
+
+/* 스크롤 고정형 헤더(필요 시 사용) */
+.site-header-sticky {
+  position: fixed;
+  top: 0;
+}
+
+/* 밝은 배경에서 사용하는 헤더 톤 */
+.site-header-light {
+  border-bottom: 1px solid rgba(46, 36, 28, 0.12);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+}
+
+/* 헤더 내부 컨테이너(공통 최대 너비/최소 높이) */
+.site-header-inner {
+  margin: 0 auto;
+  max-width: 1320px;
+  min-height: 156px;
+  height: 156px;
+  box-sizing: border-box;
+}
+
+/* 오버레이 헤더 상단 여백 */
+.site-header-overlay .site-header-inner {
+  padding-top: 2rem;
+}
+
+/* 고정 헤더 상단 여백 */
+.site-header-sticky .site-header-inner {
+  padding-top: 2rem;
+  padding-bottom: 0;
+}
+
+/* 헤더 일반 메뉴 링크 */
+.site-header-link {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  color: #ffffff;
+  font-size: clamp(14px, 0.95vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 헤더 메뉴 pill 배경(hover/active 공통 기반) */
+.site-header-link::before {
+  content: "";
+  position: absolute;
+  inset: -0.44rem -0.86rem;
+  border-radius: 9999px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  z-index: -1;
+}
+
+/* 밝은 배경 헤더에서 링크 컬러 */
+.site-header-light .site-header-link {
+  color: #211914;
+}
+
+/* 헤더 링크 호버 시 시각적 반응 */
+.site-header-link:hover {
+  opacity: 0.72;
+  color: #ffffff !important;
+}
+
+/* 비활성 메뉴도 hover 시 active와 동일한 배경 처리 */
+.site-header-link:hover::before {
+  background-color: var(--main-body-bar-color);
+}
+
+/* 헤더 CTA(고객문의) 버튼 */
+.site-header-link-cta {
+  color: #ffffff !important;
+}
+
+/* active 메뉴 배경 고정 */
+.site-header-link-cta::before {
+  background-color: var(--main-body-bar-color);
+}
+
+/* 모바일 메뉴 링크 크기 */
+.site-header-link-mobile {
+  font-size: 12px;
+}
+
+/* 모바일 CTA 버튼 패딩 */
+.site-header-link-cta-mobile {
+  display: inline-flex;
+  justify-content: center;
+}
+
+/* 모바일에서는 pill 여백만 축소 */
+.site-header-link-mobile::before {
+  inset: -0.42rem -0.66rem;
+}
+
+/* 우하단 상단 이동 버튼 */
+.scroll-to-top-button {
+  position: fixed;
+  right: clamp(16px, 2vw, 28px);
+  bottom: clamp(16px, 2.8vh, 30px);
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1.5px solid transparent;
+  border-radius: 9999px;
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+  line-height: 0;
+  box-shadow: none;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 상단 이동 버튼 아이콘 */
+.scroll-to-top-icon {
+  display: block;
+}
+
+/* 상단 이동 버튼 hover 스타일 */
+.scroll-to-top-button:hover {
+  border-color: currentColor;
+  opacity: 0.92;
+}
+
+/* 상단 이동 버튼 포커스 접근성 표시 */
+.scroll-to-top-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* 공통 헤더 반응형 */
+@media (max-width: 768px) {
+/* 전역 공통 스타일: 공통 헤더 영역 - .site-header */
+  .site-header {
+    padding-inline: 0.75rem;
+  }
+
+/* 전역 공통 스타일: 공통 헤더 영역 - .site-header-overlay .site-header-inner */
+  .site-header-overlay .site-header-inner {
+    padding-top: 1.35rem;
+    min-height: 126px;
+    height: 126px;
+  }
+
+/* 전역 공통 스타일: 공통 헤더 영역 - .site-header-sticky .site-header-inner */
+  .site-header-sticky .site-header-inner {
+    padding-top: 1.35rem;
+    padding-bottom: 0;
+    min-height: 126px;
+    height: 126px;
+  }
+}

@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS `promotion_posts` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `content` MEDIUMTEXT NOT NULL,
+  `author` VARCHAR(100) NOT NULL,
+  `created_at` VARCHAR(40) NOT NULL,
+  `updated_at` VARCHAR(40) NOT NULL,
+  `del_yn` VARCHAR(1) NOT NULL DEFAULT 'N',
+  `del_dt` VARCHAR(40) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

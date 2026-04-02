@@ -1,0 +1,249 @@
+/* 공통 모달: 화면 전체 배경 오버레이 */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background:
+    radial-gradient(circle at 22% 16%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0)),
+    rgba(12, 10, 8, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+  animation: backdropFadeIn 0.22s ease-out;
+}
+
+/* 공통 모달: 카드 본문 컨테이너 */
+.modal {
+  position: relative;
+  width: min(100%, 500px);
+  min-height: 336px;
+  border: 1px solid rgba(39, 29, 19, 0.16);
+  border-radius: 22px;
+  background:
+    linear-gradient(162deg, rgba(255, 255, 255, 0.98), rgba(250, 248, 246, 0.98));
+  padding: 2.48rem 1.25rem 1.1rem;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 0.76rem;
+  box-shadow:
+    0 22px 48px rgba(39, 29, 19, 0.24),
+    0 4px 14px rgba(39, 29, 19, 0.14);
+  overflow: hidden;
+  animation: modalPopIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 공통 모달: 상단 포인트 컬러 라인 */
+.modal::before {
+  content: "";
+  position: absolute;
+  inset:
+    var(--action-modal-accent-strip-offset-top)
+    var(--action-modal-accent-strip-inset-x, 1.25rem)
+    auto
+    var(--action-modal-accent-strip-inset-x, 1.25rem);
+  height: var(--action-modal-accent-strip-height);
+  border-radius: 9999px;
+  background-color: var(--action-modal-accent-color);
+  pointer-events: none;
+}
+
+/* 공통 모달: 브랜드 아이브로우 텍스트(THE FULL) */
+.eyebrow {
+  margin: 0;
+  color: var(--action-modal-accent-color);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* 공통 모달: 아이콘 + 제목 헤더 행 */
+.head {
+  margin-top: 0.32rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* 공통 모달: 상태 아이콘 배지 공통 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* 공통 모달: 성공 상태 배지 */
+.badgeSuccess {
+  background-color: rgba(39, 29, 19, 0.12);
+  color: var(--action-modal-accent-color);
+}
+
+/* 공통 모달: 오류 상태 배지 */
+.badgeError {
+  background-color: rgba(181, 79, 79, 0.14);
+  color: #a04141;
+}
+
+/* 공통 모달: 확인 상태 배지 */
+.badgeConfirm {
+  background-color: rgba(39, 29, 19, 0.14);
+  color: var(--action-modal-accent-color);
+}
+
+/* 공통 모달: 제목 텍스트 */
+.heading {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(20px, 1.4vw, 24px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* 공통 모달: 핵심 메시지 본문 */
+.message {
+  margin: 0.65rem 0 0;
+  color: rgba(17, 17, 17, 0.92);
+  font-size: clamp(15px, 1vw, 16px);
+  font-weight: 700;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+/* 공통 모달: 보조 안내 문구 */
+.caption {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.62);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+/* 공통 모달: 단일 확인 버튼 영역 */
+.actions {
+  margin-top: auto;
+  padding-top: 0.82rem;
+  border-top: 1px solid rgba(39, 29, 19, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 공통 모달: 취소/확인 2버튼 영역 */
+.actionsDual {
+  margin-top: auto;
+  padding-top: 0.82rem;
+  border-top: 1px solid rgba(39, 29, 19, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+/* 공통 모달: 확인 버튼 스타일 */
+.confirmButton {
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background-color: var(--action-modal-button-bg-color);
+  color: #ffffff;
+  min-width: 116px;
+  min-height: 46px;
+  padding: 0.65rem 1.25rem;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 8px 20px rgba(39, 29, 19, 0.24);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+/* 공통 모달: 확인 버튼 hover 상태 */
+.confirmButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 24px rgba(39, 29, 19, 0.26);
+  opacity: 0.95;
+}
+
+/* 공통 모달: 취소 버튼 스타일 */
+.cancelButton {
+  border: 1px solid rgba(39, 29, 19, 0.26);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  min-width: 116px;
+  min-height: 46px;
+  padding: 0.65rem 1.25rem;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+/* 공통 모달: 취소 버튼 hover 상태 */
+.cancelButton:hover {
+  transform: translateY(-1px);
+  border-color: rgba(39, 29, 19, 0.4);
+  opacity: 0.95;
+}
+
+/* 공통 모달: 모바일 레이아웃 조정 */
+@media (max-width: 640px) {
+  /* 공통 모달: 모바일 카드 크기/여백 */
+  .modal {
+    width: min(100%, 372px);
+    min-height: 312px;
+    border-radius: 16px;
+    padding: 2.1rem 0.98rem 0.9rem;
+  }
+
+  /* 공통 모달: 모바일 단일 버튼 정렬 */
+  .actions {
+    justify-content: stretch;
+  }
+
+  /* 공통 모달: 모바일 확인 버튼 너비 확장 */
+  .confirmButton {
+    width: 100%;
+  }
+
+  /* 공통 모달: 모바일 2버튼 정렬 */
+  .actionsDual {
+    justify-content: stretch;
+  }
+
+  /* 공통 모달: 모바일 2버튼 너비 확장 */
+  .actionsDual .confirmButton,
+  .actionsDual .cancelButton {
+    width: 100%;
+  }
+}
+
+/* 공통 모달: 배경 오버레이 페이드 인 */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 공통 모달: 카드 팝업 등장 애니메이션 */
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

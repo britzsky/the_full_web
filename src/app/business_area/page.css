@@ -1,0 +1,653 @@
+/* ---------------- 사업영역 ---------------- */
+
+/* 페이지 배경/스크롤 */
+.business-page {
+  background-color: #ffffff;
+  scrollbar-gutter: stable;
+}
+
+/* 라이트 헤더 톤 */
+.business-page .site-header-light {
+  border-bottom: none;
+}
+
+/* 화면 스냅 프레임 */
+.business-screen {
+  height: 100svh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 헤더 포함 첫 화면 상단 여유 */
+.business-screen-with-header {
+  padding-top: calc(156px + 0.1rem);
+}
+
+/* 본문 세로 중앙 정렬 */
+.business-screen-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
+/* 본문 폭 기준 */
+.business-screen-inner {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1320px;
+  display: grid;
+  align-content: center;
+  gap: clamp(0.8rem, 1.9vh, 1.3rem);
+}
+
+/* 1번 화면 카드 그리드 */
+.business-value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.15rem, 3.6vw, 3.1rem);
+  padding: clamp(0.95rem, 1.7vh, 1.35rem) clamp(0.7rem, 1.45vw, 1.3rem);
+}
+
+/* 1번 화면 카드 */
+.business-value-card {
+  min-height: clamp(154px, 20.3vh, 208px);
+  width: 100%;
+  margin-inline: 0;
+  border-radius: 1.2rem;
+  background-color: var(--business-overview-card-bg-1);
+  color: var(--business-value-card-text);
+  padding: clamp(0.56rem, 1.05vh, 0.78rem) clamp(0.76rem, 1.08vw, 1.08rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.52rem, 2.95vh, 2.2rem);
+}
+
+/* 1번 화면 카드별 배경색(1~6 고정 카드 순서 대응) */
+.business-value-card:nth-child(1) {
+  background-color: var(--business-overview-card-bg-1);
+}
+
+.business-value-card:nth-child(2) {
+  background-color: var(--business-overview-card-bg-2);
+}
+
+.business-value-card:nth-child(3) {
+  background-color: var(--business-overview-card-bg-3);
+}
+
+.business-value-card:nth-child(4) {
+  background-color: var(--business-overview-card-bg-4);
+}
+
+.business-value-card:nth-child(5) {
+  background-color: var(--business-overview-card-bg-5);
+}
+
+.business-value-card:nth-child(6) {
+  background-color: var(--business-overview-card-bg-6);
+}
+
+/* 1번 화면 카드 제목 */
+.business-value-title {
+  margin: -0.46rem 0 0;
+  color: #ffffff;
+  font-size: clamp(18px, 2.2vh, 24px);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* 1번 화면 카드 본문 */
+.business-value-copy {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(12px, 1.5vh, 14px);
+  line-height: clamp(20px, 2.35vh, 24px);
+  letter-spacing: -0.01em;
+}
+
+/* 1번 화면 카드 강조 */
+.business-value-copy strong {
+  font-size: clamp(14px, 1.85vh, 17px);
+  font-weight: 700;
+  line-height: inherit;
+}
+
+/* 2번 화면 풀블리드 섹션 */
+#business-catering.business-screen.business-screen-catering {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0 !important;
+}
+
+/* 2번 화면 본문 래퍼/그리드 풀폭 */
+#business-catering .business-screen-body,
+#business-catering .business-panel-fullbleed,
+/* 사업영역 화면: 급식서비스 화면 영역 - #business-catering .business-panel-grid */
+#business-catering .business-panel-grid {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* 2번 화면 본문 스트레치 */
+.business-screen-catering .business-screen-body {
+  align-items: stretch;
+  padding-top: 0;
+  min-height: 100%;
+}
+
+/* 2번 화면 전체폭 콘텐츠 */
+.business-panel-fullbleed {
+  flex: 1;
+  width: 100vw;
+  height: 100%;
+  min-height: 100%;
+}
+
+/* 2번 화면 3열 이미지 */
+.business-panel-grid {
+  overflow: hidden;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* 2번 화면 패널 카드 */
+.business-panel-card {
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+}
+
+/* 2번 화면 배경 오버레이 */
+.business-panel-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+}
+
+/* 2번 화면 텍스트 영역 */
+.business-panel-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.45rem, 2.7vh, 2.15rem);
+  padding: 0 clamp(1.65rem, 2.35vw, 2.4rem);
+  text-align: center;
+  color: #ffffff;
+}
+
+/* 2번 화면 제목 */
+.business-panel-title {
+  margin: 0;
+  font-size: clamp(15.5px, 1.08vw, 19px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* 2번 화면 설명 */
+.business-panel-description {
+  margin: 0;
+  width: min(92%, 36ch);
+  max-width: 36ch;
+  white-space: pre-line;
+  font-size: clamp(13.4px, 0.93vw, 16px);
+  line-height: 1.68;
+  letter-spacing: -0.01em;
+}
+
+/* 이미지 필터 초기화 */
+.business-catering-image,
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-image */
+.business-event-image {
+  filter: none;
+}
+
+/* 3번 화면 이벤트 레이아웃 */
+.business-event-inner {
+  gap: clamp(0.65rem, 1.2vh, 0.95rem);
+}
+
+/* 3번 화면 오브젝트 기준판 */
+.business-event-orbit {
+  position: relative;
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  min-height: clamp(530px, 68vh, 740px);
+  padding-bottom: clamp(0.65rem, 1.35vh, 1rem);
+  transform: translateY(-1.45vh);
+}
+
+/* 3번 화면 중앙 이미지 */
+.business-event-visual {
+  position: absolute;
+  left: 50%;
+  top: 45.6%;
+  transform: translate(-50%, -50%);
+  width: clamp(270px, 33vw, 430px);
+  aspect-ratio: 3 / 4;
+}
+
+/* 3번 화면 이미지 마스크 */
+.business-event-image-frame {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+/* 3번 화면 고리 */
+.business-event-ring {
+  position: absolute;
+  inset: -42%;
+  width: 172%;
+  height: 172%;
+  z-index: 4;
+  pointer-events: none;
+  transform: translateX(2%) translateY(3%) rotate(-52deg);
+}
+
+/* 3번 화면 고리 선 */
+.business-event-ring ellipse {
+  fill: none;
+  stroke: #3f3026;
+  stroke-width: 0.7;
+}
+
+/* 3번 화면 텍스트 박스 */
+.business-event-copy {
+  position: absolute;
+  text-align: center;
+  width: min(100%, 340px);
+  z-index: 6;
+}
+
+/* 3번 화면 학교 위치 */
+.business-event-copy-11 {
+  left: 10%;
+  top: 8.2%;
+}
+
+/* 3번 화면 산업체 위치 */
+.business-event-copy-1 {
+  right: 7%;
+  top: 8%;
+}
+
+/* 3번 화면 요양원 위치 */
+.business-event-copy-6 {
+  left: 50%;
+  bottom: -3.7rem;
+  transform: translateX(-50%);
+}
+
+/* 3번 화면 제목 */
+.business-event-title {
+  margin: 0;
+  color: #111111;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* 3번 화면 설명 */
+.business-event-description {
+  margin: 0.72rem 0 0;
+  white-space: pre-line;
+  color: #171717;
+  font-size: clamp(13.2px, 0.95vw, 16px);
+  line-height: 1.62;
+  letter-spacing: -0.01em;
+}
+
+/* 4번 화면 배치 */
+.business-distribution-inner {
+  --distribution-item-gap: clamp(1.05rem, 1.75vw, 1.5rem);
+  --distribution-chip-gap: clamp(2.2rem, 3.6vw, 3.4rem);
+  gap: clamp(3.6rem, 7.4vh, 5.8rem);
+  transform: translateY(-2.2vh);
+}
+
+/* 4번 화면 상단 3열 */
+.business-distribution-top {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--distribution-item-gap);
+}
+
+/* 4번 화면 상단 pill */
+.business-distribution-pill {
+  justify-self: center;
+  width: min(100%, 280px);
+  border-radius: 1rem;
+  border: 1.5px solid #3f3026;
+  padding: 0.85rem 0.95rem;
+  text-align: center;
+  font-size: clamp(14px, 1vw, 18px);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* 4번 화면 중앙 묶음 */
+.business-distribution-center {
+  display: grid;
+  justify-items: center;
+  gap: clamp(2.1rem, 4.2vh, 3rem);
+}
+
+/* 4번 화면 중앙 제목 */
+.business-distribution-center-title {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(14px, 1.05vw, 18px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* 4번 화면 중앙 박스 */
+.business-distribution-center-box {
+  width: min(100%, 980px);
+  border-radius: 1rem;
+  border: 1.5px solid #3f3026;
+  padding: clamp(2.15rem, 4.25vh, 3.15rem) clamp(0.95rem, 1.5vw, 1.65rem);
+  text-align: center;
+}
+
+/* 4번 화면 중앙 설명 */
+.business-distribution-center-box p {
+  margin: 0;
+  font-size: clamp(12.8px, 0.9vw, 15.5px);
+  line-height: 1.72;
+  letter-spacing: -0.01em;
+}
+
+/* 4번 화면 하단 1~5 묶음 */
+.business-distribution-bottom {
+  display: grid;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  gap: var(--distribution-item-gap);
+}
+
+/* 4번 화면 하단 상단행 */
+.business-distribution-bottom-top {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, max-content);
+  gap: var(--distribution-chip-gap);
+  justify-content: start;
+}
+
+/* 4번 화면 하단 하단행 */
+.business-distribution-bottom-bottom {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, max-content);
+  gap: var(--distribution-chip-gap);
+  justify-content: start;
+}
+
+/* 4번 화면 하단 공통 칩 */
+.business-distribution-chip {
+  width: fit-content;
+  min-width: fit-content;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 2.4rem;
+  border-radius: 9999px;
+  background-color: #dbd8d3;
+  padding: 0.56rem 1.15rem;
+  text-align: left;
+  font-size: clamp(12.4px, 0.9vw, 15px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  justify-self: start;
+}
+
+/* 4번 화면 칩 자동 배치 */
+.business-distribution-chip-top-1,
+.business-distribution-chip-top-2,
+.business-distribution-chip-bottom-1,
+.business-distribution-chip-bottom-2,
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip-bottom-3 */
+.business-distribution-chip-bottom-3 {
+  grid-column: auto;
+}
+
+/* 4번 화면 칩 폭 규칙 */
+.business-distribution-chip-top,
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip-bottom */
+.business-distribution-chip-bottom {
+  width: max-content;
+  min-width: max-content;
+  max-width: none;
+}
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+/* 사업영역 화면: 사업영역 화면 영역 - .business-value-grid */
+  .business-value-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-grid */
+  .business-panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-card */
+  .business-panel-card {
+    min-height: 100%;
+    height: 100%;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+  .business-event-orbit {
+    min-height: clamp(560px, 78vh, 820px);
+    transform: translateY(-1vh);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+  .business-event-visual {
+    top: 42.6%;
+    width: clamp(270px, 40vw, 362px);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+  .business-event-ring {
+    inset: -31%;
+    width: 160%;
+    height: 160%;
+    transform: translateX(4%) translateY(2%) rotate(-54deg);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy */
+  .business-event-copy {
+    width: min(100%, 290px);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-11 */
+  .business-event-copy-11 {
+    left: 6%;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-1 */
+  .business-event-copy-1 {
+    right: 8%;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+  .business-event-copy-6 {
+    bottom: -3.1rem;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-top */
+  .business-distribution-top {
+    grid-template-columns: 1fr;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-inner */
+  .business-distribution-inner {
+    transform: translateY(-1.4vh);
+  }
+
+  .business-distribution-bottom-top,
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-bottom-bottom */
+  .business-distribution-bottom-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+/* 사업영역 화면: 사업영역 화면 영역 - .business-screen-with-header */
+  .business-screen-with-header {
+    padding-top: calc(126px + 0.1rem);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-value-grid */
+  .business-value-grid {
+    grid-template-columns: 1fr;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-value-card */
+  .business-value-card {
+    min-height: 158px;
+    border-radius: 1.2rem;
+    justify-content: center;
+    gap: 1.35rem;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-copy */
+  .business-panel-copy {
+    padding: 0 1rem;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+  .business-event-orbit {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    min-height: auto;
+    transform: none;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+  .business-event-visual {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: clamp(300px, 82vw, 400px);
+    margin-top: -0.35rem;
+    margin-bottom: 1.9rem;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy */
+  .business-event-copy {
+    position: static;
+    width: 100%;
+    transform: none;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+  .business-event-ring {
+    inset: -16%;
+    width: 132%;
+    height: 132%;
+    transform: translateX(2%) translateY(2%) rotate(-56deg);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+  .business-event-copy-6 {
+    margin-top: 2rem;
+  }
+
+  .business-distribution-top,
+  .business-distribution-bottom-top,
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-bottom-bottom */
+  .business-distribution-bottom-bottom {
+    grid-template-columns: 1fr;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-pill */
+  .business-distribution-pill {
+    width: 100%;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip */
+  .business-distribution-chip {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-inner */
+  .business-distribution-inner {
+    transform: translateY(0);
+  }
+}
+
+/* 초소형 모바일 */
+@media (max-width: 480px) {
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+  .business-event-visual {
+    width: min(95vw, 340px);
+  }
+}
+
+/* 작은 데스크톱 */
+@media (max-height: 900px) and (min-width: 769px) {
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+  .business-event-orbit {
+    min-height: clamp(500px, 65vh, 670px);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+  .business-event-visual {
+    top: 42.4%;
+    width: clamp(340px, 44vh, 460px);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+  .business-event-ring {
+    inset: -43%;
+    width: 184%;
+    height: 184%;
+    transform: translateX(1%) translateY(2%) rotate(-52deg);
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring ellipse */
+  .business-event-ring ellipse {
+    stroke-width: 0.85;
+  }
+
+/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+  .business-event-copy-6 {
+    bottom: -2.9rem;
+  }
+}
