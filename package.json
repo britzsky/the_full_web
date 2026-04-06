@@ -3,13 +3,13 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p 3001",
+    "dev": "next dev -H 0.0.0.0 -p 8081",
     "clean:next": "node scripts/clean-next-safe.cjs",
     "clean:next:force": "node scripts/clean-next-safe.cjs --force",
-    "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 3001",
-    "build": "next build",
-    "start": "next start",
-    "start:lan": "next start -H 0.0.0.0 -p 3001",
+    "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 8081",
+    "build": "node --env-file=.env.real ./node_modules/next/dist/bin/next build",
+    "start": "node --env-file=.env.real ./node_modules/next/dist/bin/next start -p 8081",
+    "start:lan": "node --env-file=.env.real ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p 8081",
     "lint": "next lint"
   },
   "dependencies": {
