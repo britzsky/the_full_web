@@ -7,7 +7,7 @@ Type=simple
 User=ec2-user
 WorkingDirectory=/home/ec2-user/the_full_web
 Environment=NODE_ENV=production
-ExecStart=/usr/bin/npm start
+ExecStart=/home/ec2-user/.nvm/versions/node/v22.16.0/bin/npm start
 Restart=always
 RestartSec=5
 KillSignal=SIGINT
