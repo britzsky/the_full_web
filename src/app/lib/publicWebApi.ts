@@ -15,26 +15,10 @@ export type PublicApiResponse<T> = {
   payload: T | PublicApiErrorPayload;
 };
 
-// 브라우저 현재 호스트를 기준으로 web_api 8090 주소 생성
-const getRuntimeWebApiBaseUrl = () => {
-  if (typeof window === "undefined") {
-    return "http://127.0.0.1:8090";
-  }
+// 브라우저에서는 같은 도메인 Next API를 호출하고, 서버가 WEB_API_BASE_URL로 내부 연동한다.
+const getBrowserApiPath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
 
-  const protocol = /^https?:$/iu.test(window.location.protocol) ? window.location.protocol : "http:";
-  const hostname = normalizeText(window.location.hostname) || "127.0.0.1";
-  return `${protocol}//${hostname}:8090`;
-};
-
-// 브라우저 번들에서 읽을 공개 API 주소 반환
-export const getPublicWebApiBaseUrl = () => {
-  const raw = normalizeText(process.env.NEXT_PUBLIC_WEB_API_BASE_URL);
-
-  const baseUrl = raw || getRuntimeWebApiBaseUrl();
-  return baseUrl.replace(/\/+$/, "");
-};
-
-// 상대 API 경로를 공개 API 절대 주소로 변환
+// 클라이언트 공개 API 경로를 브라우저/절대주소 입력 규칙에 맞게 정규화
 export const toPublicWebApiUrl = (path: string) => {
   const normalizedPath = normalizeText(path);
   if (!normalizedPath) {
@@ -45,8 +29,7 @@ export const toPublicWebApiUrl = (path: string) => {
     return normalizedPath;
   }
 
-  const baseUrl = getPublicWebApiBaseUrl();
-  return `${baseUrl}${normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`}`;
+  return getBrowserApiPath(normalizedPath);
 };
 
 // 공개 API 요청 헤더를 브라우저 fetch 규칙에 맞게 구성
