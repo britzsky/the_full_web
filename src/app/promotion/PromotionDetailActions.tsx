@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
+import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 홍보 화면: 컴포넌트 전달값
 type PromotionDetailActionsProps = {
@@ -46,7 +47,7 @@ export default function PromotionDetailActions({ postId, canManage }: PromotionD
     setIsDeleting(true);
     try {
 // 홍보 화면: response 정의
-      const response = await fetch(`/api/promotion/posts/${postId}`, {
+      const response = await fetch(toPublicWebApiUrl(`/api/promotion/posts/${postId}`), {
         method: "DELETE",
       });
 // 홍보 화면: payload 정의

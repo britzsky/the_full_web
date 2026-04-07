@@ -336,6 +336,7 @@
 
 /* 4번 화면 상단 pill */
 .business-distribution-pill {
+  position: relative;
   justify-self: center;
   width: min(100%, 280px);
   border-radius: 1rem;
@@ -345,6 +346,65 @@
   font-size: clamp(14px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.3;
+  overflow: visible;
+}
+
+/* 식자재유통 상단 항목 호버 안내 박스 기준점 */
+.business-hover-anchor {
+  outline: none;
+  cursor: help;
+}
+
+/* 식자재유통 상단 항목 호버 안내 박스 */
+.business-hover-tooltip {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 1rem);
+  z-index: 12;
+  width: min(88vw, 320px);
+  display: flex;
+  align-items: center;
+  min-height: 168px;
+  border: 3px solid #3f3026;
+  border-radius: 2rem;
+  background-color: #ffffff;
+  padding: 1.8rem 1.25rem 1.25rem;
+  box-shadow: 0 22px 40px rgba(63, 48, 38, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+/* 식자재유통 상단 항목 안내 박스 북마크 장식 */
+.business-hover-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -1.95rem;
+  right: 2.1rem;
+  width: 1.9rem;
+  height: 2.55rem;
+  background-color: #3f3026;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%);
+}
+
+/* 식자재유통 상단 항목 호버/포커스 시 안내 박스 표시 */
+.business-hover-anchor:is(:hover, :focus-visible, :focus-within) .business-hover-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* 식자재유통 상단 항목 안내 문구 */
+.business-hover-tooltip-text {
+  margin: 0;
+  color: #111111;
+  text-align: left;
+  font-size: clamp(14px, 0.98vw, 16px);
+  line-height: 1.55;
+  width: 100%;
+  white-space: pre-line;
 }
 
 /* 4번 화면 중앙 묶음 */
@@ -597,6 +657,17 @@
 /* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-pill */
   .business-distribution-pill {
     width: 100%;
+  }
+
+  .business-hover-tooltip {
+    left: 0;
+    right: 0;
+    width: 100%;
+    transform: translate(0, 12px);
+  }
+
+  .business-hover-anchor:is(:hover, :focus-visible, :focus-within) .business-hover-tooltip {
+    transform: translate(0, 0);
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip */

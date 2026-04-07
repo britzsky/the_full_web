@@ -500,7 +500,7 @@
   border: 1px solid rgba(39, 29, 19, 0.33);
   background-color: #ffffff;
   color: #7b7b7b;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
   display: flex;
   align-items: center;
@@ -511,7 +511,7 @@
 .contact-manage-reply-ckeditor-shell .ck.ck-toolbar {
   border-color: rgba(39, 29, 19, 0.33);
   background-color: #ffffff;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* 문의관리 상세 답변 CKEditor 본문 편집영역 스타일 */
@@ -519,7 +519,7 @@
   min-height: clamp(140px, 20vh, 220px);
   background-color: #ffffff;
   color: #111111;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
   line-height: 1.6;
   border-color: rgba(39, 29, 19, 0.33);

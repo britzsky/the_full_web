@@ -18,6 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="stylesheet" href="/fonts/pretendardvariable.css" />
+        <link rel="stylesheet" href="/fonts/pretendard.css" />
+      </head>
       <body>{children}</body>
     </html>
   );

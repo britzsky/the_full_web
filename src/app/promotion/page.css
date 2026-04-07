@@ -439,7 +439,7 @@
 .promotion-detail-html {
   color: inherit;
   font: inherit;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   line-height: inherit;
 }
 
@@ -650,7 +650,7 @@
   border: 1px solid rgba(39, 29, 19, 0.33);
   background-color: #ffffff;
   color: #7b7b7b;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
   display: flex;
   align-items: center;
@@ -661,7 +661,7 @@
 .promotion-form-ckeditor-shell .ck.ck-toolbar {
   border-color: rgba(39, 29, 19, 0.28);
   background-color: #ffffff;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* 홍보 화면: CKEditor 편집 본문 영역 */
@@ -669,7 +669,7 @@
   min-height: clamp(220px, 34vh, 330px);
   background-color: #ffffff;
   color: #111111;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   font-size: clamp(15px, 1vw, 17px);
   line-height: 1.6;
   border-color: rgba(39, 29, 19, 0.33);

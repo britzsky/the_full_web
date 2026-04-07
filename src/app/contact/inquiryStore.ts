@@ -155,15 +155,23 @@ const toPositiveInt = (value: unknown) => {
 // 배열 형태 응답을 안전하게 변환
 const toArray = <T>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
 
-// the_full_web_api 베이스 URL 후보(환경변수 우선, 로컬 포트 fallback)
-const DEFAULT_WEB_API_BASE_URLS = ["http://127.0.0.1:3001", "http://127.0.0.1:3000", "http://127.0.0.1:8081"];
+// the_full_web_api 베이스 URL 후보(환경변수 우선, web_api 포트 8090 fallback)
+const DEFAULT_WEB_API_BASE_URLS = ["http://127.0.0.1:8090", "http://localhost:8090", "http://52.64.151.137:8090"];
+
+// 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
+const normalizeWebApiBaseUrl = (value: string) =>
+  normalizeText(value)
+    .replace(/\/+$/, "")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137)):8081$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
 
 const parseBaseUrlCandidates = (...values: Array<string | undefined>) => {
   const deduped = new Set<string>();
   const candidates: string[] = [];
 
   values.forEach((value) => {
-    const raw = normalizeText(value);
+    const raw = normalizeWebApiBaseUrl(value ?? "");
     if (!raw) {
       return;
     }
@@ -184,7 +192,7 @@ const parseBaseUrlCandidates = (...values: Array<string | undefined>) => {
 };
 
 const getApiBaseUrlCandidates = () => {
-  const configured = parseBaseUrlCandidates(process.env.THE_FULL_WEB_API_BASE_URL, process.env.WEB_API_BASE_URL);
+  const configured = parseBaseUrlCandidates(process.env.WEB_API_BASE_URL, process.env.NEXT_PUBLIC_WEB_API_BASE_URL);
   const fallback = parseBaseUrlCandidates(...DEFAULT_WEB_API_BASE_URLS);
   const merged = [...configured, ...fallback.filter((item) => !configured.includes(item))];
   const blocked = parseBaseUrlCandidates(
@@ -406,7 +414,7 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
   };
 
   const response = await requestWebApi<{ inquiry?: ContactApiInquiry; inquiryId?: number | string }>(
-    "/api/contact/inquiry",
+    "/api/contact/manage",
     {
       method: "POST",
       body: JSON.stringify(requestBody),
@@ -437,7 +445,7 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
 
 // 문의관리 목록 조회 API 호출
 export const listContactInquiry = async () => {
-  const response = await requestWebApi<{ inquiry?: ContactApiInquiry[] }>("/api/contact/inquiry_management");
+  const response = await requestWebApi<{ inquiry?: ContactApiInquiry[] }>("/api/contact/manage");
   if (!response.ok) {
     throw new Error(getApiErrorMessage(response.payload, "문의 목록 조회 중 오류가 발생했습니다."));
   }
@@ -455,7 +463,7 @@ export const getContactInquiryById = async (id: number) => {
   }
 
   const response = await requestWebApi<{ inquiry?: ContactApiInquiry }>(
-    `/api/contact/inquiry_management/${inquiryId}`
+    `/api/contact/manage/${inquiryId}`
   );
   if (response.status === 404) {
     return null;
@@ -475,7 +483,7 @@ export const getContactInquiryReplyByInquiryId = async (inquiryId: number) => {
   }
 
   const response = await requestWebApi<{ reply?: ContactApiReply | null }>(
-    `/api/contact/inquiry_management/${parsedInquiryId}/reply`
+    `/api/contact/manage/${parsedInquiryId}/reply`
   );
 
   if (response.status === 404) {
@@ -501,7 +509,7 @@ export const upsertContactInquiryReply = async (inquiryId: number, input: Contac
   }
 
   const response = await requestWebApi<{ reply?: ContactApiReply }>(
-    `/api/contact/inquiry_management/${parsedInquiryId}/reply`,
+    `/api/contact/manage/${parsedInquiryId}/reply`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -533,7 +541,7 @@ export const deleteContactInquiry = async (id: number, deletedBy = "admin") => {
     return false;
   }
 
-  const response = await requestWebApi<{ message?: string }>(`/api/contact/inquiry_management/${inquiryId}`, {
+  const response = await requestWebApi<{ message?: string }>(`/api/contact/manage/${inquiryId}`, {
     method: "DELETE",
     body: JSON.stringify({
       deletedBy: normalizeText(deletedBy) || "admin",

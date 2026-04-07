@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import CateringEducationCarousel from "./CateringEducationCarousel";
+import CateringScrollController from "./CateringScrollController";
 import "./page.css";
 
 // 1번 화면 흐름도 셀(라벨) 텍스트 데이터
@@ -10,6 +12,7 @@ type CateringFlowNode = {
   text: string;
   type: "dark" | "outline";
   className: string;
+  tooltip?: string;
 };
 
 // 2번 화면 3단 메뉴관리 카드 데이터
@@ -87,7 +90,7 @@ const cateringFlowNodes: CateringFlowNode[] = [
   { text: "사업장 메뉴구성", type: "dark", className: "catering_flow_node_center_mid" },
   { text: "운영 결과 분석", type: "dark", className: "catering_flow_node_right_mid" },
   { text: "고객 입맛 식단 구성", type: "dark", className: "catering_flow_node_right_end" },
-  { text: "현장중심의 메뉴 구성", type: "outline", className: "catering_flow_node_top_right" },
+  { text: "현장중심의 메뉴 구성", type: "outline", className: "catering_flow_node_top_right", tooltip: "연령, 성별, 근무 형태 등 각 사업장의 특성을 반영한 맞춤형 메뉴를 제공합니다. \n 3개월 단위 메뉴 분석을 통해 지속적으로 메뉴를 개선하며, 전문 영양사의 일일 모니터링으로 고객의 니즈를 빠르게 반영합니다." },
 ];
 
 // 2번 화면 체계적 메뉴관리 3단계 데이터
@@ -145,9 +148,19 @@ const cateringEducationCards: CateringEducationCard[] = [
       "현장 직원 대상 정기 교육을 실시하고,\n교육 결과에 대한 평가를 통해\n인사고과에 반영합니다.\n이를 바탕으로 지속적인 역량 향상과\n현장 운영 개선을 도모합니다.",
   },
   {
+    title: "세스코 위생 모니터링",
+    description:
+      "현장 관리 경험이 풍부한 영양사와 본사가 함께 참여하여\n정기적인 위생 모니터링을 실시합니다.\n세스코 기준에 따른 체계적인 점검으로\n현장의 위생 상태를 지속적으로 관리합니다.",
+  },
+  {
     title: "본사 소통",
     description:
       "현장 영양사와 본사 간 월 1회\n정기 미팅을 통해 현장 이슈를 공유하고\n개선 방향을 논의합니다.\n또한 현장 정기 방문을 통해\n세스코 자료를 기반으로\n한 위생 평가와 교육을 실시합니다.",
+  },
+  {
+    title: "위생 / 안전 관리",
+    description:
+      "㈜더채움 전 사업장에 세스코 멤버십 서비스를 \n 적용하여 통합적인 위생·안전 관리 시스템을 \n 운영하고 있습니다.\n일관된 기준과 철저한 관리로\n안심할 수 있는 급식 환경을 제공합니다.",
   },
   {
     title: "협력사 주관 교육",
@@ -200,8 +213,14 @@ export default function CateringServicePage() {
       id="catering_scroll"
       className="catering_page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-white text-[#111111]"
     >
+      <CateringScrollController containerId="catering_scroll" sectionSelector="[data-catering-section]" />
+
       {/* 1번 화면 메뉴구성 흐름도 */}
-      <section id="catering_flow" className="catering_screen catering_screen_with_header snap-start relative">
+      <section
+        id="catering_flow"
+        data-catering-section
+        className="catering_screen catering_screen_with_header snap-start relative"
+      >
         <SiteHeader
           leftItems={cateringHeaderLeftItems}
           rightItems={cateringHeaderRightBaseItems}
@@ -218,9 +237,15 @@ export default function CateringServicePage() {
                   key={node.text}
                   className={`catering_flow_node ${node.className} ${
                     node.type === "outline" ? "catering_flow_node_outline" : "catering_flow_node_dark"
-                  }`}
+                  } ${node.tooltip ? "catering_flow_node_hover_anchor" : ""}`}
+                  tabIndex={node.tooltip ? 0 : undefined}
                 >
-                  {node.text}
+                  <span>{node.text}</span>
+                  {node.tooltip ? (
+                    <div className="catering-hover-tooltip catering-hover-tooltip-right" role="tooltip">
+                      <p className="catering-hover-tooltip-text">{node.tooltip}</p>
+                    </div>
+                  ) : null}
                 </div>
               ))}
               <svg
@@ -258,7 +283,7 @@ export default function CateringServicePage() {
       </section>
 
       {/* 2번 화면 체계적 메뉴 관리 단계 */}
-      <section id="catering_stage" className="catering_screen catering_screen_stage snap-start">
+      <section id="catering_stage" data-catering-section className="catering_screen catering_screen_stage snap-start">
         {/* 3단 접시 패널 본문 래퍼 */}
         <div className="catering_screen_body">
           {/* 3열 접시 패널 그리드 */}
@@ -287,7 +312,7 @@ export default function CateringServicePage() {
       </section>
 
       {/* 3번 화면 메뉴개발/품질연구 표 + 프로세스 */}
-      <section id="catering_compare" className="catering_screen snap-start">
+      <section id="catering_compare" data-catering-section className="catering_screen snap-start">
         {/* 비교표/프로세스 본문 래퍼 */}
         <div className="catering_screen_body">
           {/* 비교표와 프로세스 묶음 컨테이너 */}
@@ -339,7 +364,7 @@ export default function CateringServicePage() {
       </section>
 
       {/* 4번 화면 교육/소통 지표 */}
-      <section id="catering_education" className="catering_screen snap-start">
+      <section id="catering_education" data-catering-section className="catering_screen snap-start">
         {/* 교육 지표/본문 래퍼 */}
         <div className="catering_screen_body">
           {/* 교육 섹션 콘텐츠 컨테이너 */}
@@ -353,28 +378,14 @@ export default function CateringServicePage() {
               ))}
             </div>
 
-            <div className="catering_education_cards_wrap">
-              <button type="button" aria-label="이전" className="catering_education_nav catering_education_nav_left">
-                ‹
-              </button>
-              <div className="catering_education_cards">
-                {cateringEducationCards.map((card) => (
-                  <article key={card.title} className="catering_education_card">
-                    <h3>{card.title}</h3>
-                    <p>{card.description}</p>
-                  </article>
-                ))}
-              </div>
-              <button type="button" aria-label="다음" className="catering_education_nav catering_education_nav_right">
-                ›
-              </button>
-            </div>
+            {/* 교육/소통 카드 슬라이드 영역 */}
+            <CateringEducationCarousel cards={cateringEducationCards} />
           </div>
         </div>
       </section>
 
       {/* 5번 화면 레시피/위생/채용 */}
-      <section id="catering_research" className="catering_screen snap-start">
+      <section id="catering_research" data-catering-section className="catering_screen snap-start">
         {/* 레시피/안전/채용 본문 래퍼 */}
         <div className="catering_screen_body">
           {/* 마지막 섹션 콘텐츠 컨테이너 */}

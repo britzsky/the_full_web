@@ -5,8 +5,8 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getAdminAccess } from "@/app/lib/adminAccess";
-import PromotionEditorForm from "../../PromotionEditorForm";
 import { getPromotionManagePermission } from "../../permissions";
+import { PromotionEditClient } from "../../promotionClient";
 import { getPromotionPostById } from "../../promotionStore";
 import "../../page.css";
 
@@ -61,11 +61,12 @@ export default async function PromotionEditPage({ params }: PromotionEditPagePro
     notFound();
   }
 
-// 홍보 화면: 데이터 저장 로직
-  const post = await getPromotionPostById(id);
-  if (!post) {
+  const existingPost = await getPromotionPostById(id);
+  if (!existingPost) {
     notFound();
   }
+
+  const refreshKey = `${id}:${Date.now()}`;
 
   return (
     <main
@@ -85,15 +86,7 @@ export default async function PromotionEditPage({ params }: PromotionEditPagePro
           <div className="promotion-form-header">
             <h2 className="promotion-section-title">글 수정</h2>
           </div>
-          <PromotionEditorForm
-            mode="edit"
-            postId={post.id}
-            initialValues={{
-              title: post.title,
-              author: post.author,
-              content: post.content,
-            }}
-          />
+          <PromotionEditClient postId={id} refreshKey={refreshKey} />
         </div>
       </section>
 

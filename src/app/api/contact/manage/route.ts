@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { createContactInquiry } from "@/app/contact/inquiryStore";
-import { buildContactManageUrl, triggerContactInquiryErpNotification } from "@/app/contact/erpWebhook";
+import { createContactInquiry, listContactInquiry } from "@/app/contact/inquiryStore";
+import { getAdminAccess } from "@/app/lib/adminAccess";
 
-// 고객문의 API: ContactInquiryPayload 타입 모델
+// 고객문의/문의관리 API 요청 본문 타입
 type ContactInquiryPayload = {
   businessName: string;
   managerName: string;
@@ -21,7 +21,7 @@ type ContactInquiryPayload = {
   erpSyncTarget?: string;
 };
 
-// 고객문의 API: REQUIRED_FIELDS 정의
+// 고객문의 등록 필수 항목 목록
 const REQUIRED_FIELDS: Array<keyof ContactInquiryPayload> = [
   "businessName",
   "managerName",
@@ -36,7 +36,7 @@ const REQUIRED_FIELDS: Array<keyof ContactInquiryPayload> = [
   "inquiryContent",
 ];
 
-// 고객문의 API: normalizeText 정의
+// 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => {
   if (typeof value !== "string") {
     return "";
@@ -44,15 +44,15 @@ const normalizeText = (value: unknown) => {
   return value.trim();
 };
 
+// 입력값을 KST 고정 문자열로 변환
 const toKstDateTimeString = (value: unknown) => {
   const raw = normalizeText(value);
   if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/u.test(raw)) {
     return raw;
   }
+
   const parsed = raw ? new Date(raw) : new Date();
   const baseDate = Number.isNaN(parsed.getTime()) ? new Date() : parsed;
-
-  // UTC 기준으로 +9시간 오프셋을 적용해 KST 문자열로 고정
   const kstDate = new Date(baseDate.getTime() + 9 * 60 * 60 * 1000);
   const year = String(kstDate.getUTCFullYear());
   const month = String(kstDate.getUTCMonth() + 1).padStart(2, "0");
@@ -63,7 +63,25 @@ const toKstDateTimeString = (value: unknown) => {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 };
 
-// 고객문의 API: 데이터 저장 로직
+// 문의관리 목록 조회 API
+export async function GET() {
+  const canManage = await getAdminAccess();
+  if (!canManage) {
+    return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 403 });
+  }
+
+  try {
+    const inquiry = await listContactInquiry();
+    return NextResponse.json({ inquiry });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "문의 목록 조회 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  }
+}
+
+// 고객문의 등록 API
 export async function POST(request: Request) {
   let body: Partial<ContactInquiryPayload>;
 
@@ -73,13 +91,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "요청 본문(JSON) 형식이 올바르지 않습니다." }, { status: 400 });
   }
 
-// 고객문의 API: 상태값
   const missingFields = REQUIRED_FIELDS.filter((field) => !normalizeText(body[field]));
   if (missingFields.length > 0) {
     return NextResponse.json({ error: "필수 항목을 입력해 주세요.", fields: missingFields }, { status: 400 });
   }
 
-// 고객문의 API: normalizedPayload 정의
   const normalizedPayload: ContactInquiryPayload = {
     businessName: normalizeText(body.businessName),
     managerName: normalizeText(body.managerName),
@@ -99,39 +115,11 @@ export async function POST(request: Request) {
   };
 
   try {
-// 고객문의 API: 데이터 저장 로직
     const savedInquiry = await createContactInquiry(normalizedPayload);
-// 고객문의 API: erpSync 정의
-    const inquiryId = Number(savedInquiry.id);
-    const routeUserIds = String(process.env.ERP_CONTACT_ROUTE_USER_IDS || "")
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    const primaryRouteUserId = routeUserIds[0] || "ww1";
-    const erpSync = await triggerContactInquiryErpNotification({
-      eventType: "CONTACT_INQUIRY_CREATED",
-      payload: {
-        id: inquiryId,
-        title: savedInquiry.title,
-        business_name: savedInquiry.businessName,
-        manager_name: savedInquiry.managerName,
-        phone_number: savedInquiry.phoneNumber,
-        email: savedInquiry.email,
-        answer_yn: savedInquiry.answerYn,
-        submitted_at: savedInquiry.submittedAt || savedInquiry.createdAt,
-        source: savedInquiry.source || normalizedPayload.source,
-        erp_sync_target: savedInquiry.erpSyncTarget || normalizedPayload.erpSyncTarget,
-        user_id: primaryRouteUserId,
-        target_user_id: primaryRouteUserId,
-        target_user_ids: routeUserIds.length > 0 ? routeUserIds : ["ww1"],
-        manage_url: buildContactManageUrl(inquiryId),
-      },
-    });
 
     return NextResponse.json({
       message: "문의가 정상적으로 접수되었습니다.\n확인 후 작성해주신 이메일로 답변드리겠습니다.",
       inquiryId: savedInquiry.id,
-      erpSync,
     });
   } catch (error) {
     return NextResponse.json(

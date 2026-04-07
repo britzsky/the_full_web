@@ -5,51 +5,6 @@
 
 /* ---------------- 공통 ---------------- */
 
-/* 가변 Pretendard 폰트 */
-@font-face {
-  font-family: 'Pretendard Variable';
-  font-style: normal;
-  font-weight: 45 920;
-  font-display: swap;
-  src: url('/fonts/PretendardVariable.woff2') format('woff2');
-}
-
-/* 나눔스퀘어 Light */
-@font-face {
-  font-family: 'NanumSquare';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('/fonts/NanumSquareL.woff2') format('woff2');
-}
-
-/* 나눔스퀘어 Regular/Medium */
-@font-face {
-  font-family: 'NanumSquare';
-  font-style: normal;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url('/fonts/NanumSquareR.woff2') format('woff2');
-}
-
-/* 나눔스퀘어 Bold */
-@font-face {
-  font-family: 'NanumSquare';
-  font-style: normal;
-  font-weight: 600 700;
-  font-display: swap;
-  src: url('/fonts/NanumSquareB.woff2') format('woff2');
-}
-
-/* 나눔스퀘어 ExtraBold/Black */
-@font-face {
-  font-family: 'NanumSquare';
-  font-style: normal;
-  font-weight: 800 900;
-  font-display: swap;
-  src: url('/fonts/NanumSquareEB.woff2') format('woff2');
-}
-
 /* 연혁(연도) 숫자용 폰트 */
 @font-face {
   font-family: 'HanwhaB';
@@ -152,12 +107,14 @@
 
 /* 페이지 커스텀 토큰(메인 본문 바) */
 :root {
+  --font-family-base: 'Pretendard Variable', 'Pretendard', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', 'Noto Sans KR', Arial, Helvetica, sans-serif;
+  --font-family-year: 'HanwhaB', 'Pretendard Variable', 'Pretendard', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', 'Noto Sans KR', Arial, Helvetica, sans-serif;
   --section-title-font-size: clamp(18px, 1.28vw, 22px);
   --section-title-pad-left-mobile: 1.5rem;
   --section-title-pad-left-desktop: 15rem;
   --section-title-pad-top: clamp(1.2rem, 2.6vh, 1.9rem);
 
-  /* 메인 본문 바 기본 색상 */
+  /* ----------------------- 메인 본문 바 기본 색상 ----------------------- */
   /* --main-body-bar-color: #281D13; */
   /* --main-body-bar-color: #586E34; */
   --main-body-bar-color: #27391C;
@@ -204,7 +161,7 @@
   /* html/body 기본 글꼴 렌더링 품질 설정 */
   html,
   body {
-    font-family: 'NanumSquare', sans-serif;
+    font-family: var(--font-family-base);
     font-synthesis: none;
     /* 작은 화면 축소 구간에서도 글자 가독성이 떨어지지 않도록 렌더링 품질 보정 */
     text-rendering: optimizeLegibility;
@@ -478,7 +435,7 @@
   padding-top: 0.125rem;
   color: #000000;
   text-align: center;
-  font-family: 'HanwhaB', 'NanumSquare', sans-serif;
+  font-family: var(--font-family-year);
   font-size: clamp(24px, 3.4vh, 36px);
   line-height: 1;
 }
@@ -597,17 +554,17 @@
 
 /* 디스플레이용 폰트 클래스 */
 .font-display {
-  font-family: 'NanumSquare', sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* 본문용 폰트 클래스 */
 .font-body {
-  font-family: 'NanumSquare', sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* 연혁 년도 전용 폰트 클래스 */
 .font-year {
-  font-family: 'HanwhaB', 'NanumSquare', sans-serif;
+  font-family: var(--font-family-year);
   font-weight: 400;
 }
 

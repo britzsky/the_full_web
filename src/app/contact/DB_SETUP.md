@@ -4,17 +4,15 @@
 프론트(`the_full_web`)에서는 DB 직접 연결을 사용하지 않습니다.
 
 ```env
-# 8090 변경시: 아래 두 값(8081)을 함께 8090으로 변경
-WEB_API_BASE_URL=http://127.0.0.1:8081
-# 또는
-THE_FULL_WEB_API_BASE_URL=http://127.0.0.1:8081
+# the_full_web_api 서버 주소
+WEB_API_BASE_URL=http://127.0.0.1:8090
 ```
 
-- 고객문의 등록: `POST /api/contact/inquiry`
-- 문의관리 목록: `GET /api/contact/inquiry_management`
-- 문의관리 상세: `GET /api/contact/inquiry_management/{id}`
-- 문의관리 답변 조회/저장: `GET|POST /api/contact/inquiry_management/{id}/reply`
-- 문의관리 삭제: `DELETE /api/contact/inquiry_management/{id}` (소프트삭제)
+- 고객문의 등록: `POST /api/contact/manage`
+- 문의관리 목록: `GET /api/contact/manage`
+- 문의관리 상세: `GET /api/contact/manage/{id}`
+- 문의관리 답변 조회/저장: `GET|POST /api/contact/manage/{id}/reply`
+- 문의관리 삭제: `DELETE /api/contact/manage/{id}` (소프트삭제)
 
 - 실제 테이블 생성/마이그레이션은 `the_full_web_api` 쪽에서 관리합니다.
 - 참고용 SQL은 `inquiry_inquiry_reply.sql`을 사용하시면 됩니다.

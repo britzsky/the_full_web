@@ -47,7 +47,7 @@ const parseCsvNumbers = (value: unknown) =>
 const getContactManageBaseUrl = () => {
   const configuredBaseUrl =
     normalizeText(process.env.THE_FULL_WEB_BASE_URL) || normalizeText(process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL);
-  const baseUrl = configuredBaseUrl || "http://localhost:3001";
+  const baseUrl = configuredBaseUrl || "http://localhost:8081";
   return baseUrl.replace(/\/+$/, "");
 };
 

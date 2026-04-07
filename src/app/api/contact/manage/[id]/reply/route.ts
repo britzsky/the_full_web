@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
+import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
 import {
-  getContactInquiryById,
   getContactInquiryReplyByInquiryId,
   upsertContactInquiryReply,
 } from "@/app/contact/inquiryStore";
-import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
-import { buildContactManageUrl, triggerContactInquiryErpNotification } from "@/app/contact/erpWebhook";
+import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 export const runtime = "nodejs";
 
@@ -25,7 +23,7 @@ const parseId = (value: string) => {
 // 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
-// 요청 헤더(Referer)에서 user_id 파라미터를 추출
+// 요청 헤더 Referer에서 user_id 파라미터 추출
 const getUserIdFromReferer = (request: Request) => {
   const referer = normalizeText(request.headers.get("referer"));
   if (!referer) {
@@ -51,7 +49,7 @@ const resolveReplyUserId = async (request: Request, bodyUserId: unknown) => {
   return sessionUserId || headerUserId || refererUserId || requestBodyUserId || "admin";
 };
 
-// 문의관리 상세: 답변 조회 API
+// 문의관리 상세 답변 조회 API
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
   const canManage = await getAdminAccess();
   if (!canManage) {
@@ -75,7 +73,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   }
 }
 
-// 문의관리 상세: 답변 저장/수정 API
+// 문의관리 상세 답변 저장/수정 API
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const canManage = await getAdminAccess();
   if (!canManage) {
@@ -107,40 +105,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       userId: resolvedUserId,
     });
 
-    const inquiry = await getContactInquiryById(inquiryId);
-    const replyUserId = normalizeText(reply.userId) || resolvedUserId;
-
-    // 문의관리 상세: 답변 저장 시 ERP 알림 연동
-    const erpSync = await triggerContactInquiryErpNotification({
-      eventType: "CONTACT_INQUIRY_REPLIED",
-      preferredUserIds: replyUserId ? [replyUserId] : [],
-      payload: {
-        id: inquiryId,
-        inquiry_id: inquiryId,
-        title: inquiry?.title || "",
-        business_name: inquiry?.businessName || "",
-        manager_name: inquiry?.managerName || "",
-        phone_number: inquiry?.phoneNumber || "",
-        email: inquiry?.email || "",
-        answer_yn: inquiry?.answerYn || "Y",
-        reply_user_id: replyUserId,
-        user_id: replyUserId,
-        target_user_id: replyUserId,
-        replied_at: reply.modifiedAt || reply.registeredAt,
-        manage_url: buildContactManageUrl(inquiryId, { erpUserId: replyUserId }),
-      },
-    });
-
     return NextResponse.json({
       message: "답변이 저장되었습니다.",
       reply,
-      erpSync,
     });
   } catch (error) {
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : "답변 저장 중 오류가 발생했습니다.",
-      },
+      { error: error instanceof Error ? error.message : "답변 저장 중 오류가 발생했습니다." },
       { status: 500 }
     );
   }

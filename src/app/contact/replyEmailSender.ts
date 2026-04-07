@@ -59,6 +59,14 @@ type ContactReplyEnvelope = {
   replyTo: string;
 };
 
+// 이메일/미리보기에서 Pretendard 계열을 우선 사용하기 위한 public 폰트 CSS 경로
+const PRETENDARD_VARIABLE_CSS_PATH = "/fonts/pretendardvariable.css";
+const PRETENDARD_STATIC_CSS_PATH = "/fonts/pretendard.css";
+// 메일 클라이언트가 웹폰트를 막아도 한글이 깨지지 않도록 시스템 폰트를 함께 지정
+const MAIL_SAFE_FONT_STACK =
+  "'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo','Noto Sans KR',Arial,Helvetica,sans-serif";
+const MAIL_PREFERRED_FONT_STACK = `'Pretendard Variable','Pretendard',${MAIL_SAFE_FONT_STACK}`;
+
 const SCRIPT_TAG_PATTERN = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
 const STYLE_TAG_PATTERN = /<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi;
 const EVENT_HANDLER_ATTR_PATTERN = /\son[a-z]+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi;
@@ -94,6 +102,17 @@ const toAbsoluteUrl = (value: string) => {
   }
 
   return url;
+};
+
+// 미리보기 iframe과 실제 발송 메일 head에 Pretendard 폰트 CSS 링크를 삽입
+const buildPretendardFontLinks = () => {
+  const variableCssUrl = escapeHtml(toAbsoluteUrl(PRETENDARD_VARIABLE_CSS_PATH) || PRETENDARD_VARIABLE_CSS_PATH);
+  const staticCssUrl = escapeHtml(toAbsoluteUrl(PRETENDARD_STATIC_CSS_PATH) || PRETENDARD_STATIC_CSS_PATH);
+
+  return `
+        <link rel="stylesheet" href="${variableCssUrl}" />
+        <link rel="stylesheet" href="${staticCssUrl}" />
+      `;
 };
 
 const sanitizeReplyHtml = (value: string) => {
@@ -263,11 +282,11 @@ const buildHtmlBody = (input: SendContactReplyEmailInput, logoMode: ContactReply
   const safeInquiryTitle = escapeHtml(normalizeText(input.inquiryTitle) || "-");
   const safeInquiryContent = toHtmlWithLineBreaks(normalizeText(input.inquiryContent) || "-");
   const safeReplyContent = buildReplyContentHtml(input.replyContent) || "-";
-  // 문의관리 상세: 미리보기(iframe)에서만 가독성 보정을 위해 폰트 크기/굵기를 상향
-  const isPreviewMode = logoMode === "preview";
-  const bodyFontSize = isPreviewMode ? "17px" : "16px";
-  const bodyFontWeight = isPreviewMode ? "500" : "400";
-  const headingFontWeight = isPreviewMode ? "700" : "800";
+  // 미리보기와 실제 발송 메일의 타이포를 동일하게 맞춰 화면과 메일 간 차이를 줄인다.
+  const bodyFontSize = "16px";
+  const bodyFontWeight = "400";
+  const headingFontWeight = "800";
+  const resolvedFontFamily = MAIL_PREFERRED_FONT_STACK;
 
   return `
     <!doctype html>
@@ -276,9 +295,10 @@ const buildHtmlBody = (input: SendContactReplyEmailInput, logoMode: ContactReply
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <title>더채움 고객문의 답변</title>
+        ${buildPretendardFontLinks()}
       </head>
-      <body style="margin:0;padding:0;background-color:#f3f5f8;-webkit-text-size-adjust:100%;text-size-adjust:100%;font-synthesis:none;">
-        <div style="margin:0;padding:28px 14px;background-color:#f3f5f8;font-family:'NanumSquare','Malgun Gothic',Arial,Helvetica,sans-serif;line-height:1.7;color:#111111;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:${bodyFontSize};font-weight:${bodyFontWeight};-webkit-font-smoothing:antialiased;">
+      <body style="margin:0;padding:0;background-color:#f3f5f8;font-family:${resolvedFontFamily};-webkit-text-size-adjust:100%;text-size-adjust:100%;">
+        <div style="margin:0;padding:28px 14px;background-color:#f3f5f8;font-family:${resolvedFontFamily};line-height:1.7;color:#111111;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:${bodyFontSize};font-weight:${bodyFontWeight};-webkit-font-smoothing:antialiased;">
           <div style="max-width:720px;margin:0 auto;">
             <div style="background:#ffffff;border:1px solid #e4e8ee;border-radius:18px;overflow:hidden;box-shadow:0 12px 26px rgba(17,17,17,0.06);">
               <div style="padding:22px 28px 14px;border-bottom:1px solid #edf0f5;">

@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
-import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
-import SectionTitle from "@/app/components/Common/SectionTitle";
-import EmphasisCopy from "@/app/components/Common/EmphasisCopy";
+import { type TouchEvent, useCallback, useEffect, useRef, useState } from "react";
+import SiteHeader, { SiteHeaderMenuItem } from "../../Common/SiteHeader";
+import ScrollToTopButton from "../../Common/ScrollToTopButton";
+import SectionTitle from "../../Common/SectionTitle";
+import EmphasisCopy from "../../Common/EmphasisCopy";
+import { fetchInstagramFeed } from "../../../lib/instagramClient";
 
 // 타입 선언 영역
 // 메인 히어로의 제목/설명/배경이미지 한 세트를 표현
@@ -32,16 +33,61 @@ type HistoryItem = {
 };
 
 // 인스타그램 API 응답에서 카드 렌더링에 쓰는 필드 묶음
+type InstagramMediaChild = {
+  id: string;
+  media_type: "IMAGE" | "VIDEO" | string;
+  media_url: string;
+  thumbnail_url?: string;
+};
+
+// 인스타그램 게시물 단위 데이터(단일/캐러셀 공용)
 type InstagramMediaItem = {
   id: string;
   media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM" | string;
-  media_url: string;
+  media_url?: string;
   thumbnail_url?: string;
   permalink?: string;
   caption?: string;
   timestamp?: string;
   label?: string;
+  children?: InstagramMediaChild[];
 };
+
+// 소셜 모달에서 실제로 좌우 이동하는 개별 미디어 단위
+const getSocialMediaSlides = (item?: InstagramMediaItem | null): InstagramMediaChild[] => {
+  if (!item) {
+    return [];
+  }
+
+  const children = (Array.isArray(item.children) ? item.children : [])
+    .filter((child) => Boolean(child.media_url))
+    .map((child, index) => ({
+      id: child.id || `${item.id}-child-${index}`,
+      media_type: child.media_type,
+      media_url: child.media_url,
+      thumbnail_url: child.thumbnail_url,
+    }));
+
+  if (children.length > 0) {
+    return children;
+  }
+
+  if (!item.media_url) {
+    return [];
+  }
+
+  return [
+    {
+      id: item.id,
+      media_type: item.media_type,
+      media_url: item.media_url,
+      thumbnail_url: item.thumbnail_url,
+    },
+  ];
+};
+
+// 소셜 카드 썸네일은 게시물의 첫 번째 미디어를 기준으로 표시
+const getSocialPreviewMedia = (item: InstagramMediaItem) => getSocialMediaSlides(item)[0] ?? null;
 
 // 카카오 지도 SDK 전역 객체(window.kakao) 타입 확장
 declare global {
@@ -179,10 +225,21 @@ const MainLanding = () => {
   const [instagramUser, setInstagramUser] = useState("thefull");
   const [instagramProfileImage, setInstagramProfileImage] = useState("");
   const [activeSocialMedia, setActiveSocialMedia] = useState<InstagramMediaItem | null>(null);
+  const [activeSocialMediaIndex, setActiveSocialMediaIndex] = useState(0);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState("");
 // 메인 화면: mapContainerRef 정의
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const socialTouchStartXRef = useRef<number | null>(null);
+
+  const activeSocialMediaSlides = getSocialMediaSlides(activeSocialMedia);
+  const activeSocialMediaSlideCount = activeSocialMediaSlides.length;
+  const currentActiveSocialMediaIndex =
+    activeSocialMediaSlideCount > 0
+      ? Math.min(activeSocialMediaIndex, activeSocialMediaSlideCount - 1)
+      : 0;
+  const currentActiveSocialSlide =
+    activeSocialMediaSlides[currentActiveSocialMediaIndex] ?? null;
 
   // 이전 슬라이드 인덱스와 방향을 기록해 전환 애니메이션 연결
   const goToSlide = useCallback(
@@ -243,6 +300,64 @@ const MainLanding = () => {
     setIsPaused(true);
   };
 
+  // 소셜 카드 클릭 시 게시물의 첫 번째 미디어부터 모달을 연다
+  const handleOpenSocialMedia = useCallback((item: InstagramMediaItem) => {
+    setActiveSocialMedia(item);
+    setActiveSocialMediaIndex(0);
+  }, []);
+
+  // 소셜 모달 닫기 시 현재 선택 미디어 상태를 함께 초기화한다
+  const handleCloseSocialMedia = useCallback(() => {
+    setActiveSocialMedia(null);
+    setActiveSocialMediaIndex(0);
+    socialTouchStartXRef.current = null;
+  }, []);
+
+  // 캐러셀 게시물은 현재 인덱스를 기준으로 순환 이동한다
+  const moveActiveSocialMedia = useCallback(
+    (nextDirection: 1 | -1) => {
+      if (activeSocialMediaSlideCount <= 1) {
+        return;
+      }
+
+      setActiveSocialMediaIndex(
+        (prev) => (prev + nextDirection + activeSocialMediaSlideCount) % activeSocialMediaSlideCount
+      );
+    },
+    [activeSocialMediaSlideCount]
+  );
+
+  // 모바일 스와이프 제스처 시작 좌표 저장
+  const handleSocialMediaTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (activeSocialMediaSlideCount <= 1) {
+      return;
+    }
+
+    socialTouchStartXRef.current = event.touches[0]?.clientX ?? null;
+  };
+
+  // 모바일 스와이프 종료 시 이동 방향을 계산한다
+  const handleSocialMediaTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const startX = socialTouchStartXRef.current;
+    const endX = event.changedTouches[0]?.clientX;
+    socialTouchStartXRef.current = null;
+
+    if (startX === null || typeof endX !== "number") {
+      return;
+    }
+
+    const deltaX = endX - startX;
+    if (Math.abs(deltaX) < 45) {
+      return;
+    }
+
+    moveActiveSocialMedia(deltaX < 0 ? 1 : -1);
+  };
+
+  const handleSocialMediaTouchCancel = () => {
+    socialTouchStartXRef.current = null;
+  };
+
   // 자동 재생 타이머(7초 간격)
   useEffect(() => {
     if (isPaused) {
@@ -282,23 +397,11 @@ const MainLanding = () => {
     // 인스타 API 응답 카드 가공, 실패 시 로컬 fallback 사용
     const loadSocialCards = async () => {
       try {
-// 메인 화면: response 정의
-        const response = await fetch("/api/instagram", { cache: "no-store" });
-        if (!response.ok) {
-          if (isMounted) {
-            setSocialMediaItems(fallbackSocialMedia);
-          }
-          return;
-        }
-
 // 메인 화면: payload 정의
-        const payload = (await response.json()) as {
-          user?: { username?: string; profile_picture_url?: string };
-          data?: InstagramMediaItem[];
-        };
+        const payload = await fetchInstagramFeed<InstagramMediaItem>();
 // 메인 화면: sourceItems 정의
         const sourceItems = (payload.data ?? [])
-          .filter((item) => Boolean(item.media_url))
+          .filter((item) => getSocialMediaSlides(item).length > 0)
           .slice(0, 12);
         // 메인 화면: 영상/이미지 구분 없이 timestamp 최신순으로 정렬 후 6개 노출
         const mappedCards = sourceItems
@@ -362,13 +465,39 @@ const MainLanding = () => {
 // 메인 화면: 이벤트 처리 로직
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setActiveSocialMedia(null);
+        handleCloseSocialMedia();
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveActiveSocialMedia(-1);
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        moveActiveSocialMedia(1);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSocialMedia]);
+  }, [activeSocialMedia, handleCloseSocialMedia, moveActiveSocialMedia]);
+
+  // 캐러셀 길이가 바뀌면 현재 인덱스를 유효 범위로 보정한다
+  useEffect(() => {
+    if (activeSocialMediaSlideCount === 0) {
+      if (activeSocialMediaIndex !== 0) {
+        setActiveSocialMediaIndex(0);
+      }
+      return;
+    }
+
+    if (activeSocialMediaIndex > activeSocialMediaSlideCount - 1) {
+      setActiveSocialMediaIndex(activeSocialMediaSlideCount - 1);
+    }
+  }, [activeSocialMediaIndex, activeSocialMediaSlideCount]);
 
   // 카카오 지도 SDK 로드 및 지도 초기화
   useEffect(() => {
@@ -605,6 +734,61 @@ const MainLanding = () => {
       return normalizedText;
     }
     return `${normalizedText.slice(0, maxOverlayLength)}...`;
+  };
+
+  // 소셜 본문에서 링크로 처리할 URL 패턴
+  const socialTextLinkPattern = /(https?:\/\/[^\s]+|www\.[^\s]+|(?:m\.)?blog\.naver\.com\/[^\s]+)/gi;
+
+  // URL 끝에 붙은 문장부호를 분리해 링크 범위를 안정적으로 맞춤
+  const splitSocialLinkSuffix = (value: string) => {
+    const suffixMatch = value.match(/[),.!?]+$/);
+    if (!suffixMatch) {
+      return { linkText: value, trailingText: "" };
+    }
+
+    return {
+      linkText: value.slice(0, -suffixMatch[0].length),
+      trailingText: suffixMatch[0],
+    };
+  };
+
+  // 소셜 상세 본문에 포함된 외부 링크를 하이퍼링크로 렌더링
+  const renderSocialBodyText = (value?: string) => {
+    const sourceText = value?.trim() || "";
+    if (!sourceText) {
+      return "";
+    }
+
+    return sourceText.split(socialTextLinkPattern).map((segment, index) => {
+      if (!segment) {
+        return null;
+      }
+
+      if (!/^(https?:\/\/|www\.|(?:m\.)?blog\.naver\.com\/)/i.test(segment)) {
+        return (
+          <span key={`social-text-${index}`}>
+            {segment}
+          </span>
+        );
+      }
+
+      const { linkText, trailingText } = splitSocialLinkSuffix(segment);
+      const href = /^https?:\/\//i.test(linkText) ? linkText : `https://${linkText}`;
+
+      return (
+        <span key={`social-link-${index}`}>
+          <a
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="break-all underline underline-offset-4 transition hover:opacity-80"
+          >
+            {linkText}
+          </a>
+          {trailingText}
+        </span>
+      );
+    });
   };
 
   // 인스타 날짜 문자열 YYYY-MM-DD 포맷 변환
@@ -992,14 +1176,21 @@ const MainLanding = () => {
             {!isSocialLoading &&
               socialMediaItems.map((item, index) => {
                 // 메인 화면: 상태값
-                const isVideo = item.media_type === "VIDEO";
+                const previewMedia = getSocialPreviewMedia(item);
+                const slideCount = getSocialMediaSlides(item).length;
+                const isVideo = previewMedia?.media_type === "VIDEO";
                 // 메인 화면: overlayText 정의
                 const overlayText = getSocialOverlayText(item);
+
+                if (!previewMedia) {
+                  return null;
+                }
+
                 return (
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setActiveSocialMedia(item)}
+                    onClick={() => handleOpenSocialMedia(item)}
                     className="main-social-card group relative block w-full"
                     aria-label={`${overlayText || `Instagram ${index + 1}`} 열기`}
                   >
@@ -1007,15 +1198,15 @@ const MainLanding = () => {
                     <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
                       {isVideo ? (
                         <video
-                          src={item.media_url}
-                          poster={item.thumbnail_url}
+                          src={previewMedia.media_url}
+                          poster={previewMedia.thumbnail_url}
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                           preload="metadata"
                           playsInline
                         />
                       ) : (
                         <img
-                          src={item.media_url}
+                          src={previewMedia.media_url}
                           alt={overlayText || `Instagram ${index + 1}`}
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                           loading="lazy"
@@ -1033,6 +1224,11 @@ const MainLanding = () => {
                           {overlayText}
                         </div>
                       </div>
+                      {slideCount > 1 && (
+                        <div className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white">
+                          {slideCount}컷
+                        </div>
+                      )}
                       <div className="pointer-events-none absolute inset-0 border border-white/40" />
                     </div>
                   </button>
@@ -1047,27 +1243,81 @@ const MainLanding = () => {
       {activeSocialMedia && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-6 py-10"
-          onClick={() => setActiveSocialMedia(null)}
+          onClick={handleCloseSocialMedia}
         >
           <div
             className="relative w-full max-w-5xl overflow-y-auto bg-[#f7f2e5] shadow-[0_40px_90px_rgba(0,0,0,0.4)] max-h-[88vh] md:grid md:max-h-[80vh] md:grid-cols-[1fr_1fr] md:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
             {/* 소셜 모달: 카드와 동일한 고정 3:4 프레임 + 검정 배경 */}
-            <div className="relative aspect-[3/4] w-full overflow-hidden bg-black md:max-h-[80vh]">
-              {activeSocialMedia.media_type === "VIDEO" ? (
+            <div
+              className="relative aspect-[3/4] w-full overflow-hidden bg-black md:max-h-[80vh]"
+              onTouchStart={handleSocialMediaTouchStart}
+              onTouchEnd={handleSocialMediaTouchEnd}
+              onTouchCancel={handleSocialMediaTouchCancel}
+            >
+              {currentActiveSocialSlide?.media_type === "VIDEO" ? (
                 <video
-                  src={activeSocialMedia.media_url}
+                  key={currentActiveSocialSlide.id}
+                  src={currentActiveSocialSlide.media_url}
+                  poster={currentActiveSocialSlide.thumbnail_url}
                   className="h-full w-full object-contain"
                   controls
                   playsInline
                 />
               ) : (
-                <img
-                  src={activeSocialMedia.media_url}
-                  alt={activeSocialMedia.caption ?? activeSocialMedia.label ?? "Instagram"}
-                  className="h-full w-full object-contain"
-                />
+                currentActiveSocialSlide && (
+                  <img
+                    src={currentActiveSocialSlide.media_url}
+                    alt={activeSocialMedia.caption ?? activeSocialMedia.label ?? "Instagram"}
+                    className="h-full w-full object-contain"
+                  />
+                )
+              )}
+              {activeSocialMediaSlideCount > 1 && (
+                <>
+                  <div className="pointer-events-none absolute right-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs text-white">
+                    {currentActiveSocialMediaIndex + 1} / {activeSocialMediaSlideCount}
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="이전 미디어"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      moveActiveSocialMedia(-1);
+                    }}
+                    className="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-2xl text-white transition hover:bg-black/65"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="다음 미디어"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      moveActiveSocialMedia(1);
+                    }}
+                    className="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-2xl text-white transition hover:bg-black/65"
+                  >
+                    ›
+                  </button>
+                  <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur-sm">
+                    {activeSocialMediaSlides.map((slide, index) => (
+                      <button
+                        key={slide.id}
+                        type="button"
+                        aria-label={`${index + 1}번째 미디어 보기`}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setActiveSocialMediaIndex(index);
+                        }}
+                        className={`h-2.5 w-2.5 rounded-full transition ${
+                          index === currentActiveSocialMediaIndex ? "bg-white" : "bg-white/45 hover:bg-white/75"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
             <div className="flex max-h-none flex-col gap-6 overflow-auto p-6 text-[#6b7a8f] md:max-h-[80vh]">
@@ -1098,14 +1348,14 @@ const MainLanding = () => {
                 <button
                   type="button"
                   aria-label="Close"
-                  onClick={() => setActiveSocialMedia(null)}
+                  onClick={handleCloseSocialMedia}
                   className="text-base"
                 >
                   ×
                 </button>
               </div>
               <p className="text-base leading-relaxed whitespace-pre-line">
-                {activeSocialMedia.caption ?? activeSocialMedia.label ?? ""}
+                {renderSocialBodyText(activeSocialMedia.caption ?? activeSocialMedia.label ?? "")}
               </p>
               <div className="mt-auto w-full">
                 {formatMediaDate(activeSocialMedia.timestamp) && (
@@ -1245,5 +1495,3 @@ const MainLanding = () => {
 };
 
 export default MainLanding;
-
-

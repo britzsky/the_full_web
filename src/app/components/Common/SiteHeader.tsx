@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import TheFullLogo, { type TheFullLogoFormat, type TheFullLogoVariant } from "./TheFullLogo";
@@ -84,10 +84,33 @@ const isPathMatch = (currentPath: string, menuPath: string) => {
   return currentPath === menuPath || currentPath.startsWith(`${menuPath}/`);
 };
 
+const isScrollableElement = (element: HTMLElement) => {
+  const computedStyle = window.getComputedStyle(element);
+  const canScrollVertically = /(auto|scroll|overlay)/.test(computedStyle.overflowY);
+
+  return canScrollVertically && element.scrollHeight > element.clientHeight;
+};
+
+// 해시 대상이 내부 스크롤 컨테이너 안에 있으면 해당 컨테이너 기준으로 이동한다.
+const findClosestScrollContainer = (element: HTMLElement | null) => {
+  let currentElement = element?.parentElement ?? null;
+
+  while (currentElement) {
+    if (isScrollableElement(currentElement)) {
+      return currentElement;
+    }
+
+    currentElement = currentElement.parentElement;
+  }
+
+  return null;
+};
+
 // 메뉴 링크 렌더링 분기
 const renderMenuLink = (
   item: SiteHeaderMenuItem,
-  className: string
+  className: string,
+  onHashLinkClick?: (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => void
 ) => {
   if (!item.href) {
     return <span className={className}>{item.label}</span>;
@@ -95,7 +118,7 @@ const renderMenuLink = (
 
   if (item.href.startsWith("#")) {
     return (
-      <a href={item.href} className={className}>
+      <a href={item.href} className={className} onClick={(event) => onHashLinkClick?.(event, item.href!)}>
         {item.label}
       </a>
     );
@@ -186,6 +209,41 @@ export default function SiteHeader({
     return `site-header-link ${isActive ? "site-header-link-cta" : ""}`;
   };
 
+  // 현재 페이지 안의 해시 링크는 내부 스크롤 컨테이너 기준으로 부드럽게 이동시킨다.
+  const handleHashLinkClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
+    const targetId = href.slice(1);
+
+    if (!targetId) {
+      return;
+    }
+
+    const targetElement = document.getElementById(targetId);
+
+    if (!(targetElement instanceof HTMLElement)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const scrollContainer = findClosestScrollContainer(targetElement);
+
+    if (scrollContainer) {
+      const targetScrollTop =
+        targetElement.getBoundingClientRect().top -
+        scrollContainer.getBoundingClientRect().top +
+        scrollContainer.scrollTop;
+
+      scrollContainer.scrollTo({ top: targetScrollTop, behavior: "smooth" });
+    } else {
+      const targetScrollTop = targetElement.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: targetScrollTop, behavior: "smooth" });
+    }
+
+    if (window.location.hash !== href) {
+      window.history.replaceState(null, "", href);
+    }
+  };
+
   return (
     <header className={`site-header ${headerPositionClass} ${headerThemeClass}`} style={headerLayoutStyle}>
       <div className="site-header-inner">
@@ -193,7 +251,7 @@ export default function SiteHeader({
           <ul className="flex justify-end gap-12 pr-6 lg:gap-14 lg:pr-10">
             {leftItems.map((item) => (
               <li key={item.label} className="flex h-10 items-center">
-                {renderMenuLink(item, getMenuClassName(item))}
+                {renderMenuLink(item, getMenuClassName(item), handleHashLinkClick)}
               </li>
             ))}
           </ul>
@@ -214,7 +272,7 @@ export default function SiteHeader({
           <ul className="flex justify-start gap-12 pl-6 lg:gap-14 lg:pl-10">
             {resolvedRightItems.map((item) => (
               <li key={item.label} className="flex h-10 items-center">
-                {renderMenuLink(item, getMenuClassName(item))}
+                {renderMenuLink(item, getMenuClassName(item), handleHashLinkClick)}
               </li>
             ))}
           </ul>
@@ -237,12 +295,12 @@ export default function SiteHeader({
             <ul className="grid w-full grid-cols-3 gap-x-3 gap-y-2 text-center">
               {leftItems.map((item) => (
                 <li key={`mobile-left-${item.label}`}>
-                  {renderMenuLink(item, getMenuClassName(item, true))}
+                  {renderMenuLink(item, getMenuClassName(item, true), handleHashLinkClick)}
                 </li>
               ))}
               {resolvedRightItems.map((item) => (
                 <li key={`mobile-right-${item.label}`}>
-                  {renderMenuLink(item, getMenuClassName(item, true))}
+                  {renderMenuLink(item, getMenuClassName(item, true), handleHashLinkClick)}
                 </li>
               ))}
             </ul>
@@ -252,4 +310,3 @@ export default function SiteHeader({
     </header>
   );
 }
-

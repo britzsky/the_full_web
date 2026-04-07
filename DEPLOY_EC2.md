@@ -28,7 +28,6 @@ NEXTAUTH_URL=http://운영주소:8081
 NEXT_PUBLIC_BASE_URL=http://운영주소:8081
 PORT=8081
 WEB_API_BASE_URL=http://운영주소:8090
-THE_FULL_WEB_API_BASE_URL=http://운영주소:8080
 ERP_INQUIRY_WEBHOOK_URL=http://운영주소:8080/ERP/ContactInquiryWebhook
 ```
 

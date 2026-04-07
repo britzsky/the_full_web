@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
 import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
 import { getContactInquiryById } from "@/app/contact/inquiryStore";
 import { buildContactReplyEmailPreview } from "@/app/contact/replyEmailSender";
+import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 export const runtime = "nodejs";
 
@@ -21,7 +21,7 @@ const parseId = (value: string) => {
 // 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
-// 요청 헤더(Referer)에서 user_id 파라미터를 추출
+// 요청 헤더 Referer에서 user_id 파라미터 추출
 const getUserIdFromReferer = (request: Request) => {
   const referer = normalizeText(request.headers.get("referer"));
   if (!referer) {
@@ -47,7 +47,7 @@ const resolveReplyUserId = async (request: Request, bodyUserId: unknown) => {
   return sessionUserId || headerUserId || refererUserId || requestBodyUserId || "admin";
 };
 
-// 문의관리 상세: 답변 메일 미리보기 API
+// 문의관리 상세 답변 메일 미리보기 API
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const canManage = await getAdminAccess();
   if (!canManage) {
@@ -89,7 +89,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       replyContent: content,
       replyUserId: resolvedUserId,
     },
-    // 문의관리 상세 미리보기는 public 로고 경로로 렌더링
     { logoMode: "preview" }
   );
 

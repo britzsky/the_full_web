@@ -6,10 +6,10 @@
     "dev": "next dev -H 0.0.0.0 -p 8081",
     "clean:next": "node scripts/clean-next-safe.cjs",
     "clean:next:force": "node scripts/clean-next-safe.cjs --force",
-    "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 3001",
+    "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 8081",
     "build": "node --env-file=.env.real ./node_modules/next/dist/bin/next build",
     "start": "node --env-file=.env.real ./node_modules/next/dist/bin/next start",
-    "start:lan": "node --env-file=.env.real ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p 3001",
+    "start:lan": "node --env-file=.env.real ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p 8081",
     "lint": "next lint"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "react-slick": "^0.30.2",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
+    "server-only": "^0.0.1",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {

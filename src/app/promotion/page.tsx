@@ -5,10 +5,8 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getAdminAccess } from "@/app/lib/adminAccess";
-import PromotionListActions from "./PromotionListActions";
-import { formatPromotionDate } from "./format";
 import { getPromotionManagePermission } from "./permissions";
-import { listPromotionPosts } from "./promotionStore";
+import { PromotionListTableClient } from "./promotionClient";
 import type { PromotionSearchField } from "./types";
 import "./page.css";
 
@@ -64,11 +62,8 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
     typeof resolvedSearchParams.field === "string" ? resolvedSearchParams.field : undefined
   );
 
-  const [posts, canManagePromotion, canManageContact] = await Promise.all([
-    listPromotionPosts({ query, field }),
-    getPromotionManagePermission(),
-    getAdminAccess(),
-  ]);
+  const [canManagePromotion, canManageContact] = await Promise.all([getPromotionManagePermission(), getAdminAccess()]);
+  const refreshKey = `${field}:${query}:${Date.now()}`;
 // 홍보 화면: 헤더 우측 메뉴 목록
   const promotionHeaderRightItems = appendContactManageMenu(promotionHeaderRightBaseItems, canManageContact);
 
@@ -121,43 +116,12 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
           </form>
 
           <div className="promotion-table-wrap">
-            <table className="promotion-table" aria-label="홍보 게시글 목록">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">제목</th>
-                  <th scope="col">작성자</th>
-                  <th scope="col">등록일</th>
-                  {canManagePromotion && <th scope="col">관리</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {posts.map((post) => (
-                  <tr key={post.id}>
-                    <td>{post.id}</td>
-                    <td className="promotion-title-cell">
-                      <Link href={`/promotion/${post.id}`} className="promotion-title-link">
-                        {post.title}
-                      </Link>
-                    </td>
-                    <td>{post.author}</td>
-                    <td>{formatPromotionDate(post.createdAt)}</td>
-                    {canManagePromotion && (
-                      <td>
-                        <PromotionListActions postId={post.id} editHref={`/promotion/${post.id}/edit`} />
-                      </td>
-                    )}
-                  </tr>
-                ))}
-                {posts.length === 0 && (
-                  <tr>
-                    <td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">
-                      등록된 게시글이 없습니다.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <PromotionListTableClient
+              query={query}
+              field={field}
+              canManagePromotion={canManagePromotion}
+              refreshKey={refreshKey}
+            />
           </div>
         </div>
       </section>

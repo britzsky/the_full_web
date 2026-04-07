@@ -80,7 +80,20 @@ const eventGroups = [
 
 // 사업영역 4번 화면(식자재유통) 데이터
 // 식자재유통 상단 3개 항목 데이터
-const distributionTopBadges = ["업무협약", "구매관리", "식자재유통 시스템"];
+const distributionTopBadges = [
+  {
+    label: "업무협약",
+    tooltip: "HACCP인증 최대규모 식자재업체들과 업무협약을 통해 매일 새벽 경매시장에서 구입한 신선한 재료를 공급합니다."
+  },
+  {
+    label: "구매관리",
+    tooltip: "전문 벤더가 엄선한 안전하고 신선한 제품을 확보하고, 전문 협력사의 다양한 구매 경로를 활용해 품질 경쟁력과 가격 경쟁력을 동시에 강화합니다. \n \n 또한 경매 참여를 통해 신선도는 높이고 원가와 운영 비용은 효율적으로 관리합니다."
+  },
+  {
+    label: "식자재유통 시스템",
+    tooltip: "대기업 물류사와의 복수 거래 체계를 통해 최상의 식자재를 안정적으로 확보하고, 가격 경쟁력을 지속적으로 강화하고 있습니다. \n \n 다양한 기업과의 협력을 바탕으로 고품질 식자재를 보다 합리적인 가격에 선점하며, 분기별 상품 가격 리뷰를 통해 항상 최적의 품질과 가격을 제시합니다."
+  },
+];
 // 식자재유통 하단 1~2번 데이터
 const distributionBottomBadgesTop = [
   "1. 전 분야 HACCP 시스템 준용 ISO 품질인증식품 안전 관련 무사고 2000일",
@@ -234,8 +247,11 @@ export default function BusinessPage() {
           <div className="business-screen-inner business-distribution-inner">
             <div className="business-distribution-top">
               {distributionTopBadges.map((item) => (
-                <div key={item} className="business-distribution-pill">
-                  {item}
+                <div key={item.label} className="business-distribution-pill business-hover-anchor" tabIndex={0}>
+                  <span>{item.label}</span>
+                  <div className="business-hover-tooltip" role="tooltip">
+                    <p className="business-hover-tooltip-text">{item.tooltip}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -288,6 +304,5 @@ export default function BusinessPage() {
     </main>
   );
 }
-
 
 

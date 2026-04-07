@@ -4,10 +4,8 @@
 프론트(`the_full_web`)에서는 DB 직접 연결을 사용하지 않습니다.
 
 ```env
-# 8090 변경시: 아래 두 값(8081)을 함께 8090으로 변경
-WEB_API_BASE_URL=http://127.0.0.1:8081
-# 또는
-THE_FULL_WEB_API_BASE_URL=http://127.0.0.1:8081
+# the_full_web_api 서버 주소
+WEB_API_BASE_URL=http://127.0.0.1:8090
 ```
 
 - 게시글 목록: `GET /api/promotion/posts`

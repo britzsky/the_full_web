@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
+import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 고객문의 폼 입력값 모델
 type ContactInquiryFormValues = {
@@ -170,7 +171,7 @@ export default function ContactInquiryForm() {
 
     try {
 // 고객문의 화면: response 정의
-      const response = await fetch("/api/contact/inquiry", {
+      const response = await fetch(toPublicWebApiUrl("/api/contact/manage"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

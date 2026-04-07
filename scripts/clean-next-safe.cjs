@@ -7,7 +7,7 @@ const projectRoot = process.cwd();
 const nextDir = path.join(projectRoot, ".next");
 const args = new Set(process.argv.slice(2));
 const force = args.has("--force");
-const port = Number(process.env.PORT || 3001);
+const port = Number(process.env.PORT || 8081);
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

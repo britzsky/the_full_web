@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
+import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 홍보 화면: PromotionEditorMode 타입 모델
 type PromotionEditorMode = "create" | "edit";
@@ -227,7 +228,9 @@ export default function PromotionEditorForm({ mode, postId, initialValues }: Pro
     }
 
     // 홍보 화면: endpoint 정의
-    const endpoint = mode === "create" ? "/api/promotion/posts" : `/api/promotion/posts/${postId}`;
+    const endpoint = toPublicWebApiUrl(
+      mode === "create" ? "/api/promotion/posts" : `/api/promotion/posts/${postId}`
+    );
     // 홍보 화면: method 정의
     const method = mode === "create" ? "POST" : "PATCH";
 

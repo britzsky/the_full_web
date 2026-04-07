@@ -99,6 +99,7 @@
   font-weight: 500;
   line-height: 1.3;
   white-space: nowrap;
+  overflow: visible;
 }
 
 /* 1번 화면: 검정색 셀(메인 바 색 연동) */
@@ -171,8 +172,70 @@
 /* 1번 화면: 우상단 현장중심 메뉴구성 셀 위치 */
 .catering_flow_node_top_right {
   right: 0;
-  top: 8%;
+  top: 4%;
   width: 280px;
+}
+
+/* 1번 화면 현장중심 메뉴구성 호버 안내 박스 기준점 */
+.catering_flow_node_hover_anchor {
+  outline: none;
+  cursor: help;
+}
+
+/* 1번 화면 현장중심 메뉴구성 호버 안내 박스 */
+.catering-hover-tooltip {
+  position: absolute;
+  top: calc(100% + 1rem);
+  z-index: 12;
+  width: min(88vw, 320px);
+  display: flex;
+  align-items: center;
+  min-height: 168px;
+  border: 3px solid #3f3026;
+  border-radius: 2rem;
+  background-color: #ffffff;
+  padding: 1.8rem 1.25rem 1.25rem;
+  box-shadow: 0 22px 40px rgba(63, 48, 38, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+/* 1번 화면 현장중심 메뉴구성 우측 정렬 박스 */
+.catering-hover-tooltip-right {
+  right: 0;
+}
+
+/* 1번 화면 현장중심 메뉴구성 안내 박스 북마크 장식 */
+.catering-hover-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -1.95rem;
+  right: 2.1rem;
+  width: 1.9rem;
+  height: 2.55rem;
+  background-color: #3f3026;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%);
+}
+
+/* 1번 화면 현장중심 메뉴구성 호버/포커스 시 안내 박스 표시 */
+.catering_flow_node_hover_anchor:is(:hover, :focus-visible, :focus-within) .catering-hover-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 1번 화면 현장중심 메뉴구성 안내 문구 */
+.catering-hover-tooltip-text {
+  margin: 0;
+  color: #111111;
+  text-align: left;
+  font-size: clamp(14px, 0.98vw, 16px);
+  line-height: 1.55;
+  width: 100%;
+  white-space: pre-line;
 }
 
 /* 1번 화면: 흐름 연결 SVG */
@@ -556,7 +619,20 @@
 
 /* 4번 화면: 좌우 네비/본문 카드 묶음 */
 .catering_education_cards_wrap {
+  --catering-education-gap: clamp(1rem, 2.4vw, 2rem);
   position: relative;
+}
+
+/* 4번 화면: 카드 슬라이드 표시 영역 */
+.catering_education_cards_viewport {
+  overflow: hidden;
+}
+
+/* 4번 화면: 카드 페이지 트랙 */
+.catering_education_cards_track {
+  display: flex;
+  transition: transform 0.55s ease;
+  will-change: transform;
 }
 
 /* 4번 화면: 좌우 화살표 버튼 */
@@ -569,7 +645,19 @@
   color: #d8d4cf;
   font-size: 64px;
   line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 4번 화면: 비활성 화살표 버튼 상태 */
+.catering_education_nav:disabled {
+  opacity: 0.38;
   cursor: default;
+}
+
+/* 4번 화면: 이동 가능한 화살표 버튼 강조 */
+.catering_education_nav:not(:disabled):hover {
+  color: #9f968d;
 }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_left */
@@ -584,9 +672,16 @@
 
 /* 4번 화면: 교육/소통/협력사 카드 3열 */
 .catering_education_cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1rem, 2.4vw, 2rem);
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  gap: var(--catering-education-gap);
+}
+
+/* 4번 화면: 슬라이드 한 장 안에서 카드 폭을 3열 기준으로 맞춘다. */
+.catering_education_card {
+  flex: 0 0 calc((100% - var(--catering-education-gap) - var(--catering-education-gap)) / 3);
+  max-width: calc((100% - var(--catering-education-gap) - var(--catering-education-gap)) / 3);
 }
 
 /* 4번 화면: 카드 제목/본문 */
@@ -845,12 +940,19 @@
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_cards */
   .catering_education_cards {
-    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_card */
+  .catering_education_card {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav */
   .catering_education_nav {
-    display: none;
+    top: 50%;
+    font-size: 52px;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_safety_chip_row */
@@ -897,6 +999,26 @@
   .catering_education_stats {
     grid-template-columns: 1fr;
     gap: 0.8rem;
+  }
+
+/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_cards_wrap */
+  .catering_education_cards_wrap {
+    padding-inline: 1.8rem;
+  }
+
+/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav */
+  .catering_education_nav {
+    font-size: 40px;
+  }
+
+/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_left */
+  .catering_education_nav_left {
+    left: 0;
+  }
+
+/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_right */
+  .catering_education_nav_right {
+    right: 0;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_research_item */

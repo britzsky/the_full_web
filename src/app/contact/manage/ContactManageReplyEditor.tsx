@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
+import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 import {
   isCkEditorContentMeaningful,
   toCkEditorDataFromStoredContent,
@@ -154,7 +155,7 @@ export default function ContactManageReplyEditor({
     setIsSaving(true);
 
     try {
-      const response = await fetch(`/api/contact/inquiry_management/${inquiryId}/reply`, {
+      const response = await fetch(toPublicWebApiUrl(`/api/contact/manage/${inquiryId}/reply`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -229,7 +230,7 @@ export default function ContactManageReplyEditor({
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/contact/inquiry_management/${inquiryId}`, {
+      const response = await fetch(toPublicWebApiUrl(`/api/contact/manage/${inquiryId}`), {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -331,7 +332,7 @@ export default function ContactManageReplyEditor({
 
     setIsPreviewLoading(true);
     try {
-      const response = await fetch(`/api/contact/inquiry_management/${inquiryId}/reply/preview`, {
+      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/preview`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -431,7 +432,7 @@ export default function ContactManageReplyEditor({
 
     setIsSendingEmail(true);
     try {
-      const response = await fetch(`/api/contact/inquiry_management/${inquiryId}/reply/send`, {
+      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -590,7 +591,7 @@ export default function ContactManageReplyEditor({
                 onClick={handlePreviewOpen}
                 disabled={isPreviewLoading || isSaving || isSendingEmail || isDeleting || feedbackModal.open || isDeleteConfirmOpen}
               >
-                {isPreviewLoading ? "미리보기 불러오는 중..." : "이메일 발송"}
+                {isPreviewLoading ? "미리보기 불러오는 중..." : "이메일 미리보기(발송)"}
               </button>
               <button
                 type="submit"

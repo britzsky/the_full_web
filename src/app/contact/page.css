@@ -307,7 +307,7 @@
   border-radius: 0;
   background-color: #ffffff;
   color: #111111;
-  font-family: "NanumSquare", sans-serif;
+  font-family: var(--font-family-base);
   font-size: var(--contact-label-size);
   font-weight: 500;
   line-height: 1.3;

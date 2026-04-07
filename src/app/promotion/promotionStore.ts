@@ -51,11 +51,23 @@ const toSearchField = (value: unknown): PromotionSearchField => {
   return "title";
 };
 
+// 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
+const normalizeWebApiBaseUrl = (value: string) => {
+  const normalized = normalizeText(value).replace(/\/+$/, "");
+  if (!normalized) {
+    return "";
+  }
+
+  return normalized
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137)):8081$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
+};
+
 // the_full_web_api 베이스 URL(미설정 시 로컬 기본값 사용)
 const getApiBaseUrl = () => {
-  const raw = normalizeText(process.env.THE_FULL_WEB_API_BASE_URL ?? process.env.WEB_API_BASE_URL);
-  // 8090 변경시: .env.local과 함께 이 fallback 포트도 8090으로 변경
-  const baseUrl = raw || "http://127.0.0.1:8081";
+  const raw = normalizeWebApiBaseUrl(process.env.WEB_API_BASE_URL ?? process.env.NEXT_PUBLIC_WEB_API_BASE_URL ?? "");
+  const baseUrl = raw || "http://127.0.0.1:8090";
   return baseUrl.replace(/\/+$/, "");
 };
 

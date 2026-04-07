@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
 import { deleteContactInquiry, getContactInquiryById } from "@/app/contact/inquiryStore";
+import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 // 동적 라우트 id 문자열을 양의 정수로 변환
 const parseId = (value: string) => {
@@ -11,7 +11,7 @@ const parseId = (value: string) => {
 // 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
-// 요청 헤더(Referer)에서 user_id 파라미터를 추출
+// 요청 헤더 Referer에서 user_id 파라미터 추출
 const getUserIdFromReferer = (request: Request) => {
   const referer = normalizeText(request.headers.get("referer"));
   if (!referer) {
@@ -26,7 +26,7 @@ const getUserIdFromReferer = (request: Request) => {
   }
 };
 
-// 문의관리 상세: 문의 단건 조회 API
+// 문의관리 상세 조회 API
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
   const canManage = await getAdminAccess();
   if (!canManage) {
@@ -53,7 +53,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   }
 }
 
-// 문의관리 상세: 문의 소프트삭제 API(del_yn='Y')
+// 문의관리 상세 삭제 API
 export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
   const canManage = await getAdminAccess();
   if (!canManage) {
@@ -69,7 +69,6 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
   let deletedBy = "admin";
   try {
     const body = (await request.json().catch(() => ({}))) as { deletedBy?: string };
-    // 문의 삭제 작성자: 세션 user_id 우선, 없으면 기존 요청값/기본값 유지
     const sessionUserId = await getSessionUserId();
     const refererUserId = getUserIdFromReferer(request);
     deletedBy = sessionUserId || refererUserId || normalizeText(body.deletedBy) || "admin";
