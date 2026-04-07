@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import { getPublicApiErrorMessage, requestPublicWebApi } from "@/app/lib/publicWebApi";
 import PromotionDetailActions from "./PromotionDetailActions";
 import PromotionEditorForm from "./PromotionEditorForm";
@@ -296,7 +296,7 @@ export function PromotionListTableClient({ query, field, canManagePromotion, ref
         {!state.isLoading && !state.errorMessage && state.posts.map((post) => (
           <tr key={post.id}>
             <td>{post.id}</td>
-            <td className="promotion-title-cell"><Link href={`/promotion/${post.id}`} className="promotion-title-link">{post.title}</Link></td>
+            <td className="promotion-title-cell"><PageNavigationLink href={`/promotion/${post.id}`} className="promotion-title-link">{post.title}</PageNavigationLink></td>
             <td>{post.author}</td>
             <td>{formatPromotionDate(post.createdAt)}</td>
             {canManagePromotion && <td><PromotionListActions postId={post.id} editHref={`/promotion/${post.id}/edit`} /></td>}
@@ -363,7 +363,7 @@ export function PromotionDetailClient({ postId, canManagePromotion, refreshKey }
           <div className="promotion-detail-content">
             <p className="promotion-detail-paragraph">{state.isLoading ? "게시글을 불러오는 중입니다." : state.errorMessage}</p>
           </div>
-          <div className="promotion-detail-actions"><Link href="/promotion" className="promotion-button promotion-button-outline">목록</Link></div>
+          <div className="promotion-detail-actions"><PageNavigationLink href="/promotion" className="promotion-button promotion-button-outline">목록</PageNavigationLink></div>
         </article>
       </div>
     );
@@ -386,12 +386,12 @@ export function PromotionDetailClient({ postId, canManagePromotion, refreshKey }
       <div className="promotion-detail-nav">
         <div className="promotion-detail-nav-row">
           <span className="promotion-detail-nav-label">이전글</span>
-          {state.adjacentPosts.previous ? <Link href={`/promotion/${state.adjacentPosts.previous.id}`} className="promotion-detail-nav-link">{state.adjacentPosts.previous.title}</Link> : <span className="promotion-detail-nav-empty">이전 글이 없습니다.</span>}
+          {state.adjacentPosts.previous ? <PageNavigationLink href={`/promotion/${state.adjacentPosts.previous.id}`} className="promotion-detail-nav-link">{state.adjacentPosts.previous.title}</PageNavigationLink> : <span className="promotion-detail-nav-empty">이전 글이 없습니다.</span>}
           <span className="promotion-detail-nav-date">{state.adjacentPosts.previous ? formatPromotionDate(state.adjacentPosts.previous.createdAt) : ""}</span>
         </div>
         <div className="promotion-detail-nav-row">
           <span className="promotion-detail-nav-label">다음글</span>
-          {state.adjacentPosts.next ? <Link href={`/promotion/${state.adjacentPosts.next.id}`} className="promotion-detail-nav-link">{state.adjacentPosts.next.title}</Link> : <span className="promotion-detail-nav-empty">다음 글이 없습니다.</span>}
+          {state.adjacentPosts.next ? <PageNavigationLink href={`/promotion/${state.adjacentPosts.next.id}`} className="promotion-detail-nav-link">{state.adjacentPosts.next.title}</PageNavigationLink> : <span className="promotion-detail-nav-empty">다음 글이 없습니다.</span>}
           <span className="promotion-detail-nav-date">{state.adjacentPosts.next ? formatPromotionDate(state.adjacentPosts.next.createdAt) : ""}</span>
         </div>
       </div>

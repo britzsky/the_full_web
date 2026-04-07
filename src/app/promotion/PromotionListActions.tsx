@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 홍보 화면: 컴포넌트 전달값
@@ -68,9 +68,9 @@ export default function PromotionListActions({ postId, editHref }: PromotionList
   return (
     // 홍보 목록 화면: 행 단위 수정/삭제 버튼 묶음 영역
     <div className="promotion-row-actions">
-      <Link href={editHref} className="promotion-row-action-link">
+      <PageNavigationLink href={editHref} className="promotion-row-action-link">
         수정
-      </Link>
+      </PageNavigationLink>
       <button
         type="button"
         className="promotion-row-action-button"

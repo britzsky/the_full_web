@@ -155,14 +155,17 @@ const toPositiveInt = (value: unknown) => {
 // 배열 형태 응답을 안전하게 변환
 const toArray = <T>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
 
+// the_full_web_api 기본 호출 주소
+const DEFAULT_WEB_API_BASE_URL = "http://127.0.0.1:8090";
+
 // the_full_web_api 베이스 URL 후보(환경변수 우선, web_api 포트 8090 fallback)
-const DEFAULT_WEB_API_BASE_URLS = ["http://127.0.0.1:8090", "http://localhost:8090", "http://52.64.151.137:8090"];
+const DEFAULT_WEB_API_BASE_URLS = [DEFAULT_WEB_API_BASE_URL, "http://localhost:8090", "http://52.64.151.137:8090"];
 
 // 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
 const normalizeWebApiBaseUrl = (value: string) =>
   normalizeText(value)
     .replace(/\/+$/, "")
-    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137)):8081$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr)):8081$/iu, "$1:8090")
     .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
     .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
 
@@ -192,17 +195,21 @@ const parseBaseUrlCandidates = (...values: Array<string | undefined>) => {
 };
 
 const getApiBaseUrlCandidates = () => {
-  const configured = parseBaseUrlCandidates(process.env.WEB_API_BASE_URL, process.env.NEXT_PUBLIC_WEB_API_BASE_URL);
-  const fallback = parseBaseUrlCandidates(...DEFAULT_WEB_API_BASE_URLS);
-  const merged = [...configured, ...fallback.filter((item) => !configured.includes(item))];
+  const configured = parseBaseUrlCandidates(process.env.WEB_API_BASE_URL);
   const blocked = parseBaseUrlCandidates(
     process.env.NEXTAUTH_URL,
     process.env.THE_FULL_WEB_BASE_URL,
     process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL
   );
 
-  const filtered = merged.filter((item) => !blocked.includes(item));
-  return filtered.length > 0 ? filtered : merged;
+  if (configured.length > 0) {
+    const filteredConfigured = configured.filter((item) => !blocked.includes(item));
+    return filteredConfigured.length > 0 ? filteredConfigured : configured;
+  }
+
+  const fallback = parseBaseUrlCandidates(...DEFAULT_WEB_API_BASE_URLS);
+  const filteredFallback = fallback.filter((item) => !blocked.includes(item));
+  return filteredFallback.length > 0 ? filteredFallback : fallback;
 };
 
 // 문의 API 연결 실패 주소를 잠시 제외하는 쿨다운(서킷 브레이커) 설정

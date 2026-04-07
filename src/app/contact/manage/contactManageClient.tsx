@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import { getPublicApiErrorMessage, requestPublicWebApi } from "@/app/lib/publicWebApi";
 import ContactManageReplyEditor from "./ContactManageReplyEditor";
 
@@ -319,7 +319,7 @@ export function ContactManageTableClient({ refreshKey }: ContactManageTableClien
           {!state.isLoading && !state.errorMessage && state.inquiryList.map((inquiry) => (
             <tr key={inquiry.id}>
               <td>{inquiry.id}</td>
-              <td className="contact-manage-title-cell"><Link href={`/contact/manage/${inquiry.id}`} className="contact-manage-title-link">{inquiry.title || "-"}</Link></td>
+              <td className="contact-manage-title-cell"><PageNavigationLink href={`/contact/manage/${inquiry.id}`} className="contact-manage-title-link">{inquiry.title || "-"}</PageNavigationLink></td>
               <td>{inquiry.businessName || "-"}</td>
               <td>{inquiry.managerName}</td>
               <td>{inquiry.phoneNumber}</td>
@@ -399,7 +399,7 @@ export function ContactManageDetailClient({ inquiryId, erpUserId, refreshKey }: 
               <p className="contact-manage-detail-value">{state.isLoading ? "문의 상세를 불러오는 중입니다." : state.errorMessage}</p>
             </div>
           </div>
-          <div className="contact-manage-detail-actions"><Link href="/contact/manage" className="contact-manage-detail-list-button">목록</Link></div>
+          <div className="contact-manage-detail-actions"><PageNavigationLink href="/contact/manage" className="contact-manage-detail-list-button">목록</PageNavigationLink></div>
         </article>
       </div>
     );
@@ -431,7 +431,7 @@ export function ContactManageDetailClient({ inquiryId, erpUserId, refreshKey }: 
           <div className="contact-manage-detail-row"><span className="contact-manage-detail-label">문의 내용</span><p className="contact-manage-detail-value">{state.inquiry.inquiryContent}</p></div>
         </div>
         {/* 목록으로 돌아가는 공통 액션 영역 */}
-        <div className="contact-manage-detail-actions"><Link href="/contact/manage" className="contact-manage-detail-list-button">목록</Link></div>
+        <div className="contact-manage-detail-actions"><PageNavigationLink href="/contact/manage" className="contact-manage-detail-list-button">목록</PageNavigationLink></div>
       </article>
       {/* 저장된 답변 로딩 결과를 넘겨서 상세 하단 편집기와 메일 발송 UI를 구성 */}
       <ContactManageReplyEditor

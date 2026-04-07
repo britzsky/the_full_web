@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
+import { navigateWithDocumentRequest } from "@/app/lib/documentNavigation";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 홍보 화면: PromotionEditorMode 타입 모델
@@ -183,9 +183,6 @@ const parsePromotionContent = (content: string) => {
 
 // 홍보 화면: PromotionEditorForm 함수 로직
 export default function PromotionEditorForm({ mode, postId, initialValues }: PromotionEditorFormProps) {
-  // 홍보 화면: router 정의
-  const router = useRouter();
-
   // 홍보 화면: 초기 본문 HTML 변환값
   const initialContentHtml = useMemo(() => parsePromotionContent(toFormValue(initialValues?.content)), [initialValues]);
 
@@ -321,8 +318,7 @@ export default function PromotionEditorForm({ mode, postId, initialValues }: Pro
     setFeedbackModal((prev) => ({ ...prev, open: false }));
 
     if (shouldMove) {
-      router.replace(nextPath);
-      router.refresh();
+      navigateWithDocumentRequest(nextPath, { replace: true });
     }
   };
 
@@ -374,9 +370,9 @@ export default function PromotionEditorForm({ mode, postId, initialValues }: Pro
       {/* 홍보 화면: 상태 문구/하단 액션 버튼 영역 */}
       <div className="promotion-form-actions">
         <div className="promotion-form-actions-right">
-          <Link href="/promotion" className="promotion-button promotion-button-outline">
+          <PageNavigationLink href="/promotion" className="promotion-button promotion-button-outline">
             취소
-          </Link>
+          </PageNavigationLink>
           <button
             type="submit"
             className="promotion-button promotion-button-dark"

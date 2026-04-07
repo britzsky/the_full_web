@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { unstable_noStore as noStore } from "next/cache";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
@@ -109,9 +109,9 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
               검색
             </button>
             {canManagePromotion && (
-              <Link href="/promotion/write" className="promotion-button promotion-button-dark promotion-search-write">
+              <PageNavigationLink href="/promotion/write" className="promotion-button promotion-button-dark promotion-search-write">
                 글작성
-              </Link>
+              </PageNavigationLink>
             )}
           </form>
 

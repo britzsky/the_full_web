@@ -3,6 +3,15 @@
 // 브라우저에서 사용할 공개 API 베이스 주소 정규화
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
+// 브라우저에서 직접 호출할 web_api 주소를 정규화
+const normalizePublicWebApiBaseUrl = (value: string) =>
+  normalizeText(value)
+    .replace(/\/+$/, "")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr))$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr)):8081$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
+
 // 공개 API 공통 에러 페이로드 모델
 type PublicApiErrorPayload = {
   error?: string;
@@ -15,8 +24,22 @@ export type PublicApiResponse<T> = {
   payload: T | PublicApiErrorPayload;
 };
 
-// 브라우저에서는 같은 도메인 Next API를 호출하고, 서버가 WEB_API_BASE_URL로 내부 연동한다.
+// 브라우저에서 사용할 공개 API 상대 경로 정규화
 const getBrowserApiPath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
+
+// 브라우저에서 직접 호출할 web_api 베이스 주소 계산
+const getPublicWebApiBaseUrl = () => {
+  const configuredBaseUrl = normalizePublicWebApiBaseUrl(process.env.NEXT_PUBLIC_BASE_URL ?? "");
+  if (configuredBaseUrl) {
+    return configuredBaseUrl;
+  }
+
+  if (typeof window !== "undefined") {
+    return normalizePublicWebApiBaseUrl(window.location.origin);
+  }
+
+  return "";
+};
 
 // 클라이언트 공개 API 경로를 브라우저/절대주소 입력 규칙에 맞게 정규화
 export const toPublicWebApiUrl = (path: string) => {
@@ -29,7 +52,9 @@ export const toPublicWebApiUrl = (path: string) => {
     return normalizedPath;
   }
 
-  return getBrowserApiPath(normalizedPath);
+  const apiPath = getBrowserApiPath(normalizedPath);
+  const baseUrl = getPublicWebApiBaseUrl();
+  return baseUrl ? `${baseUrl}${apiPath}` : apiPath;
 };
 
 // 공개 API 요청 헤더를 브라우저 fetch 규칙에 맞게 구성

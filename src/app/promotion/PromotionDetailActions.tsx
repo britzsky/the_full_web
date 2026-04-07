@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
+import { navigateWithDocumentRequest } from "@/app/lib/documentNavigation";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 
 // 홍보 화면: 컴포넌트 전달값
@@ -14,8 +14,6 @@ type PromotionDetailActionsProps = {
 
 // 홍보 화면: PromotionDetailActions 함수 로직
 export default function PromotionDetailActions({ postId, canManage }: PromotionDetailActionsProps) {
-// 홍보 화면: router 정의
-  const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
@@ -57,8 +55,7 @@ export default function PromotionDetailActions({ postId, canManage }: PromotionD
         throw new Error(payload.error ?? "삭제 중 오류가 발생했습니다.");
       }
 
-      router.push("/promotion");
-      router.refresh();
+      navigateWithDocumentRequest("/promotion");
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "삭제 중 오류가 발생했습니다.");
       setIsDeleting(false);
@@ -68,14 +65,14 @@ export default function PromotionDetailActions({ postId, canManage }: PromotionD
   return (
     // 홍보 상세 화면: 목록/수정/삭제 버튼 묶음 영역
     <div className="promotion-detail-actions">
-      <Link href="/promotion" className="promotion-button promotion-button-outline">
+      <PageNavigationLink href="/promotion" className="promotion-button promotion-button-outline">
         목록
-      </Link>
+      </PageNavigationLink>
       {canManage && (
         <>
-          <Link href={`/promotion/${postId}/edit`} className="promotion-button promotion-button-outline">
+          <PageNavigationLink href={`/promotion/${postId}/edit`} className="promotion-button promotion-button-outline">
             수정
-          </Link>
+          </PageNavigationLink>
           <button
             type="button"
             className="promotion-button promotion-button-dark"

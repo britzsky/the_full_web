@@ -51,6 +51,9 @@ const toSearchField = (value: unknown): PromotionSearchField => {
   return "title";
 };
 
+// the_full_web_api 기본 호출 주소
+const DEFAULT_WEB_API_BASE_URL = "http://127.0.0.1:8090";
+
 // 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
 const normalizeWebApiBaseUrl = (value: string) => {
   const normalized = normalizeText(value).replace(/\/+$/, "");
@@ -59,15 +62,15 @@ const normalizeWebApiBaseUrl = (value: string) => {
   }
 
   return normalized
-    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137)):8081$/iu, "$1:8090")
+    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr)):8081$/iu, "$1:8090")
     .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
     .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
 };
 
 // the_full_web_api 베이스 URL(미설정 시 로컬 기본값 사용)
 const getApiBaseUrl = () => {
-  const raw = normalizeWebApiBaseUrl(process.env.WEB_API_BASE_URL ?? process.env.NEXT_PUBLIC_WEB_API_BASE_URL ?? "");
-  const baseUrl = raw || "http://127.0.0.1:8090";
+  const raw = normalizeWebApiBaseUrl(process.env.WEB_API_BASE_URL ?? "");
+  const baseUrl = raw || DEFAULT_WEB_API_BASE_URL;
   return baseUrl.replace(/\/+$/, "");
 };
 

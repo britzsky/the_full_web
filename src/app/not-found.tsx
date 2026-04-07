@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Link from "next/link";
+import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import TheFullLogo from "@/app/components/Common/TheFullLogo";
 
 // 404 페이지 메타데이터 정의
@@ -31,14 +31,13 @@ export default function NotFoundPage() {
           요청하신 페이지가 없거나 주소가 변경되었습니다.
         </p>
 
-        <Link
+        <PageNavigationLink
           href="/"
           className="mt-8 inline-flex items-center justify-center rounded-full border border-[#1f1b18] px-6 py-2.5 text-sm font-bold text-[#1f1b18] transition hover:bg-[#1f1b18] hover:text-white"
         >
           메인으로 이동
-        </Link>
+        </PageNavigationLink>
       </div>
     </main>
   );
 }
-

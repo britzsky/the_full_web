@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import PageNavigationLink from "./PageNavigationLink";
 import TheFullLogo, { type TheFullLogoFormat, type TheFullLogoVariant } from "./TheFullLogo";
 
 // 헤더 메뉴 아이템 타입
@@ -125,9 +125,9 @@ const renderMenuLink = (
   }
 
   return (
-    <Link href={item.href} className={className}>
+    <PageNavigationLink href={item.href} className={className}>
       {item.label}
-    </Link>
+    </PageNavigationLink>
   );
 };
 
@@ -257,7 +257,7 @@ export default function SiteHeader({
           </ul>
 
           {/* 로고 링크 */}
-          <Link href={logoHref} className="inline-flex items-center justify-center px-6 lg:px-8">
+          <PageNavigationLink href={logoHref} className="inline-flex items-center justify-center px-6 lg:px-8">
             <TheFullLogo
               src={logoSrc}
               alt={logoAlt}
@@ -267,7 +267,7 @@ export default function SiteHeader({
               height={56}
               className="h-auto w-[178px] md:w-[220px]"
             />
-          </Link>
+          </PageNavigationLink>
 
           <ul className="flex justify-start gap-12 pl-6 lg:gap-14 lg:pl-10">
             {resolvedRightItems.map((item) => (
@@ -281,7 +281,7 @@ export default function SiteHeader({
         <div className="md:hidden">
           <div className="flex flex-col items-center gap-4">
             {/* 모바일 로고 링크 */}
-            <Link href={logoHref} className="inline-flex items-center justify-center">
+            <PageNavigationLink href={logoHref} className="inline-flex items-center justify-center">
               <TheFullLogo
                 src={logoSrc}
                 alt={logoAlt}
@@ -291,7 +291,7 @@ export default function SiteHeader({
                 height={48}
                 className="h-auto w-[145px]"
               />
-            </Link>
+            </PageNavigationLink>
             <ul className="grid w-full grid-cols-3 gap-x-3 gap-y-2 text-center">
               {leftItems.map((item) => (
                 <li key={`mobile-left-${item.label}`}>

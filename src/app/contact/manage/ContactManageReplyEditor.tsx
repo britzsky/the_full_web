@@ -2,9 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
+import { navigateWithDocumentRequest, reloadCurrentDocument } from "@/app/lib/documentNavigation";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
 import {
   isCkEditorContentMeaningful,
@@ -65,7 +65,6 @@ export default function ContactManageReplyEditor({
   inquiryContent,
   erpUserId = "",
 }: ContactManageReplyEditorProps) {
-  const router = useRouter();
   const normalizedErpUserId = erpUserId.trim();
   const userId = normalizedErpUserId || initialReply?.userId || "admin";
   const initialStoredContent = toCkEditorDataFromStoredContent(initialReply?.content || "");
@@ -280,10 +279,11 @@ export default function ContactManageReplyEditor({
     setFeedbackModal((prev) => ({ ...prev, open: false }));
 
     if (nextPath) {
-      router.push(nextPath);
+      navigateWithDocumentRequest(nextPath);
+      return;
     }
     if (shouldRefresh) {
-      router.refresh();
+      reloadCurrentDocument();
     }
   };
 
