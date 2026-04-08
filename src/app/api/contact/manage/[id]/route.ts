@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { deleteContactInquiry, getContactInquiryById } from "@/app/contact/inquiryStore";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
+import { getContactManageAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 // 동적 라우트 id 문자열을 양의 정수로 변환
 const parseId = (value: string) => {
@@ -11,26 +11,11 @@ const parseId = (value: string) => {
 // 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
-// 요청 헤더 Referer에서 user_id 파라미터 추출
-const getUserIdFromReferer = (request: Request) => {
-  const referer = normalizeText(request.headers.get("referer"));
-  if (!referer) {
-    return "";
-  }
-
-  try {
-    const url = new URL(referer);
-    return normalizeText(url.searchParams.get("erp_user_id")) || normalizeText(url.searchParams.get("user_id"));
-  } catch {
-    return "";
-  }
-};
-
 // 문의관리 상세 조회 API
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
-  const canManage = await getAdminAccess();
+  const canManage = await getContactManageAccess();
   if (!canManage) {
-    return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 403 });
+    return NextResponse.json({ error: "로그인 세션이 필요합니다." }, { status: 403 });
   }
 
   const { id: idParam } = await context.params;
@@ -55,9 +40,9 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
 
 // 문의관리 상세 삭제 API
 export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
-  const canManage = await getAdminAccess();
+  const canManage = await getContactManageAccess();
   if (!canManage) {
-    return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 403 });
+    return NextResponse.json({ error: "로그인 세션이 필요합니다." }, { status: 403 });
   }
 
   const { id: idParam } = await context.params;
@@ -70,12 +55,10 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
   try {
     const body = (await request.json().catch(() => ({}))) as { deletedBy?: string };
     const sessionUserId = await getSessionUserId();
-    const refererUserId = getUserIdFromReferer(request);
-    deletedBy = sessionUserId || refererUserId || normalizeText(body.deletedBy) || "admin";
+    deletedBy = sessionUserId || normalizeText(body.deletedBy) || "admin";
   } catch {
     const sessionUserId = await getSessionUserId();
-    const refererUserId = getUserIdFromReferer(request);
-    deletedBy = sessionUserId || refererUserId || "admin";
+    deletedBy = sessionUserId || "admin";
   }
 
   try {

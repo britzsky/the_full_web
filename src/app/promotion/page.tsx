@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { unstable_noStore as noStore } from "next/cache";
 import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
+import CommonSearchSelect from "@/app/components/Common/CommonSearchSelect";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
-import { getAdminAccess } from "@/app/lib/adminAccess";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import { getPromotionManagePermission } from "./permissions";
 import { PromotionListTableClient } from "./promotionClient";
 import type { PromotionSearchField } from "./types";
@@ -41,6 +42,12 @@ const promotionHeaderRightBaseItems: SiteHeaderMenuItem[] = [
   { label: "고객문의", href: "/contact", isCta: true },
 ];
 
+const promotionSearchFieldOptions = [
+  { value: "title", label: "제목" },
+  { value: "content", label: "내용" },
+  { value: "all", label: "제목+내용" },
+];
+
 // 홍보 화면: toSearchField 정의
 const toSearchField = (value: string | undefined): PromotionSearchField => {
   if (value === "content" || value === "all") {
@@ -62,7 +69,10 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
     typeof resolvedSearchParams.field === "string" ? resolvedSearchParams.field : undefined
   );
 
-  const [canManagePromotion, canManageContact] = await Promise.all([getPromotionManagePermission(), getAdminAccess()]);
+  const [canManagePromotion, canManageContact] = await Promise.all([
+    getPromotionManagePermission(),
+    getContactManageAccess(),
+  ]);
   const refreshKey = `${field}:${query}:${Date.now()}`;
 // 홍보 화면: 헤더 우측 메뉴 목록
   const promotionHeaderRightItems = appendContactManageMenu(promotionHeaderRightBaseItems, canManageContact);
@@ -90,11 +100,13 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
             <label className="promotion-sr-only" htmlFor="promotion-field">
               검색 구분
             </label>
-            <select id="promotion-field" name="field" defaultValue={field} className="promotion-search-select">
-              <option value="title">제목</option>
-              <option value="content">내용</option>
-              <option value="all">제목+내용</option>
-            </select>
+            <CommonSearchSelect
+              id="promotion-field"
+              name="field"
+              defaultValue={field}
+              options={promotionSearchFieldOptions}
+              wrapperClassName="promotion-search-select"
+            />
             <label className="promotion-sr-only" htmlFor="promotion-query">
               검색어
             </label>

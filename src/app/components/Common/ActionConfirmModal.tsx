@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import styles from "./ActionFeedbackModal.module.css";
 
 // 공통 확인 모달 전달값
@@ -51,11 +52,11 @@ export default function ActionConfirmModal({
     };
   }, [open, onCancel, onConfirm]);
 
-  if (!open) {
+  if (!open || typeof document === "undefined") {
     return null;
   }
 
-  return (
+  return createPortal(
     // 공통 확인 모달: 배경 오버레이 + 접근성 대화상자 루트
     <div className={styles.backdrop} role="dialog" aria-modal="true" aria-labelledby="action-confirm-modal-heading">
       {/* 공통 확인 모달: 카드 본문 컨테이너 */}
@@ -83,6 +84,7 @@ export default function ActionConfirmModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

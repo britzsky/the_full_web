@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import styles from "./ActionFeedbackModal.module.css";
 
 // 공통 완료/오류 모달 톤
@@ -27,30 +27,11 @@ export default function ActionFeedbackModal({
   confirmLabel = "확인",
   onConfirm,
 }: ActionFeedbackModalProps) {
-  // 공통 완료/오류 모달: 열림 상태에서 Enter/Escape 키로 확인 처리
-  useEffect(() => {
-    if (!open) {
-      return undefined;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" || event.key === "Enter") {
-        event.preventDefault();
-        onConfirm();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, onConfirm]);
-
-  if (!open) {
+  if (!open || typeof document === "undefined") {
     return null;
   }
 
-  return (
+  return createPortal(
     // 공통 완료/오류 모달: 배경 오버레이 + 접근성 대화상자 루트
     <div className={styles.backdrop} role="dialog" aria-modal="true" aria-labelledby="action-feedback-modal-heading">
       {/* 공통 완료/오류 모달: 카드 본문 컨테이너 */}
@@ -77,6 +58,7 @@ export default function ActionFeedbackModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
-import { getContactInquiryById } from "@/app/contact/inquiryStore";
+import { resolveErpMailAuthPassword } from "@/app/contact/erpMailAuth";
+import {
+  getContactInquiryById,
+  markContactInquiryAnswered,
+  resolveContactReplyMailRuntimeConfig,
+} from "@/app/contact/inquiryStore";
 import { sendContactReplyEmail } from "@/app/contact/replyEmailSender";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
+import { getContactManageAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 export const runtime = "nodejs";
 
@@ -10,6 +15,7 @@ export const runtime = "nodejs";
 type ContactReplySendPayload = {
   content: string;
   userId?: string;
+  editorContentWidthPx?: number;
 };
 
 // 동적 라우트 id 문자열을 양의 정수로 변환
@@ -21,37 +27,21 @@ const parseId = (value: string) => {
 // 문자열 입력값 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
-// 요청 헤더 Referer에서 user_id 파라미터 추출
-const getUserIdFromReferer = (request: Request) => {
-  const referer = normalizeText(request.headers.get("referer"));
-  if (!referer) {
-    return "";
-  }
-
-  try {
-    const url = new URL(referer);
-    return normalizeText(url.searchParams.get("erp_user_id")) || normalizeText(url.searchParams.get("user_id"));
-  } catch {
-    return "";
-  }
-};
-
 // 문의 답변 작성 user_id를 세션/헤더/본문 순서로 결정
 const resolveReplyUserId = async (request: Request, bodyUserId: unknown) => {
   const sessionUserId = await getSessionUserId();
   const headerUserId =
     normalizeText(request.headers.get("x-erp-user-id")) || normalizeText(request.headers.get("x-user-id"));
-  const refererUserId = getUserIdFromReferer(request);
   const requestBodyUserId = normalizeText(bodyUserId);
 
-  return sessionUserId || headerUserId || refererUserId || requestBodyUserId || "admin";
+  return sessionUserId || headerUserId || requestBodyUserId || "admin";
 };
 
 // 문의관리 상세 답변 메일 송부 API
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
-  const canManage = await getAdminAccess();
+  const canManage = await getContactManageAccess();
   if (!canManage) {
-    return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 403 });
+    return NextResponse.json({ error: "로그인 세션이 필요합니다." }, { status: 403 });
   }
 
   const { id: idParam } = await context.params;
@@ -78,8 +68,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   }
 
   const resolvedUserId = await resolveReplyUserId(request, body.userId);
+  const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
 
   try {
+    const smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
+      userId: resolvedUserId,
+    });
     const mailResult = await sendContactReplyEmail({
       toEmail: inquiry.email,
       inquiryId,
@@ -89,7 +83,27 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       managerName: inquiry.managerName,
       replyContent: content,
       replyUserId: resolvedUserId,
+      editorContentWidthPx: Number(body.editorContentWidthPx),
+      smtpPassword: resolvedSmtpPassword,
+      smtpHost: smtpRuntimeConfig.smtpHost,
+      smtpPort: smtpRuntimeConfig.smtpPort,
+      smtpSecure: smtpRuntimeConfig.smtpSecure,
+      smtpAuthUser: smtpRuntimeConfig.smtpUser,
+      mailFrom: smtpRuntimeConfig.mailFrom,
+      mailReplyTo: smtpRuntimeConfig.mailReplyTo,
     });
+    let answerSync: { completed: boolean; error?: string } = { completed: false };
+    try {
+      // 답변 메일 발송이 끝난 뒤에만 문의 답변여부를 완료 상태로 반영
+      await markContactInquiryAnswered(inquiryId, resolvedUserId);
+      answerSync = { completed: true };
+    } catch (error) {
+      console.error("[contact-manage-reply-send-answer-sync]", error);
+      answerSync = {
+        completed: false,
+        error: error instanceof Error ? error.message : "답변 완료 상태 반영 중 오류가 발생했습니다.",
+      };
+    }
 
     return NextResponse.json({
       message: "이메일이 발송되었습니다.",
@@ -99,8 +113,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         accepted: (mailResult.accepted || []).map((item: unknown) => String(item)),
         rejected: (mailResult.rejected || []).map((item: unknown) => String(item)),
       },
+      answerSync,
     });
   } catch (error) {
+    console.error("[contact-manage-reply-send]", error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "이메일 송부 중 오류가 발생했습니다.",

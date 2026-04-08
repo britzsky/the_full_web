@@ -2,6 +2,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
 // 1번 화면 대표 인사 이미지 경로
@@ -75,7 +77,10 @@ export const metadata: Metadata = {
 };
 
 // 회사소개 화면: CompanyPage 함수 로직
-export default function CompanyPage() {
+export default async function CompanyPage() {
+  const canManageContact = await getContactManageAccess();
+  const companyHeaderRightItems = appendContactManageMenu(companyHeaderRightBaseItems, canManageContact);
+
   return (
     <main
       id="company-scroll"
@@ -85,7 +90,7 @@ export default function CompanyPage() {
       <section id="company-greeting" className="company-screen company-screen-with-header relative">
         <SiteHeader
           leftItems={companyHeaderLeftItems}
-          rightItems={companyHeaderRightBaseItems}
+          rightItems={companyHeaderRightItems}
           lightBackground
         />
 
@@ -204,6 +209,5 @@ export default function CompanyPage() {
     </main>
   );
 }
-
 
 

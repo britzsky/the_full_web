@@ -65,6 +65,8 @@ type PromotionEditState = {
   post: PromotionPost | null;
 };
 
+const PROMOTION_PAGE_SIZE = 15;
+const PROMOTION_PAGINATION_WINDOW = 5;
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 const toPositiveInt = (value: unknown) => {
   const parsed = Number(value);
@@ -74,6 +76,19 @@ const toArray = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T
 const toSearchField = (value: unknown): PromotionSearchField => {
   const normalized = normalizeText(value);
   return normalized === "content" || normalized === "all" ? normalized : "title";
+};
+const clampPage = (page: number, totalPages: number) => Math.min(Math.max(page, 1), Math.max(totalPages, 1));
+const getPaginationPages = (currentPage: number, totalPages: number) => {
+  const normalizedCurrentPage = clampPage(currentPage, totalPages);
+  const halfWindow = Math.floor(PROMOTION_PAGINATION_WINDOW / 2);
+  let startPage = Math.max(1, normalizedCurrentPage - halfWindow);
+  let endPage = Math.min(totalPages, startPage + PROMOTION_PAGINATION_WINDOW - 1);
+
+  if (endPage - startPage + 1 < PROMOTION_PAGINATION_WINDOW) {
+    startPage = Math.max(1, endPage - PROMOTION_PAGINATION_WINDOW + 1);
+  }
+
+  return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
 };
 
 const toSummary = (row?: PromotionApiPost | null): PromotionPostSummary | null => {
@@ -247,6 +262,7 @@ const renderPromotionContent = (content: string): ReactNode[] => {
 
 export function PromotionListTableClient({ query, field, canManagePromotion, refreshKey }: PromotionListTableClientProps) {
   const [state, setState] = useState<PromotionListState>({ isLoading: true, errorMessage: "", posts: [] });
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     let isMounted = true;
@@ -275,38 +291,99 @@ export function PromotionListTableClient({ query, field, canManagePromotion, ref
     };
   }, [field, query, refreshKey]);
 
+  useEffect(() => {
+    // 검색 조건이 바뀌면 목록 첫 페이지부터 다시 보여준다.
+    setCurrentPage(1);
+  }, [field, query, refreshKey]);
+
+  const totalPages = Math.max(1, Math.ceil(state.posts.length / PROMOTION_PAGE_SIZE));
+  const normalizedCurrentPage = clampPage(currentPage, totalPages);
+  const pageStartIndex = (normalizedCurrentPage - 1) * PROMOTION_PAGE_SIZE;
+  const visiblePosts = state.posts.slice(pageStartIndex, pageStartIndex + PROMOTION_PAGE_SIZE);
+  const paginationPages = getPaginationPages(normalizedCurrentPage, totalPages);
+
   return (
-    <table className="promotion-table" aria-label="홍보 게시글 목록">
-      <thead>
-        <tr>
-          <th scope="col">No</th>
-          <th scope="col">제목</th>
-          <th scope="col">작성자</th>
-          <th scope="col">등록일</th>
-          {canManagePromotion && <th scope="col">관리</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {state.isLoading && (
-          <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">게시글을 불러오는 중입니다.</td></tr>
-        )}
-        {!state.isLoading && state.errorMessage && (
-          <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">{state.errorMessage}</td></tr>
-        )}
-        {!state.isLoading && !state.errorMessage && state.posts.map((post) => (
-          <tr key={post.id}>
-            <td>{post.id}</td>
-            <td className="promotion-title-cell"><PageNavigationLink href={`/promotion/${post.id}`} className="promotion-title-link">{post.title}</PageNavigationLink></td>
-            <td>{post.author}</td>
-            <td>{formatPromotionDate(post.createdAt)}</td>
-            {canManagePromotion && <td><PromotionListActions postId={post.id} editHref={`/promotion/${post.id}/edit`} /></td>}
+    <>
+      <table className="promotion-table" aria-label="홍보 게시글 목록">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">제목</th>
+            <th scope="col">작성자</th>
+            <th scope="col">등록일</th>
+            {canManagePromotion && <th scope="col">관리</th>}
           </tr>
-        ))}
-        {!state.isLoading && !state.errorMessage && state.posts.length === 0 && (
-          <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">등록된 게시글이 없습니다.</td></tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {state.isLoading && (
+            <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">게시글을 불러오는 중입니다.</td></tr>
+          )}
+          {!state.isLoading && state.errorMessage && (
+            <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">{state.errorMessage}</td></tr>
+          )}
+          {!state.isLoading && !state.errorMessage && visiblePosts.map((post) => (
+            <tr key={post.id}>
+              <td>{post.id}</td>
+              <td className="promotion-title-cell"><PageNavigationLink href={`/promotion/${post.id}`} className="promotion-title-link">{post.title}</PageNavigationLink></td>
+              <td>{post.author}</td>
+              <td>{formatPromotionDate(post.createdAt)}</td>
+              {canManagePromotion && <td><PromotionListActions postId={post.id} editHref={`/promotion/${post.id}/edit`} /></td>}
+            </tr>
+          ))}
+          {!state.isLoading && !state.errorMessage && state.posts.length === 0 && (
+            <tr><td colSpan={canManagePromotion ? 5 : 4} className="promotion-empty-row">등록된 게시글이 없습니다.</td></tr>
+          )}
+        </tbody>
+      </table>
+
+      {!state.isLoading && !state.errorMessage && totalPages > 1 && (
+        <nav className="promotion-pagination" aria-label="홍보 게시글 페이지 이동">
+          <button
+            type="button"
+            className="promotion-pagination-button"
+            onClick={() => setCurrentPage(1)}
+            disabled={normalizedCurrentPage === 1}
+          >
+            처음
+          </button>
+          <button
+            type="button"
+            className="promotion-pagination-button"
+            onClick={() => setCurrentPage((prev) => clampPage(prev - 1, totalPages))}
+            disabled={normalizedCurrentPage === 1}
+          >
+            이전
+          </button>
+          {paginationPages.map((pageNumber) => (
+            <button
+              key={pageNumber}
+              type="button"
+              className={`promotion-pagination-button promotion-pagination-button-number ${pageNumber === normalizedCurrentPage ? "promotion-pagination-button-active" : ""}`}
+              onClick={() => setCurrentPage(pageNumber)}
+              aria-current={pageNumber === normalizedCurrentPage ? "page" : undefined}
+            >
+              {pageNumber}
+            </button>
+          ))}
+          <button
+            type="button"
+            className="promotion-pagination-button"
+            onClick={() => setCurrentPage((prev) => clampPage(prev + 1, totalPages))}
+            disabled={normalizedCurrentPage === totalPages}
+          >
+            다음
+          </button>
+          <button
+            type="button"
+            className="promotion-pagination-button"
+            onClick={() => setCurrentPage(totalPages)}
+            disabled={normalizedCurrentPage === totalPages}
+          >
+            마지막
+          </button>
+        </nav>
+      )}
+    </>
   );
 }
 

@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
-import { getAdminAccess, getSessionUserId } from "@/app/lib/adminAccess";
+import { getContactManageAccess, getSessionUserId } from "@/app/lib/adminAccess";
 import { getContactInquiryById } from "@/app/contact/inquiryStore";
 import { ContactManageDetailClient } from "../contactManageClient";
 import "../page.css";
@@ -12,7 +12,6 @@ import "../page.css";
 // 문의관리 상세 페이지 params 타입
 type ContactManageDetailPageProps = {
   params: Promise<{ id: string }>;
-  searchParams?: Promise<{ erp_user_id?: string | string[]; user_id?: string | string[] }>;
 };
 
 // 문의관리 상세 페이지 메타데이터
@@ -43,11 +42,11 @@ const contactManageHeaderRightBaseItems: SiteHeaderMenuItem[] = [
 ];
 
 // 문의관리 상세 페이지 렌더링
-export default async function ContactManageDetailPage({ params, searchParams }: ContactManageDetailPageProps) {
+export default async function ContactManageDetailPage({ params }: ContactManageDetailPageProps) {
   noStore();
 
 // 문의관리 화면: 상태값
-  const canManage = await getAdminAccess();
+  const canManage = await getContactManageAccess();
   if (!canManage) {
     notFound();
   }
@@ -65,19 +64,8 @@ export default async function ContactManageDetailPage({ params, searchParams }: 
     notFound();
   }
 
-  const resolvedSearchParams = (await Promise.resolve(searchParams ?? {})) as {
-    erp_user_id?: string | string[];
-    user_id?: string | string[];
-  };
-  const queryUserId = Array.isArray(resolvedSearchParams.erp_user_id)
-    ? resolvedSearchParams.erp_user_id[0]
-    : resolvedSearchParams.erp_user_id;
-  const legacyQueryUserId = Array.isArray(resolvedSearchParams.user_id)
-    ? resolvedSearchParams.user_id[0]
-    : resolvedSearchParams.user_id;
-  // 문의관리 상세: URL 파라미터가 없을 때는 로그인 세션 쿠키 user_id를 사용
   const sessionUserId = await getSessionUserId();
-  const erpUserId = (queryUserId || legacyQueryUserId || sessionUserId || "").trim();
+  const erpUserId = (sessionUserId || "").trim();
   const refreshKey = `${id}:${Date.now()}`;
 
 // 문의관리 화면: rightItems 정의

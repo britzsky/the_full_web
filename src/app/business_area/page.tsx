@@ -4,6 +4,8 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import EmphasisCopy from "@/app/components/Common/EmphasisCopy";
+import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
 // 사업영역 1번 화면 카드 데이터
@@ -126,7 +128,10 @@ export const metadata: Metadata = {
 };
 
 // 사업영역 화면: BusinessPage 함수 로직
-export default function BusinessPage() {
+export default async function BusinessPage() {
+  const canManageContact = await getContactManageAccess();
+  const businessHeaderRightItems = appendContactManageMenu(businessHeaderRightBaseItems, canManageContact);
+
   return (
     <main
       id="business-scroll"
@@ -137,7 +142,7 @@ export default function BusinessPage() {
         {/* 공통 헤더(최상단 1회 노출) */}
         <SiteHeader
           leftItems={businessHeaderLeftItems}
-          rightItems={businessHeaderRightBaseItems}
+          rightItems={businessHeaderRightItems}
           lightBackground
         />
         {/* 1번 화면 본문 정렬 래퍼 */}
@@ -304,5 +309,4 @@ export default function BusinessPage() {
     </main>
   );
 }
-
 

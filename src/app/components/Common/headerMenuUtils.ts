@@ -1,6 +1,6 @@
 import type { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 
-// 관리자 권한이 있을 때 헤더 우측에 문의관리 메뉴를 추가
+// 문의관리 권한이 있을 때 헤더 우측에 문의관리 메뉴를 추가
 export const appendContactManageMenu = (items: SiteHeaderMenuItem[], canManage: boolean): SiteHeaderMenuItem[] => {
   if (!canManage) {
     return items;

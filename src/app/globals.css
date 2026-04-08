@@ -156,6 +156,109 @@
   --catering-stage-light-color: color-mix(in oklab, var(--catering-stage-mid-color) 84%, #ffffff 16%);
 }
 
+/* 공통 검색 드롭박스 래퍼 */
+.common-search-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+/* 공통 검색 드롭박스 트리거 버튼 */
+.common-search-select-trigger {
+  position: relative;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgba(39, 29, 19, 0.25);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 공통 검색 드롭박스 트리거 내부 표시 라벨 */
+.common-search-select-trigger-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 2.25rem;
+  color: #111111;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 공통 검색 드롭박스 화살표 아이콘 */
+.common-search-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 12px;
+  height: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23111111' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 8px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* 공통 검색 드롭박스가 열리면 화살표를 바로 위로 돌린다 */
+.common-search-select-wrap-open .common-search-select-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* 공통 검색 드롭박스 목록 래퍼 */
+.common-search-select-panel-wrap {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  width: 100%;
+  z-index: 30;
+}
+
+/* 공통 검색 드롭박스 옵션 목록 */
+.common-search-select-panel {
+  margin: 0;
+  padding: 0.35rem 0;
+  list-style: none;
+  border: 1px solid rgba(39, 29, 19, 0.18);
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 14px 28px rgba(39, 29, 19, 0.12);
+}
+
+/* 공통 검색 드롭박스 옵션 버튼 */
+.common-search-select-option {
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  background-color: transparent;
+  color: #111111;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1;
+  text-align: center;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+/* 공통 검색 드롭박스 옵션 hover 상태 */
+.common-search-select-option:hover {
+  background-color: rgba(39, 57, 28, 0.06);
+}
+
+/* 공통 검색 드롭박스 현재 선택 옵션 강조 */
+.common-search-select-option-active {
+  color: var(--main-body-bar-color);
+  font-weight: 700;
+}
+
 /* 기본 엘리먼트 스타일 */
 @layer base {
   /* html/body 기본 글꼴 렌더링 품질 설정 */

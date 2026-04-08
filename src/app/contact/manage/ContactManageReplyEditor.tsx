@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
 import ActionConfirmModal from "@/app/components/Common/ActionConfirmModal";
 import { navigateWithDocumentRequest, reloadCurrentDocument } from "@/app/lib/documentNavigation";
@@ -10,6 +11,8 @@ import {
   isCkEditorContentMeaningful,
   toCkEditorDataFromStoredContent,
 } from "../editorTextUtils";
+
+const IMAGE_WIDTH_PERCENT_PATTERN = /(?:^|;)\s*width\s*:\s*([0-9]+(?:\.[0-9]+)?)%/i;
 
 // 문의관리 상세에서 답변 입력창 초기값으로 쓰는 데이터 모델
 type ContactInquiryReplyRecord = {
@@ -40,6 +43,7 @@ type ReplyFeedbackModalState = {
   caption: string;
   nextPath: string;
   shouldRefresh: boolean;
+  shouldClosePreview: boolean;
 };
 
 // 문의관리 상세 답변 메일 미리보기 모달 상태 모델
@@ -65,6 +69,7 @@ export default function ContactManageReplyEditor({
   inquiryContent,
   erpUserId = "",
 }: ContactManageReplyEditorProps) {
+  const replyEditorShellRef = useRef<HTMLDivElement | null>(null);
   const normalizedErpUserId = erpUserId.trim();
   const userId = normalizedErpUserId || initialReply?.userId || "admin";
   const initialStoredContent = toCkEditorDataFromStoredContent(initialReply?.content || "");
@@ -78,6 +83,7 @@ export default function ContactManageReplyEditor({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isSplitViewOpen, setIsSplitViewOpen] = useState(false);
+  const [replyBaseContentWidthPx, setReplyBaseContentWidthPx] = useState<number | null>(null);
   const [previewModal, setPreviewModal] = useState<ReplyPreviewModalState>({
     open: false,
     subject: "",
@@ -93,15 +99,8 @@ export default function ContactManageReplyEditor({
     caption: "",
     nextPath: "",
     shouldRefresh: false,
+    shouldClosePreview: false,
   });
-
-  useEffect(() => {
-    // 문의관리 상세: URL로 전달받은 user_id를 세션 쿠키로 유지
-    if (!normalizedErpUserId) {
-      return;
-    }
-    document.cookie = `erp_user_id=${encodeURIComponent(normalizedErpUserId)}; Path=/; SameSite=Lax`;
-  }, [normalizedErpUserId]);
 
   useEffect(() => {
     // 문의관리 상세: 서버에서 다시 읽은 답변 본문을 에디터/저장 상태에 동기화
@@ -131,6 +130,182 @@ export default function ContactManageReplyEditor({
     };
   }, [previewModal.open]);
 
+  // 문의관리 상세: 원래보기 상태의 에디터 본문 폭을 기준값(px)으로 측정
+  const measureReplyEditorContentWidthPx = () => {
+    const editableElement = replyEditorShellRef.current?.querySelector(".ck-editor__editable_inline") as HTMLElement | null;
+    const measuredWidth = editableElement?.clientWidth ?? replyEditorShellRef.current?.clientWidth ?? 0;
+    return measuredWidth > 0 ? Math.round(measuredWidth) : null;
+  };
+
+  useEffect(() => {
+    // 문의관리 상세: 좌우보기로 전환해도 원래보기 기준 폭을 메일/미리보기에 재사용
+    if (isSplitViewOpen) {
+      return undefined;
+    }
+
+    let frameId = 0;
+    const syncBaseWidth = () => {
+      frameId = window.requestAnimationFrame(() => {
+        const measuredWidth = measureReplyEditorContentWidthPx();
+        if (measuredWidth && measuredWidth !== replyBaseContentWidthPx) {
+          setReplyBaseContentWidthPx(measuredWidth);
+        }
+      });
+    };
+
+    syncBaseWidth();
+    window.addEventListener("resize", syncBaseWidth);
+    return () => {
+      window.removeEventListener("resize", syncBaseWidth);
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [isSplitViewOpen, replyBaseContentWidthPx, inquiryId]);
+
+  // 문의관리 상세: 현재 CKEditor 본문 편집영역의 실제 너비(px)를 조회
+  const getReplyEditorContentWidthPx = () => {
+    const measuredWidth = measureReplyEditorContentWidthPx();
+    return replyBaseContentWidthPx || measuredWidth || undefined;
+  };
+
+  useEffect(() => {
+    // 문의관리 상세: 좌우보기 오른쪽은 50:50 레이아웃을 유지하고 사진 표시 폭만 원래보기 기준 px로 고정
+    const editableElement = replyEditorShellRef.current?.querySelector(".ck-editor__editable_inline") as HTMLElement | null;
+    if (!editableElement) {
+      return undefined;
+    }
+
+    const restoreSplitViewImageWidths = () => {
+      const lockedFigures = editableElement.querySelectorAll("[data-split-view-image-fixed='Y']");
+      lockedFigures.forEach((figureNode) => {
+        const figureElement = figureNode as HTMLElement;
+        const originalWidth = figureElement.dataset.originalFigureWidth || "";
+        const originalMaxWidth = figureElement.dataset.originalFigureMaxWidth || "";
+
+        if (originalWidth) {
+          figureElement.style.width = originalWidth;
+        } else {
+          figureElement.style.removeProperty("width");
+        }
+
+        if (originalMaxWidth) {
+          figureElement.style.maxWidth = originalMaxWidth;
+        } else {
+          figureElement.style.removeProperty("max-width");
+        }
+
+        delete figureElement.dataset.splitViewImageFixed;
+        delete figureElement.dataset.originalFigureWidth;
+        delete figureElement.dataset.originalFigureMaxWidth;
+
+        const imageElement = figureElement.querySelector("img") as HTMLElement | null;
+        if (!imageElement) {
+          return;
+        }
+
+        const originalImageWidth = imageElement.dataset.originalImageWidth || "";
+        const originalImageMaxWidth = imageElement.dataset.originalImageMaxWidth || "";
+        const originalImageHeight = imageElement.dataset.originalImageHeight || "";
+
+        if (originalImageWidth) {
+          imageElement.style.width = originalImageWidth;
+        } else {
+          imageElement.style.removeProperty("width");
+        }
+
+        if (originalImageMaxWidth) {
+          imageElement.style.maxWidth = originalImageMaxWidth;
+        } else {
+          imageElement.style.removeProperty("max-width");
+        }
+
+        if (originalImageHeight) {
+          imageElement.style.height = originalImageHeight;
+        } else {
+          imageElement.style.removeProperty("height");
+        }
+
+        delete imageElement.dataset.originalImageWidth;
+        delete imageElement.dataset.originalImageMaxWidth;
+        delete imageElement.dataset.originalImageHeight;
+      });
+    };
+
+    if (!isSplitViewOpen || !replyBaseContentWidthPx) {
+      restoreSplitViewImageWidths();
+      return undefined;
+    }
+
+    const applySplitViewImageWidths = () => {
+      const figureElements = editableElement.querySelectorAll("figure.image");
+      figureElements.forEach((figureNode) => {
+        const figureElement = figureNode as HTMLElement;
+        const styleValue = figureElement.getAttribute("style") || "";
+        const percentMatched = styleValue.match(IMAGE_WIDTH_PERCENT_PATTERN);
+        if (!percentMatched) {
+          return;
+        }
+
+        const percent = Number(percentMatched[1]);
+        if (!Number.isFinite(percent) || percent <= 0) {
+          return;
+        }
+
+        const fixedWidthPx = Math.round((replyBaseContentWidthPx * percent) / 100);
+        if (fixedWidthPx <= 0) {
+          return;
+        }
+
+        if (figureElement.dataset.splitViewImageFixed !== "Y") {
+          figureElement.dataset.originalFigureWidth = figureElement.style.width || "";
+          figureElement.dataset.originalFigureMaxWidth = figureElement.style.maxWidth || "";
+          figureElement.dataset.splitViewImageFixed = "Y";
+          const imageElement = figureElement.querySelector("img") as HTMLElement | null;
+          if (imageElement) {
+            imageElement.dataset.originalImageWidth = imageElement.style.width || "";
+            imageElement.dataset.originalImageMaxWidth = imageElement.style.maxWidth || "";
+            imageElement.dataset.originalImageHeight = imageElement.style.height || "";
+          }
+        }
+
+        figureElement.style.width = `${fixedWidthPx}px`;
+        figureElement.style.maxWidth = `${fixedWidthPx}px`;
+
+        const imageElement = figureElement.querySelector("img") as HTMLElement | null;
+        if (!imageElement) {
+          return;
+        }
+
+        if (!imageElement.dataset.originalImageMaxWidth && !imageElement.dataset.originalImageHeight) {
+          imageElement.dataset.originalImageWidth = imageElement.style.width || "";
+          imageElement.dataset.originalImageMaxWidth = imageElement.style.maxWidth || "";
+          imageElement.dataset.originalImageHeight = imageElement.style.height || "";
+        }
+
+        imageElement.style.width = "100%";
+        imageElement.style.maxWidth = `${fixedWidthPx}px`;
+        imageElement.style.height = "auto";
+      });
+    };
+
+    const frameId = window.requestAnimationFrame(applySplitViewImageWidths);
+    const observer = new MutationObserver(() => {
+      window.requestAnimationFrame(applySplitViewImageWidths);
+    });
+
+    observer.observe(editableElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["style", "class"],
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
+      restoreSplitViewImageWidths();
+    };
+  }, [isSplitViewOpen, replyBaseContentWidthPx, editorContent]);
+
   const handleSaveReply = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSaving || isSendingEmail || isPreviewLoading || previewModal.open || feedbackModal.open || isDeleteConfirmOpen) {
@@ -147,6 +322,7 @@ export default function ContactManageReplyEditor({
         caption: "텍스트 또는 이미지를 포함해 답변을 작성해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
       return;
     }
@@ -162,6 +338,7 @@ export default function ContactManageReplyEditor({
         body: JSON.stringify({
           userId,
           content: normalizedContent,
+          editorContentWidthPx: getReplyEditorContentWidthPx(),
         }),
       });
 
@@ -182,6 +359,7 @@ export default function ContactManageReplyEditor({
         caption: "확인을 누르면 최신 답변 상태로 갱신됩니다.",
         nextPath: "",
         shouldRefresh: true,
+        shouldClosePreview: false,
       });
       // 문의관리 상세: 저장 성공 직후에는 현재 편집값을 최신 저장본 기준으로 갱신
       setContent(normalizedContent);
@@ -196,6 +374,7 @@ export default function ContactManageReplyEditor({
         caption: "잠시 후 다시 시도해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
     } finally {
       setIsSaving(false);
@@ -256,6 +435,7 @@ export default function ContactManageReplyEditor({
         caption: "확인을 누르면 문의관리 목록으로 이동합니다.",
         nextPath: "/contact/manage",
         shouldRefresh: true,
+        shouldClosePreview: false,
       });
     } catch (error) {
       setFeedbackModal({
@@ -266,6 +446,7 @@ export default function ContactManageReplyEditor({
         caption: "잠시 후 다시 시도해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
     } finally {
       setIsDeleting(false);
@@ -276,7 +457,12 @@ export default function ContactManageReplyEditor({
   const handleFeedbackConfirm = () => {
     const nextPath = feedbackModal.nextPath;
     const shouldRefresh = feedbackModal.shouldRefresh;
+    const shouldClosePreview = feedbackModal.shouldClosePreview;
     setFeedbackModal((prev) => ({ ...prev, open: false }));
+
+    if (shouldClosePreview) {
+      setPreviewModal((prev) => ({ ...prev, open: false }));
+    }
 
     if (nextPath) {
       navigateWithDocumentRequest(nextPath);
@@ -312,6 +498,7 @@ export default function ContactManageReplyEditor({
         caption: "텍스트 또는 이미지를 포함해 답변을 작성해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
       return;
     }
@@ -326,13 +513,14 @@ export default function ContactManageReplyEditor({
         caption: "띄어쓰기/특수문자 변경도 저장 대상입니다.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
       return;
     }
 
     setIsPreviewLoading(true);
     try {
-      const response = await fetch(`/contact/manage/${inquiryId}/reply/preview`, {
+      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/preview`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -340,6 +528,7 @@ export default function ContactManageReplyEditor({
         body: JSON.stringify({
           userId,
           content: normalizedContent,
+          editorContentWidthPx: getReplyEditorContentWidthPx(),
         }),
       });
 
@@ -373,6 +562,7 @@ export default function ContactManageReplyEditor({
         caption: "잠시 후 다시 시도해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
     } finally {
       setIsPreviewLoading(false);
@@ -412,6 +602,7 @@ export default function ContactManageReplyEditor({
         caption: "텍스트 또는 이미지를 포함해 답변을 작성해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
       return;
     }
@@ -426,13 +617,14 @@ export default function ContactManageReplyEditor({
         caption: "띄어쓰기/특수문자 변경도 저장 대상입니다.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
       return;
     }
 
     setIsSendingEmail(true);
     try {
-      const response = await fetch(`/contact/manage/${inquiryId}/reply/send`, {
+      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -440,6 +632,7 @@ export default function ContactManageReplyEditor({
         body: JSON.stringify({
           userId,
           content: normalizedContent,
+          editorContentWidthPx: getReplyEditorContentWidthPx(),
         }),
       });
 
@@ -460,7 +653,6 @@ export default function ContactManageReplyEditor({
         throw new Error(payload.emailSync.error || payload.message || "이메일 발송에 실패했습니다.");
       }
 
-      setPreviewModal((prev) => ({ ...prev, open: false }));
       setFeedbackModal({
         open: true,
         tone: "success",
@@ -469,6 +661,7 @@ export default function ContactManageReplyEditor({
         caption: "답변 저장은 별도로 진행해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: true,
       });
     } catch (error) {
       setFeedbackModal({
@@ -479,11 +672,76 @@ export default function ContactManageReplyEditor({
         caption: "잠시 후 다시 시도해 주세요.",
         nextPath: "",
         shouldRefresh: false,
+        shouldClosePreview: false,
       });
     } finally {
       setIsSendingEmail(false);
     }
   };
+
+  const previewModalLayer = previewModal.open && typeof document !== "undefined"
+    ? createPortal(
+      <div className="contact-manage-preview-backdrop" role="dialog" aria-modal="true" aria-labelledby="reply-preview-title">
+        <div className="contact-manage-preview-modal">
+          <div className="contact-manage-preview-header">
+            <h3 id="reply-preview-title" className="contact-manage-preview-title">이메일 미리보기</h3>
+            <div className="contact-manage-preview-header-actions">
+              <button
+                type="button"
+                className="contact-manage-preview-close"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  handlePreviewClose();
+                }}
+                disabled={isPreviewLoading || isSendingEmail}
+              >
+                닫기
+              </button>
+              <button
+                type="button"
+                className="contact-manage-preview-send"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  void handleSendReplyEmail();
+                }}
+                disabled={isPreviewLoading || isSendingEmail || isSaving || isDeleting}
+              >
+                {isSendingEmail ? "발송중..." : "이메일 발송"}
+              </button>
+            </div>
+          </div>
+          <p className="contact-manage-preview-subject">{previewModal.subject}</p>
+          <div className="contact-manage-preview-body">
+            <div className="contact-manage-preview-layout">
+              <aside className="contact-manage-preview-envelope-card" aria-label="메일 발신/수신 정보">
+                <h4 className="contact-manage-preview-envelope-title">메일 정보</h4>
+                <dl className="contact-manage-preview-envelope-list">
+                  <div className="contact-manage-preview-envelope-row">
+                    <dt>보낸사람</dt>
+                    <dd>{previewModal.from || "-"}</dd>
+                  </div>
+                  <div className="contact-manage-preview-envelope-row">
+                    <dt>받는사람</dt>
+                    <dd>{previewModal.to || "-"}</dd>
+                  </div>
+                </dl>
+              </aside>
+              <div className="contact-manage-preview-iframe-wrap">
+                <iframe
+                  title="답변 메일 미리보기"
+                  className="contact-manage-preview-iframe"
+                  srcDoc={previewModal.html}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>,
+      document.body
+    )
+    : null;
 
   return (
     <section className="contact-manage-reply-section">
@@ -499,9 +757,7 @@ export default function ContactManageReplyEditor({
         </button>
       </div>
 
-      <div
-        className={`contact-manage-reply-layout${isSplitViewOpen ? " contact-manage-reply-layout-split" : ""}`}
-      >
+      <div className={`contact-manage-reply-layout${isSplitViewOpen ? " contact-manage-reply-layout-split" : ""}`}>
         {isSplitViewOpen && (
           <aside className="contact-manage-reply-inquiry-panel" aria-label="문의 내용 확인 영역">
             <div className="contact-manage-reply-inquiry-block">
@@ -544,7 +800,7 @@ export default function ContactManageReplyEditor({
                 aria-hidden="true"
                 required
               />
-              <div className="contact-manage-reply-ckeditor-shell" aria-label="답변 내용 편집기">
+              <div ref={replyEditorShellRef} className="contact-manage-reply-ckeditor-shell" aria-label="답변 내용 편집기">
                 <ContactManageReplyCkEditor
                   value={editorContent}
                   // 문의관리 상세: 입력값은 html 상태로 유지해 이미지/서식을 저장/발송에 반영
@@ -588,7 +844,11 @@ export default function ContactManageReplyEditor({
               <button
                 type="button"
                 className="contact-manage-reply-button contact-manage-reply-button-preview"
-                onClick={handlePreviewOpen}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  void handlePreviewOpen();
+                }}
                 disabled={isPreviewLoading || isSaving || isSendingEmail || isDeleting || feedbackModal.open || isDeleteConfirmOpen}
               >
                 {isPreviewLoading ? "미리보기 불러오는 중..." : "이메일 미리보기(발송)"}
@@ -632,61 +892,9 @@ export default function ContactManageReplyEditor({
             onCancel={handleDeleteCancel}
             onConfirm={handleDeleteConfirm}
           />
-
-          {previewModal.open && (
-            <div className="contact-manage-preview-backdrop" role="dialog" aria-modal="true" aria-labelledby="reply-preview-title">
-              <div className="contact-manage-preview-modal">
-                <div className="contact-manage-preview-header">
-                  <h3 id="reply-preview-title" className="contact-manage-preview-title">이메일 미리보기</h3>
-                  <div className="contact-manage-preview-header-actions">
-                    <button
-                      type="button"
-                      className="contact-manage-preview-close"
-                      onClick={handlePreviewClose}
-                      disabled={isPreviewLoading || isSendingEmail}
-                    >
-                      닫기
-                    </button>
-                    <button
-                      type="button"
-                      className="contact-manage-preview-send"
-                      onClick={handleSendReplyEmail}
-                      disabled={isPreviewLoading || isSendingEmail || isSaving || isDeleting}
-                    >
-                      {isSendingEmail ? "발송중..." : "이메일 발송"}
-                    </button>
-                  </div>
-                </div>
-                <p className="contact-manage-preview-subject">{previewModal.subject}</p>
-                <div className="contact-manage-preview-body">
-                  <div className="contact-manage-preview-layout">
-                    <aside className="contact-manage-preview-envelope-card" aria-label="메일 발신/수신 정보">
-                      <h4 className="contact-manage-preview-envelope-title">메일 정보</h4>
-                      <dl className="contact-manage-preview-envelope-list">
-                        <div className="contact-manage-preview-envelope-row">
-                          <dt>보낸사람</dt>
-                          <dd>{previewModal.from || "-"}</dd>
-                        </div>
-                        <div className="contact-manage-preview-envelope-row">
-                          <dt>받는사람</dt>
-                          <dd>{previewModal.to || "-"}</dd>
-                        </div>
-                      </dl>
-                    </aside>
-                    <div className="contact-manage-preview-iframe-wrap">
-                      <iframe
-                        title="답변 메일 미리보기"
-                        className="contact-manage-preview-iframe"
-                        srcDoc={previewModal.html}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </form>
       </div>
+      {previewModalLayer}
     </section>
   );
 }

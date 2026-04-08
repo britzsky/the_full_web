@@ -34,6 +34,67 @@
   line-height: 1.2;
 }
 
+/* 문의관리 화면: 스크린리더 전용 접근성 텍스트 영역 */
+.contact-manage-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 문의관리 목록 검색 폼 정렬 영역 */
+.contact-manage-search-form {
+  margin-top: clamp(0.95rem, 2.2vh, 1.45rem);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+/* 문의관리 목록 검색 입력/버튼 공통 스타일 */
+.contact-manage-search-input,
+.contact-manage-search-button {
+  min-height: 46px;
+  border: 1px solid rgba(39, 29, 19, 0.25);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: clamp(14px, 0.95vw, 16px);
+  line-height: 1;
+}
+
+/* 문의관리 목록 검색 구분 선택 박스 */
+.contact-manage-search-select {
+  width: 164px;
+}
+
+/* 문의관리 목록 검색어 입력 박스 */
+.contact-manage-search-input {
+  width: min(100%, 380px);
+  padding-inline: 1rem;
+}
+
+/* 문의관리 목록 검색어 플레이스홀더 */
+.contact-manage-search-input::placeholder {
+  color: #7b7b7b;
+}
+
+/* 문의관리 목록 검색 버튼 */
+.contact-manage-search-button {
+  min-width: 88px;
+  border: none;
+  background-color: var(--promotion-search-button-bg-color);
+  color: #ffffff;
+  padding-inline: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* 문의관리 목록 테이블 스크롤 래퍼 */
 .contact-manage-table-wrap {
   /* 문의관리 목록: 제목 위치는 고정하고 테이블만 좌우로 의도적으로 확장 */
@@ -65,7 +126,7 @@
 
 /* 문의관리 테이블 헤더 셀 */
 .contact-manage-table thead th {
-  height: 56px;
+  height: 52px;
   border-bottom: 1px solid rgba(39, 29, 19, 0.14);
   text-align: center;
   font-size: clamp(14px, 0.95vw, 16px);
@@ -82,7 +143,7 @@
   text-align: center;
   font-size: clamp(14px, 0.95vw, 16px);
   font-weight: 500;
-  padding-block: 0.95rem;
+  padding-block: 0.68rem;
   padding-inline: 0.7rem;
   color: #111111;
   /* 문의관리 목록: 제목 외 컬럼은 줄바꿈 허용으로 내용 최대 노출 */
@@ -168,11 +229,59 @@
   white-space: normal;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.35;
-  max-height: calc(1.35em * 2);
+  line-height: 1.3;
+  max-height: calc(1.3em * 2);
   color: #111111;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* 문의관리 목록 정렬 가능한 컬럼 헤더 정렬 영역 */
+.contact-manage-sort-header {
+  padding-inline: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 문의관리 목록 정렬 가능한 컬럼 헤더 내부 레이아웃 */
+.contact-manage-sort-header-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+}
+
+/* 문의관리 목록 정렬 버튼 세로 묶음 */
+.contact-manage-sort-button-group {
+  display: inline-grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  width: 18px;
+  min-height: 22px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* 문의관리 목록 정렬 화살표 버튼 스타일 */
+.contact-manage-sort-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 18px;
+  min-height: 11px;
+  border: 0;
+  background: transparent;
+  color: rgba(17, 17, 17, 0.35);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.12rem 0;
+  cursor: pointer;
+}
+
+/* 문의관리 목록 활성 정렬 화살표 버튼 스타일 */
+.contact-manage-sort-button-active {
+  color: var(--main-body-bar-color);
 }
 
 /* 문의관리 목록: 답변 상태 공통 뱃지 */
@@ -180,11 +289,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 98px;
-  min-height: 34px;
+  min-width: 94px;
+  min-height: 31px;
   border: 1px solid transparent;
   border-radius: 9999px;
-  padding: 0.24rem 0.85rem;
+  padding: 0.2rem 0.72rem;
   font-size: clamp(13px, 0.9vw, 15px);
   font-weight: 700;
   line-height: 1;
@@ -207,6 +316,70 @@
 /* 문의 목록 비어있을 때 텍스트 */
 .contact-manage-empty {
   color: #7a7a7a !important;
+}
+
+/* 문의관리 목록 페이지 이동 버튼 정렬 영역 */
+.contact-manage-pagination {
+  margin-top: clamp(1rem, 2.3vh, 1.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  flex-wrap: wrap;
+}
+
+/* 문의관리 목록 페이지 이동 버튼 공통 스타일 */
+.contact-manage-pagination-button {
+  min-width: 44px;
+  min-height: 40px;
+  border: 1px solid rgba(39, 29, 19, 0.2);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 문의관리 목록 숫자 페이지 버튼 원형 스타일 */
+.contact-manage-pagination-button-number {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 9999px;
+}
+
+/* 문의관리 목록 페이지 이동 버튼 hover 상태 */
+.contact-manage-pagination-button:not(:disabled):hover {
+  border-color: rgba(39, 57, 28, 0.28);
+  color: var(--main-body-bar-color);
+  background-color: rgba(39, 57, 28, 0.06);
+}
+
+/* 문의관리 목록 활성 페이지 버튼 스타일 */
+.contact-manage-pagination-button-active {
+  border-color: var(--main-body-bar-color);
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+}
+
+/* 문의관리 목록 활성 페이지 버튼 hover 상태 */
+.contact-manage-pagination-button-active:not(:disabled):hover {
+  border-color: var(--main-body-bar-color);
+  color: #ffffff;
+  background-color: var(--main-body-bar-color);
+  filter: brightness(1.08);
+}
+
+/* 문의관리 목록 비활성 페이지 버튼 스타일 */
+.contact-manage-pagination-button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
 }
 
 /* 문의 상세 카드 외곽선 */
@@ -348,6 +521,7 @@
 .contact-manage-reply-form {
   display: grid;
   gap: 0.8rem;
+  min-width: 0;
 }
 
 /* 문의관리 상세 좌측 문의 내용 확인 패널 */
@@ -776,6 +950,23 @@
 
 /* 태블릿 구간 문의관리 반응형 */
 @media (max-width: 1024px) {
+  /* 문의관리 목록 검색 폼 줄바꿈 정렬 */
+  .contact-manage-search-form {
+    justify-content: stretch;
+    flex-wrap: wrap;
+  }
+
+  /* 문의관리 목록 검색어 입력 폭 보정 */
+  .contact-manage-search-input {
+    width: min(100%, 460px);
+    flex: 1;
+  }
+
+  /* 문의관리 목록 페이지 이동 버튼 좌측 정렬 */
+  .contact-manage-pagination {
+    justify-content: flex-start;
+  }
+
 /* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table-wrap */
   .contact-manage-table-wrap {
     --manage-table-bleed: 0rem;

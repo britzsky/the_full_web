@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createContactInquiry, listContactInquiry } from "@/app/contact/inquiryStore";
-import { getAdminAccess } from "@/app/lib/adminAccess";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 
 // 고객문의/문의관리 API 요청 본문 타입
 type ContactInquiryPayload = {
@@ -65,9 +65,9 @@ const toKstDateTimeString = (value: unknown) => {
 
 // 문의관리 목록 조회 API
 export async function GET() {
-  const canManage = await getAdminAccess();
+  const canManage = await getContactManageAccess();
   if (!canManage) {
-    return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 403 });
+    return NextResponse.json({ error: "로그인 세션이 필요합니다." }, { status: 403 });
   }
 
   try {

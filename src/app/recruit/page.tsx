@@ -4,6 +4,8 @@ import type { CSSProperties, ReactNode } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import SectionTitle from "@/app/components/Common/SectionTitle";
+import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
 // 채용 페이지 1번 화면(인재상) 카드 데이터
@@ -107,7 +109,10 @@ export const metadata: Metadata = {
 };
 
 // 채용 페이지: RecruitPage 함수 로직
-export default function RecruitPage() {
+export default async function RecruitPage() {
+  const canManageContact = await getContactManageAccess();
+  const recruitHeaderRightItems = appendContactManageMenu(recruitHeaderRightBaseItems, canManageContact);
+
   return (
     <main
       id="recruit-scroll"
@@ -116,9 +121,9 @@ export default function RecruitPage() {
       {/* 1번 화면: 더채움 인재상 */}
       <section id="recruit-talent" className="recruit-screen recruit-screen-with-header snap-start relative">
          <SiteHeader
-          leftItems={recruitHeaderLeftItems}
-          rightItems={recruitHeaderRightBaseItems}
-          lightBackground
+            leftItems={recruitHeaderLeftItems}
+            rightItems={recruitHeaderRightItems}
+            lightBackground
         />
         {/* <SectionTitle>인재상</SectionTitle> */}
 

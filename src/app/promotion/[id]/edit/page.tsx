@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
-import { getAdminAccess } from "@/app/lib/adminAccess";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import { getPromotionManagePermission } from "../../permissions";
 import { PromotionEditClient } from "../../promotionClient";
 import { getPromotionPostById } from "../../promotionStore";
@@ -46,7 +46,10 @@ const promotionHeaderRightBaseItems: SiteHeaderMenuItem[] = [
 export default async function PromotionEditPage({ params }: PromotionEditPageProps) {
   noStore();
 
-  const [canManagePromotion, canManageContact] = await Promise.all([getPromotionManagePermission(), getAdminAccess()]);
+  const [canManagePromotion, canManageContact] = await Promise.all([
+    getPromotionManagePermission(),
+    getContactManageAccess(),
+  ]);
   if (!canManagePromotion) {
     notFound();
   }

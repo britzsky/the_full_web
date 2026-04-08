@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
-import { getAdminAccess } from "@/app/lib/adminAccess";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import { getPromotionManagePermission } from "../permissions";
 import { PromotionDetailClient } from "../promotionClient";
 import { getPromotionPostById } from "../promotionStore";
@@ -57,7 +57,7 @@ export default async function PromotionDetailPage({ params }: PromotionDetailPag
   const [existingPost, canManagePromotion, canManageContact] = await Promise.all([
     getPromotionPostById(id),
     getPromotionManagePermission(),
-    getAdminAccess(),
+    getContactManageAccess(),
   ]);
   const refreshKey = `${id}:${Date.now()}`;
 // 홍보 화면: 헤더 우측 메뉴 목록

@@ -5,6 +5,8 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import CateringEducationCarousel from "./CateringEducationCarousel";
 import CateringScrollController from "./CateringScrollController";
+import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
 // 1번 화면 흐름도 셀(라벨) 텍스트 데이터
@@ -207,7 +209,10 @@ const cateringRecruitBlocks: CateringRecruitBlock[] = [
 ];
 
 // 급식서비스 화면: CateringServicePage 함수 로직
-export default function CateringServicePage() {
+export default async function CateringServicePage() {
+  const canManageContact = await getContactManageAccess();
+  const cateringHeaderRightItems = appendContactManageMenu(cateringHeaderRightBaseItems, canManageContact);
+
   return (
     <main
       id="catering_scroll"
@@ -223,7 +228,7 @@ export default function CateringServicePage() {
       >
         <SiteHeader
           leftItems={cateringHeaderLeftItems}
-          rightItems={cateringHeaderRightBaseItems}
+          rightItems={cateringHeaderRightItems}
           lightBackground
         />
         {/* 흐름도 본문 정렬 래퍼 */}

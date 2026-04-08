@@ -64,6 +64,21 @@ export type ContactInquiryReplyInput = {
   userId?: string;
 };
 
+// 문의 답변 메일 SMTP 런타임 설정 요청 모델
+export type ContactReplyMailRuntimeConfigInput = {
+  userId?: string;
+};
+
+// 문의 답변 메일 SMTP 런타임 설정 응답 모델
+export type ContactReplyMailRuntimeConfig = {
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecure: boolean;
+  smtpUser: string;
+  mailFrom: string;
+  mailReplyTo: string;
+};
+
 // 백엔드(the_full_web_api) 문의 도메인 응답 모델
 type ContactApiInquiry = {
   id?: number | string;
@@ -97,6 +112,16 @@ type ContactApiReply = {
   registeredAt?: string;
   modId?: string | null;
   modifiedAt?: string;
+};
+
+// 백엔드(the_full_web_api) 문의 답변 메일 런타임 설정 응답 모델
+type ContactApiReplyMailRuntimeConfig = {
+  smtpHost?: string;
+  smtpPort?: number | string;
+  smtpSecure?: boolean | string;
+  smtpUser?: string;
+  mailFrom?: string;
+  mailReplyTo?: string;
 };
 
 // 백엔드 공통 에러 페이로드 모델
@@ -155,19 +180,8 @@ const toPositiveInt = (value: unknown) => {
 // 배열 형태 응답을 안전하게 변환
 const toArray = <T>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
 
-// the_full_web_api 기본 호출 주소
-const DEFAULT_WEB_API_BASE_URL = "http://127.0.0.1:8090";
-
-// the_full_web_api 베이스 URL 후보(환경변수 우선, web_api 포트 8090 fallback)
-const DEFAULT_WEB_API_BASE_URLS = [DEFAULT_WEB_API_BASE_URL, "http://localhost:8090", "http://52.64.151.137:8090"];
-
-// 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
-const normalizeWebApiBaseUrl = (value: string) =>
-  normalizeText(value)
-    .replace(/\/+$/, "")
-    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr)):8081$/iu, "$1:8090")
-    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
-    .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
+// the_full_web_api 베이스 URL 문자열 공백/슬래시 정리
+const normalizeWebApiBaseUrl = (value: string) => normalizeText(value).replace(/\/+$/, "");
 
 const parseBaseUrlCandidates = (...values: Array<string | undefined>) => {
   const deduped = new Set<string>();
@@ -196,20 +210,12 @@ const parseBaseUrlCandidates = (...values: Array<string | undefined>) => {
 
 const getApiBaseUrlCandidates = () => {
   const configured = parseBaseUrlCandidates(process.env.WEB_API_BASE_URL);
-  const blocked = parseBaseUrlCandidates(
-    process.env.NEXTAUTH_URL,
-    process.env.THE_FULL_WEB_BASE_URL,
-    process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL
-  );
 
-  if (configured.length > 0) {
-    const filteredConfigured = configured.filter((item) => !blocked.includes(item));
-    return filteredConfigured.length > 0 ? filteredConfigured : configured;
+  if (configured.length <= 0) {
+    throw new Error("WEB_API_BASE_URL 환경변수를 설정해 주세요.");
   }
 
-  const fallback = parseBaseUrlCandidates(...DEFAULT_WEB_API_BASE_URLS);
-  const filteredFallback = fallback.filter((item) => !blocked.includes(item));
-  return filteredFallback.length > 0 ? filteredFallback : fallback;
+  return configured;
 };
 
 // 문의 API 연결 실패 주소를 잠시 제외하는 쿨다운(서킷 브레이커) 설정
@@ -539,6 +545,74 @@ export const upsertContactInquiryReply = async (inquiryId: number, input: Contac
   }
 
   return savedReply;
+};
+
+// 답변 메일 발송 완료 후 문의 답변여부를 완료 상태로 반영
+export const markContactInquiryAnswered = async (inquiryId: number, userId?: string) => {
+  const parsedInquiryId = toPositiveInt(inquiryId);
+  if (!parsedInquiryId) {
+    throw new Error("문의 번호가 올바르지 않습니다.");
+  }
+
+  const response = await requestWebApi<{ message?: string }>(
+    `/contact/manage/${parsedInquiryId}/reply/complete`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        userId: normalizeText(userId) || "admin",
+      }),
+    }
+  );
+
+  if (response.status === 404) {
+    throw new Error("문의 내역을 찾을 수 없습니다.");
+  }
+  if (!response.ok) {
+    throw new Error(getApiErrorMessage(response.payload, "답변 완료 상태 반영 중 오류가 발생했습니다."));
+  }
+};
+
+// 문의 답변 메일 발송 전에 SMTP 런타임 설정을 조회
+export const resolveContactReplyMailRuntimeConfig = async (
+  input: ContactReplyMailRuntimeConfigInput
+): Promise<ContactReplyMailRuntimeConfig> => {
+  const response = await requestWebApi<{ config?: ContactApiReplyMailRuntimeConfig }>(
+    "/contact/manage/reply/mail-runtime-config",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        userId: normalizeText(input.userId),
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(getApiErrorMessage(response.payload, "문의 답변 SMTP 설정 조회 중 오류가 발생했습니다."));
+  }
+
+  const config = (response.payload as { config?: ContactApiReplyMailRuntimeConfig }).config;
+  const smtpHost = normalizeText(config?.smtpHost);
+  const smtpUser = normalizeText(config?.smtpUser);
+  const mailFrom = normalizeText(config?.mailFrom);
+  const mailReplyTo = normalizeText(config?.mailReplyTo);
+  const smtpPort = Number(config?.smtpPort);
+  const smtpSecure =
+    typeof config?.smtpSecure === "boolean"
+      ? config.smtpSecure
+      : normalizeText(config?.smtpSecure).toLowerCase() === "true";
+
+  if (!smtpHost || !smtpUser || !mailFrom || !mailReplyTo || !Number.isFinite(smtpPort) || smtpPort <= 0) {
+    throw new Error("문의 답변 SMTP 설정 응답이 올바르지 않습니다.");
+  }
+
+  return {
+    smtpHost,
+    smtpPort,
+    smtpSecure,
+    smtpUser,
+    mailFrom,
+    mailReplyTo,
+  };
 };
 
 // 문의 소프트삭제 API 호출(del_yn='Y')

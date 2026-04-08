@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import ContactInquiryForm from "./ContactInquiryForm";
+import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
+import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
 // 고객문의 화면: ContactQualityRow 타입 모델
@@ -54,7 +56,10 @@ const contactQualityRows: ContactQualityRow[] = [
 ];
 
 // 고객문의 화면: ContactPage 함수 로직
-export default function ContactPage() {
+export default async function ContactPage() {
+  const canManageContact = await getContactManageAccess();
+  const contactHeaderRightItems = appendContactManageMenu(contactHeaderRightBaseItems, canManageContact);
+
   return (
     <main
       id="contact_scroll"
@@ -73,7 +78,7 @@ export default function ContactPage() {
         <div className="contact-hero-overlay" />
         <SiteHeader
           leftItems={contactHeaderLeftItems}
-          rightItems={contactHeaderRightBaseItems}
+          rightItems={contactHeaderRightItems}
         />
         <div className="contact-hero-copy">
           <h1 className="contact-hero-title">

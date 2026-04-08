@@ -5,6 +5,15 @@ import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import { getPublicApiErrorMessage, requestPublicWebApi } from "@/app/lib/publicWebApi";
 import ContactManageReplyEditor from "./ContactManageReplyEditor";
 
+type ContactManageSearchField = "title" | "businessName" | "managerName";
+type ContactManageSortKey = "id" | "answerYn";
+type ContactManageSortDirection = "asc" | "desc";
+
+type ContactManageSortState = {
+  key: ContactManageSortKey;
+  direction: ContactManageSortDirection;
+};
+
 // 문의관리 목록 화면에 필요한 기본 문의 요약 모델
 type ContactInquirySummary = {
   id: number;
@@ -81,6 +90,8 @@ type ContactApiReply = {
 // 문의관리 목록 CSR 새로고침 기준값
 type ContactManageTableClientProps = {
   refreshKey: string;
+  query: string;
+  field: ContactManageSearchField;
 };
 
 // 문의관리 목록 CSR 로딩/오류/데이터 상태
@@ -105,6 +116,12 @@ type ContactManageDetailState = {
   reply: ContactInquiryReplyRecord | null;
 };
 
+const CONTACT_MANAGE_PAGE_SIZE = 15;
+const CONTACT_MANAGE_PAGINATION_WINDOW = 5;
+const DEFAULT_CONTACT_MANAGE_SORT_STATE: ContactManageSortState = {
+  key: "answerYn",
+  direction: "asc",
+};
 // API 응답 문자열을 화면 표시에 맞게 정리하는 공통 정규화 유틸
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 const normalizePhoneNumber = (value: unknown) => {
@@ -118,6 +135,62 @@ const toPositiveInt = (value: unknown) => {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
 };
 const toArray = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
+const normalizeSearchText = (value: string) => normalizeText(value).toLowerCase();
+const getAnswerYnOrder = (answerYn: ContactInquirySummary["answerYn"]) => (answerYn === "N" ? 0 : 1);
+const clampPage = (page: number, totalPages: number) => Math.min(Math.max(page, 1), Math.max(totalPages, 1));
+const getPaginationPages = (currentPage: number, totalPages: number) => {
+  const normalizedCurrentPage = clampPage(currentPage, totalPages);
+  const halfWindow = Math.floor(CONTACT_MANAGE_PAGINATION_WINDOW / 2);
+  let startPage = Math.max(1, normalizedCurrentPage - halfWindow);
+  let endPage = Math.min(totalPages, startPage + CONTACT_MANAGE_PAGINATION_WINDOW - 1);
+
+  if (endPage - startPage + 1 < CONTACT_MANAGE_PAGINATION_WINDOW) {
+    startPage = Math.max(1, endPage - CONTACT_MANAGE_PAGINATION_WINDOW + 1);
+  }
+
+  return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
+};
+const matchesInquirySearch = (
+  inquiry: ContactInquirySummary,
+  query: string,
+  field: ContactManageSearchField
+) => {
+  const normalizedQuery = normalizeSearchText(query);
+  if (!normalizedQuery) {
+    return true;
+  }
+
+  if (field === "businessName") {
+    return normalizeSearchText(inquiry.businessName).includes(normalizedQuery);
+  }
+  if (field === "managerName") {
+    return normalizeSearchText(inquiry.managerName).includes(normalizedQuery);
+  }
+  return normalizeSearchText(inquiry.title).includes(normalizedQuery);
+};
+const sortInquiryList = (inquiryList: ContactInquirySummary[], sortState: ContactManageSortState) =>
+  [...inquiryList].sort((left, right) => {
+    if (sortState.key === "answerYn") {
+      const answerCompare = getAnswerYnOrder(left.answerYn) - getAnswerYnOrder(right.answerYn);
+      if (answerCompare !== 0) {
+        return sortState.direction === "asc" ? answerCompare : answerCompare * -1;
+      }
+
+      return right.id - left.id;
+    }
+
+    const idCompare = left.id - right.id;
+    if (idCompare !== 0) {
+      return sortState.direction === "asc" ? idCompare : idCompare * -1;
+    }
+
+    const answerCompare = getAnswerYnOrder(left.answerYn) - getAnswerYnOrder(right.answerYn);
+    if (answerCompare !== 0) {
+      return answerCompare;
+    }
+
+    return 0;
+  });
 
 // 목록 테이블에서 바로 사용할 수 있는 문의 요약 행 모델로 변환
 const toSummary = (row?: ContactApiInquiry | null): ContactInquirySummary | null => {
@@ -258,13 +331,15 @@ const formatDateTime = (value: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
-export function ContactManageTableClient({ refreshKey }: ContactManageTableClientProps) {
+export function ContactManageTableClient({ refreshKey, query, field }: ContactManageTableClientProps) {
   // 문의 목록 테이블에서 공통으로 쓰는 CSR 상태
   const [state, setState] = useState<ContactManageTableState>({
     isLoading: true,
     errorMessage: "",
     inquiryList: [],
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortState, setSortState] = useState<ContactManageSortState>(DEFAULT_CONTACT_MANAGE_SORT_STATE);
 
   useEffect(() => {
     let isMounted = true;
@@ -294,49 +369,189 @@ export function ContactManageTableClient({ refreshKey }: ContactManageTableClien
     };
   }, [refreshKey]);
 
+  useEffect(() => {
+    // 검색 조건이 바뀌면 목록 첫 페이지부터 다시 보여준다.
+    setCurrentPage(1);
+  }, [field, query, refreshKey]);
+
+  const handleSortChange = (key: ContactManageSortKey, direction: ContactManageSortDirection) => {
+    setSortState({ key, direction });
+    setCurrentPage(1);
+  };
+  const handleSortToggle = (key: ContactManageSortKey) => {
+    const nextDirection =
+      sortState.key === key && sortState.direction === "asc"
+        ? "desc"
+        : "asc";
+
+    handleSortChange(key, nextDirection);
+  };
+
+  const filteredInquiryList = state.inquiryList.filter((inquiry) => matchesInquirySearch(inquiry, query, field));
+  const sortedInquiryList = sortInquiryList(filteredInquiryList, sortState);
+  const totalPages = Math.max(1, Math.ceil(filteredInquiryList.length / CONTACT_MANAGE_PAGE_SIZE));
+  const normalizedCurrentPage = clampPage(currentPage, totalPages);
+  const pageStartIndex = (normalizedCurrentPage - 1) * CONTACT_MANAGE_PAGE_SIZE;
+  const visibleInquiryList = sortedInquiryList.slice(pageStartIndex, pageStartIndex + CONTACT_MANAGE_PAGE_SIZE);
+  const paginationPages = getPaginationPages(normalizedCurrentPage, totalPages);
+
   return (
-    <div className="contact-manage-table-wrap">
-      <table className="contact-manage-table" aria-label="고객 문의 목록">
-        {/* 문의 목록 테이블 헤더 영역 */}
-        <thead>
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">제목</th>
-            <th scope="col">업장명</th>
-            <th scope="col">담당자</th>
-            <th scope="col">연락처</th>
-            <th scope="col">이메일</th>
-            <th scope="col">등록일</th>
-            <th scope="col">답변여부</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* 목록 조회 중에는 테이블 안에서 동일한 레이아웃으로 로딩 문구를 노출 */}
-          {state.isLoading && <tr><td colSpan={8} className="contact-manage-empty">문의 목록을 불러오는 중입니다.</td></tr>}
-          {/* API 오류가 발생하면 같은 위치에 오류 문구를 노출 */}
-          {!state.isLoading && state.errorMessage && <tr><td colSpan={8} className="contact-manage-empty">{state.errorMessage}</td></tr>}
-          {/* 조회된 문의를 한 줄씩 렌더링하고 제목 셀에서 상세 페이지로 이동 */}
-          {!state.isLoading && !state.errorMessage && state.inquiryList.map((inquiry) => (
-            <tr key={inquiry.id}>
-              <td>{inquiry.id}</td>
-              <td className="contact-manage-title-cell"><PageNavigationLink href={`/contact/manage/${inquiry.id}`} className="contact-manage-title-link">{inquiry.title || "-"}</PageNavigationLink></td>
-              <td>{inquiry.businessName || "-"}</td>
-              <td>{inquiry.managerName}</td>
-              <td>{inquiry.phoneNumber}</td>
-              <td>{inquiry.email}</td>
-              <td>{formatSubmittedAt(inquiry.submittedAt || inquiry.createdAt)}</td>
-              <td>
-                <span className={`contact-manage-answer-badge ${inquiry.answerYn === "Y" ? "contact-manage-answer-badge-done" : "contact-manage-answer-badge-pending"}`}>
-                  {inquiry.answerYn === "Y" ? "답변완료" : "답변미완료"}
+    <>
+      <div className="contact-manage-table-wrap">
+        <table className="contact-manage-table" aria-label="고객 문의 목록">
+          {/* 문의 목록 테이블 헤더 영역 */}
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                className="contact-manage-sort-header"
+                onClick={() => handleSortToggle("id")}
+              >
+                <span className="contact-manage-sort-header-inner">
+                  <span>No</span>
+                  <span className="contact-manage-sort-button-group">
+                    <button
+                      type="button"
+                      className={`contact-manage-sort-button ${sortState.key === "id" && sortState.direction === "asc" ? "contact-manage-sort-button-active" : ""}`}
+                      aria-label="번호 정렬 방향 변경"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleSortToggle("id");
+                      }}
+                    >
+                      ▲
+                    </button>
+                    <button
+                      type="button"
+                      className={`contact-manage-sort-button ${sortState.key === "id" && sortState.direction === "desc" ? "contact-manage-sort-button-active" : ""}`}
+                      aria-label="번호 정렬 방향 변경"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleSortToggle("id");
+                      }}
+                    >
+                      ▼
+                    </button>
+                  </span>
                 </span>
-              </td>
+              </th>
+              <th scope="col">제목</th>
+              <th scope="col">업장명</th>
+              <th scope="col">담당자</th>
+              <th scope="col">연락처</th>
+              <th scope="col">이메일</th>
+              <th scope="col">등록일</th>
+              <th
+                scope="col"
+                className="contact-manage-sort-header"
+                onClick={() => handleSortToggle("answerYn")}
+              >
+                <span className="contact-manage-sort-header-inner">
+                  <span>답변여부</span>
+                  <span className="contact-manage-sort-button-group">
+                    <button
+                      type="button"
+                      className={`contact-manage-sort-button ${sortState.key === "answerYn" && sortState.direction === "asc" ? "contact-manage-sort-button-active" : ""}`}
+                      aria-label="답변여부 정렬 방향 변경"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleSortToggle("answerYn");
+                      }}
+                    >
+                      ▲
+                    </button>
+                    <button
+                      type="button"
+                      className={`contact-manage-sort-button ${sortState.key === "answerYn" && sortState.direction === "desc" ? "contact-manage-sort-button-active" : ""}`}
+                      aria-label="답변여부 정렬 방향 변경"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleSortToggle("answerYn");
+                      }}
+                    >
+                      ▼
+                    </button>
+                  </span>
+                </span>
+              </th>
             </tr>
+          </thead>
+          <tbody>
+            {/* 목록 조회 중에는 테이블 안에서 동일한 레이아웃으로 로딩 문구를 노출 */}
+            {state.isLoading && <tr><td colSpan={8} className="contact-manage-empty">문의 목록을 불러오는 중입니다.</td></tr>}
+            {/* API 오류가 발생하면 같은 위치에 오류 문구를 노출 */}
+            {!state.isLoading && state.errorMessage && <tr><td colSpan={8} className="contact-manage-empty">{state.errorMessage}</td></tr>}
+            {/* 조회된 문의를 한 줄씩 렌더링하고 제목 셀에서 상세 페이지로 이동 */}
+            {!state.isLoading && !state.errorMessage && visibleInquiryList.map((inquiry) => (
+              <tr key={inquiry.id}>
+                <td>{inquiry.id}</td>
+                <td className="contact-manage-title-cell"><PageNavigationLink href={`/contact/manage/${inquiry.id}`} className="contact-manage-title-link">{inquiry.title || "-"}</PageNavigationLink></td>
+                <td>{inquiry.businessName || "-"}</td>
+                <td>{inquiry.managerName}</td>
+                <td>{inquiry.phoneNumber}</td>
+                <td>{inquiry.email}</td>
+                <td>{formatSubmittedAt(inquiry.submittedAt || inquiry.createdAt)}</td>
+                <td>
+                  <span className={`contact-manage-answer-badge ${inquiry.answerYn === "Y" ? "contact-manage-answer-badge-done" : "contact-manage-answer-badge-pending"}`}>
+                    {inquiry.answerYn === "Y" ? "답변완료" : "답변미완료"}
+                  </span>
+                </td>
+              </tr>
+            ))}
+            {/* 정상 조회 결과가 비어 있으면 빈 목록 안내 문구를 노출 */}
+            {!state.isLoading && !state.errorMessage && filteredInquiryList.length === 0 && <tr><td colSpan={8} className="contact-manage-empty">{query ? "검색 결과가 없습니다." : "접수된 문의가 없습니다."}</td></tr>}
+          </tbody>
+        </table>
+      </div>
+
+      {!state.isLoading && !state.errorMessage && totalPages > 1 && (
+        <nav className="contact-manage-pagination" aria-label="문의관리 페이지 이동">
+          <button
+            type="button"
+            className="contact-manage-pagination-button"
+            onClick={() => setCurrentPage(1)}
+            disabled={normalizedCurrentPage === 1}
+          >
+            처음
+          </button>
+          <button
+            type="button"
+            className="contact-manage-pagination-button"
+            onClick={() => setCurrentPage((prev) => clampPage(prev - 1, totalPages))}
+            disabled={normalizedCurrentPage === 1}
+          >
+            이전
+          </button>
+          {paginationPages.map((pageNumber) => (
+            <button
+              key={pageNumber}
+              type="button"
+              className={`contact-manage-pagination-button contact-manage-pagination-button-number ${pageNumber === normalizedCurrentPage ? "contact-manage-pagination-button-active" : ""}`}
+              onClick={() => setCurrentPage(pageNumber)}
+              aria-current={pageNumber === normalizedCurrentPage ? "page" : undefined}
+            >
+              {pageNumber}
+            </button>
           ))}
-          {/* 정상 조회 결과가 비어 있으면 빈 목록 안내 문구를 노출 */}
-          {!state.isLoading && !state.errorMessage && state.inquiryList.length === 0 && <tr><td colSpan={8} className="contact-manage-empty">접수된 문의가 없습니다.</td></tr>}
-        </tbody>
-      </table>
-    </div>
+          <button
+            type="button"
+            className="contact-manage-pagination-button"
+            onClick={() => setCurrentPage((prev) => clampPage(prev + 1, totalPages))}
+            disabled={normalizedCurrentPage === totalPages}
+          >
+            다음
+          </button>
+          <button
+            type="button"
+            className="contact-manage-pagination-button"
+            onClick={() => setCurrentPage(totalPages)}
+            disabled={normalizedCurrentPage === totalPages}
+          >
+            마지막
+          </button>
+        </nav>
+      )}
+    </>
   );
 }
 

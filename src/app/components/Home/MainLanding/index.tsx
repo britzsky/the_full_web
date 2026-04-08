@@ -7,6 +7,7 @@ import ScrollToTopButton from "../../Common/ScrollToTopButton";
 import SectionTitle from "../../Common/SectionTitle";
 import EmphasisCopy from "../../Common/EmphasisCopy";
 import { fetchInstagramFeed } from "../../../lib/instagramClient";
+import { appendContactManageMenu } from "../../Common/headerMenuUtils";
 
 // 타입 선언 영역
 // 메인 히어로의 제목/설명/배경이미지 한 세트를 표현
@@ -207,10 +208,15 @@ const HEAD_OFFICE_ADDRESS = "경기도 수원시 세류로 32";
 const HERO_AUTOPLAY_DELAY_MS = 7000;
 const HERO_TRANSITION_DURATION_MS = 950;
 
+// 메인 화면: MainLanding props 모델
+type MainLandingProps = {
+  canManageContact: boolean;
+};
+
 // 메인 화면: MainLanding 정의
-const MainLanding = () => {
-// 메인 화면: rightMenu 정의
-  const rightMenu = rightMenuBase;
+const MainLanding = ({ canManageContact }: MainLandingProps) => {
+// 메인 화면: 문의관리 권한을 반영한 rightMenu 정의
+  const rightMenu = appendContactManageMenu(rightMenuBase, canManageContact);
 
   // 상태 관리 영역
   const [activeIndex, setActiveIndex] = useState(0);

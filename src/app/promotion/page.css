@@ -137,7 +137,7 @@
 }
 
 /* 홍보 화면: 검색 입력/버튼 공통 기본 스타일 영역 */
-.promotion-search-select, .promotion-search-input, .promotion-search-button {
+.promotion-search-input, .promotion-search-button {
   min-height: 46px;
   border: 1px solid rgba(39, 29, 19, 0.25);
   border-radius: 9999px;
@@ -150,20 +150,6 @@
 /* 홍보 화면: 검색 구분 선택 박스 영역 */
 .promotion-search-select {
   width: 164px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-align: center;
-  text-align-last: center;
-  padding-inline: 1rem 2.5rem;
-  background-image:
-    linear-gradient(45deg, transparent 50%, #111111 50%),
-    linear-gradient(135deg, #111111 50%, transparent 50%);
-  background-position:
-    calc(100% - 1.34rem) 50%,
-    calc(100% - 1rem) 50%;
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
 }
 
 /* 홍보 화면: 검색어 입력 박스 영역 */
@@ -240,6 +226,70 @@
   overflow-x: auto;
 }
 
+/* 홍보 화면: 목록 페이지 이동 버튼 정렬 영역 */
+.promotion-pagination {
+  margin-top: clamp(1rem, 2.3vh, 1.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  flex-wrap: wrap;
+}
+
+/* 홍보 화면: 목록 페이지 이동 버튼 공통 스타일 영역 */
+.promotion-pagination-button {
+  min-width: 44px;
+  min-height: 40px;
+  border: 1px solid rgba(39, 29, 19, 0.2);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 홍보 화면: 숫자 페이지 버튼 원형 스타일 영역 */
+.promotion-pagination-button-number {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 9999px;
+}
+
+/* 홍보 화면: 페이지 이동 버튼 hover 상태 영역 */
+.promotion-pagination-button:not(:disabled):hover {
+  border-color: rgba(39, 57, 28, 0.28);
+  color: var(--main-body-bar-color);
+  background-color: rgba(39, 57, 28, 0.06);
+}
+
+/* 홍보 화면: 활성 페이지 버튼 스타일 영역 */
+.promotion-pagination-button-active {
+  border-color: var(--main-body-bar-color);
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+}
+
+/* 홍보 화면: 활성 페이지 버튼 hover 상태 영역 */
+.promotion-pagination-button-active:not(:disabled):hover {
+  border-color: var(--main-body-bar-color);
+  color: #ffffff;
+  background-color: var(--main-body-bar-color);
+  filter: brightness(1.08);
+}
+
+/* 홍보 화면: 비활성 페이지 버튼 스타일 영역 */
+.promotion-pagination-button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
 /* 홍보 화면: 게시글 목록 테이블 영역 */
 .promotion-table {
   width: 100%;
@@ -250,7 +300,7 @@
 
 /* 홍보 화면: 목록 테이블 헤더 셀 영역 */
 .promotion-table thead th {
-  height: 56px;
+  height: 52px;
   border-bottom: 1px solid rgba(39, 29, 19, 0.14);
   color: #111111;
   background-color: #ffffff;
@@ -261,12 +311,13 @@
 
 /* 홍보 화면: 목록 테이블 본문 셀 영역 */
 .promotion-table tbody td {
-  height: 68px;
+  height: 58px;
   border-bottom: 1px solid rgba(39, 29, 19, 0.12);
   color: #111111;
   text-align: center;
   font-size: clamp(14px, 0.95vw, 16px);
   font-weight: 500;
+  padding-block: 0.42rem;
   padding-inline: 0.7rem;
 }
 
@@ -321,14 +372,14 @@
   align-items: center;
   justify-content: center;
   min-width: 50px;
-  min-height: 30px;
+  min-height: 28px;
   border: 1px solid rgba(39, 29, 19, 0.24);
   background-color: #ffffff;
   color: #111111;
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
-  padding: 0.25rem 0.4rem;
+  padding: 0.22rem 0.4rem;
 }
 
 /* 홍보 화면: 목록 행 액션 버튼 클릭 영역 */
@@ -998,6 +1049,11 @@
   .promotion-search-input {
     width: min(100%, 460px);
     flex: 1;
+  }
+
+  /* 홍보 화면: 모바일 이하 페이지 버튼 간격 보정 영역 */
+  .promotion-pagination {
+    justify-content: flex-start;
   }
 
   /* 홍보 화면: 게시글 목록 테이블 영역 */

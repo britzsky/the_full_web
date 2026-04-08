@@ -32,8 +32,8 @@ const CONTACT_MANAGE_ITEM: SiteHeaderMenuItem = {
 };
 type ContactManageMenuMode = "all" | "erp-user-only";
 
-// 문의관리 메뉴 노출 모드: 지금은 전체 노출, 추후 필요 시 "erp-user-only"로 전환
-const CONTACT_MANAGE_MENU_MODE: ContactManageMenuMode = "all";
+// 문의관리 메뉴는 ERP 로그인 세션 + web_position(I/A)이 있을 때만 노출
+const CONTACT_MANAGE_MENU_MODE: ContactManageMenuMode = "erp-user-only";
 
 // ERP 로그인 사용자 식별 쿠키 키 후보
 const ERP_USER_COOKIE_KEYS = [
@@ -42,6 +42,20 @@ const ERP_USER_COOKIE_KEYS = [
   "login_user_id",
   "thefull_user_id",
   "thefull_user",
+];
+
+// ERP 로그인 세션 식별에 사용하는 쿠키 키 후보
+const ERP_SESSION_COOKIE_KEYS = [
+  "login_session_id",
+  "thefull_session_id",
+  "session_id",
+];
+
+// 문의관리 권한에 사용하는 web_position 쿠키 키 후보
+const ERP_WEB_POSITION_COOKIE_KEYS = [
+  "login_web_position",
+  "web_position",
+  "thefull_web_position",
 ];
 
 const readCookieValue = (cookieName: string) => {
@@ -63,6 +77,13 @@ const readCookieValue = (cookieName: string) => {
 };
 
 const hasErpUserIdSession = () => ERP_USER_COOKIE_KEYS.some((cookieKey) => Boolean(readCookieValue(cookieKey)));
+const hasErpSessionId = () => ERP_SESSION_COOKIE_KEYS.some((cookieKey) => Boolean(readCookieValue(cookieKey)));
+const getErpWebPosition = () =>
+  ERP_WEB_POSITION_COOKIE_KEYS.map((cookieKey) => readCookieValue(cookieKey).toUpperCase()).find(Boolean) || "";
+const hasContactManageSession = () => {
+  const webPosition = getErpWebPosition();
+  return hasErpUserIdSession() && hasErpSessionId() && (webPosition === "I" || webPosition === "A");
+};
 const isContactManageMenu = (item: SiteHeaderMenuItem) =>
   item.href === CONTACT_MANAGE_ITEM.href || item.label === CONTACT_MANAGE_ITEM.label;
 
@@ -149,7 +170,9 @@ export default function SiteHeader({
   const headerThemeClass = lightBackground ? "site-header-light" : "site-header-dark";
   const resolvedLogoVariant: TheFullLogoVariant = logoVariant ?? (lightBackground ? "default" : "white");
   const pathname = usePathname();
-  const [canShowContactManage, setCanShowContactManage] = useState(CONTACT_MANAGE_MENU_MODE === "all");
+  const [canShowContactManage, setCanShowContactManage] = useState(
+    CONTACT_MANAGE_MENU_MODE === "all" || rightItems.some((item) => isContactManageMenu(item))
+  );
   // 첫 렌더부터 헤더 위치가 고정되도록 핵심 레이아웃 속성은 인라인 스타일로 고정
   const headerLayoutStyle: CSSProperties = {
     position: sticky ? "fixed" : "absolute",
@@ -161,15 +184,21 @@ export default function SiteHeader({
 
   useEffect(() => {
     if (CONTACT_MANAGE_MENU_MODE === "all") {
+      setCanShowContactManage(true);
       return;
     }
 
-    setCanShowContactManage(hasErpUserIdSession());
-  }, []);
+    if (rightItems.some((item) => isContactManageMenu(item))) {
+      setCanShowContactManage(true);
+      return;
+    }
+
+    setCanShowContactManage(hasContactManageSession());
+  }, [rightItems]);
 
   const resolvedRightItems = useMemo(() => {
     if (!canShowContactManage) {
-      return rightItems;
+      return rightItems.filter((item) => !isContactManageMenu(item));
     }
 
     const hasManageMenu = rightItems.some((item) => isContactManageMenu(item));
