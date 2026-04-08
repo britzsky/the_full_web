@@ -182,7 +182,7 @@ const toReply = (row?: ContactApiReply | null): ContactInquiryReplyRecord | null
 
 // 브라우저가 공개 API를 직접 호출해서 네트워크 탭에 실제 호출 URL이 보이게 한다.
 const fetchContactInquiryList = async () => {
-  const response = await requestPublicWebApi<{ inquiry?: ContactApiInquiry[] }>("/api/contact/manage");
+  const response = await requestPublicWebApi<{ inquiry?: ContactApiInquiry[] }>("/contact/manage");
   if (!response.ok) {
     throw new Error(getPublicApiErrorMessage(response.payload, "문의 목록 조회 중 오류가 발생했습니다."));
   }
@@ -199,7 +199,7 @@ const fetchContactInquiryById = async (id: number) => {
     return null;
   }
 
-  const response = await requestPublicWebApi<{ inquiry?: ContactApiInquiry }>(`/api/contact/manage/${inquiryId}`);
+  const response = await requestPublicWebApi<{ inquiry?: ContactApiInquiry }>(`/contact/manage/${inquiryId}`);
   if (response.status === 404) {
     return null;
   }
@@ -218,7 +218,7 @@ const fetchContactInquiryReplyByInquiryId = async (inquiryId: number) => {
   }
 
   const response = await requestPublicWebApi<{ reply?: ContactApiReply | null }>(
-    `/api/contact/manage/${parsedInquiryId}/reply`
+    `/contact/manage/${parsedInquiryId}/reply`
   );
   if (response.status === 404) {
     return null;

@@ -226,7 +226,7 @@ export default function PromotionEditorForm({ mode, postId, initialValues }: Pro
 
     // 홍보 화면: endpoint 정의
     const endpoint = toPublicWebApiUrl(
-      mode === "create" ? "/api/promotion/posts" : `/api/promotion/posts/${postId}`
+      mode === "create" ? "/promotion/posts" : `/promotion/posts/${postId}`
     );
     // 홍보 화면: method 정의
     const method = mode === "create" ? "POST" : "PATCH";

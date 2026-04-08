@@ -171,7 +171,7 @@ export default function ContactInquiryForm() {
 
     try {
 // 고객문의 화면: response 정의
-      const response = await fetch(toPublicWebApiUrl("/api/contact/manage"), {
+      const response = await fetch(toPublicWebApiUrl("/contact/manage"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -47,7 +47,7 @@ export default function PromotionListActions({ postId, editHref }: PromotionList
     setIsDeleting(true);
     try {
 // 홍보 화면: response 정의
-      const response = await fetch(toPublicWebApiUrl(`/api/promotion/posts/${postId}`), {
+      const response = await fetch(toPublicWebApiUrl(`/promotion/posts/${postId}`), {
         method: "DELETE",
       });
 // 홍보 화면: payload 정의

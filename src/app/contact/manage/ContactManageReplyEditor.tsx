@@ -154,7 +154,7 @@ export default function ContactManageReplyEditor({
     setIsSaving(true);
 
     try {
-      const response = await fetch(toPublicWebApiUrl(`/api/contact/manage/${inquiryId}/reply`), {
+      const response = await fetch(toPublicWebApiUrl(`/contact/manage/${inquiryId}/reply`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -229,7 +229,7 @@ export default function ContactManageReplyEditor({
     setIsDeleting(true);
 
     try {
-      const response = await fetch(toPublicWebApiUrl(`/api/contact/manage/${inquiryId}`), {
+      const response = await fetch(toPublicWebApiUrl(`/contact/manage/${inquiryId}`), {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -332,7 +332,7 @@ export default function ContactManageReplyEditor({
 
     setIsPreviewLoading(true);
     try {
-      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/preview`, {
+      const response = await fetch(`/contact/manage/${inquiryId}/reply/preview`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -432,7 +432,7 @@ export default function ContactManageReplyEditor({
 
     setIsSendingEmail(true);
     try {
-      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/send`, {
+      const response = await fetch(`/contact/manage/${inquiryId}/reply/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

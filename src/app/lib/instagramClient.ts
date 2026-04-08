@@ -16,7 +16,7 @@ export type InstagramApiPayload<TItem = unknown> = {
 
 // 브라우저에서 the_full_web_api 인스타그램 공개 API 호출
 export const fetchInstagramFeed = async <TItem = unknown>() => {
-  const response = await requestPublicWebApi<TItem[]>("/api/instagram");
+  const response = await requestPublicWebApi<TItem[]>("/instagram");
   if (!response.ok) {
     throw new Error("Instagram API request failed.");
   }

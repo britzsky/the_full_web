@@ -156,7 +156,7 @@ export const listPromotionPosts = async (options?: {
   }
 
   const queryString = searchParams.toString();
-  const path = queryString ? `/api/promotion/posts?${queryString}` : "/api/promotion/posts";
+  const path = queryString ? `/promotion/posts?${queryString}` : "/promotion/posts";
   const response = await requestWebApi<{ posts?: PromotionApiPost[] }>(path);
 
   if (!response.ok) {
@@ -175,7 +175,7 @@ export const getPromotionPostById = async (id: number) => {
     return null;
   }
 
-  const response = await requestWebApi<{ post?: PromotionApiPost }>(`/api/promotion/posts/${postId}`);
+  const response = await requestWebApi<{ post?: PromotionApiPost }>(`/promotion/posts/${postId}`);
   if (response.status === 404) {
     return null;
   }
@@ -194,7 +194,7 @@ export const getPromotionAdjacentPosts = async (id: number) => {
   }
 
   const response = await requestWebApi<{ adjacent?: { previous?: PromotionApiPost | null; next?: PromotionApiPost | null } }>(
-    `/api/promotion/posts/${postId}/adjacent`
+    `/promotion/posts/${postId}/adjacent`
   );
 
   if (response.status === 404) {
@@ -224,7 +224,7 @@ export const createPromotionPost = async (input: PromotionPostInput) => {
     throw new Error("제목과 내용을 입력해 주세요.");
   }
 
-  const response = await requestWebApi<{ post?: PromotionApiPost }>("/api/promotion/posts", {
+  const response = await requestWebApi<{ post?: PromotionApiPost }>("/promotion/posts", {
     method: "POST",
     body: JSON.stringify({
       title,
@@ -263,7 +263,7 @@ export const updatePromotionPost = async (id: number, input: PromotionPostUpdate
     payload.author = normalizeText(input.author);
   }
 
-  const response = await requestWebApi<{ post?: PromotionApiPost }>(`/api/promotion/posts/${postId}`, {
+  const response = await requestWebApi<{ post?: PromotionApiPost }>(`/promotion/posts/${postId}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
   });
@@ -285,7 +285,7 @@ export const deletePromotionPost = async (id: number) => {
     return false;
   }
 
-  const response = await requestWebApi<{ message?: string }>(`/api/promotion/posts/${postId}`, {
+  const response = await requestWebApi<{ message?: string }>(`/promotion/posts/${postId}`, {
     method: "DELETE",
   });
 

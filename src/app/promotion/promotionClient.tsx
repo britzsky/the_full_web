@@ -117,7 +117,7 @@ const fetchPromotionPosts = async (options?: { query?: string; field?: Promotion
   }
 
   const queryString = searchParams.toString();
-  const path = queryString ? `/api/promotion/posts?${queryString}` : "/api/promotion/posts";
+  const path = queryString ? `/promotion/posts?${queryString}` : "/promotion/posts";
   const response = await requestPublicWebApi<{ posts?: PromotionApiPost[] }>(path);
 
   if (!response.ok) {
@@ -135,7 +135,7 @@ const fetchPromotionPostById = async (id: number) => {
     return null;
   }
 
-  const response = await requestPublicWebApi<{ post?: PromotionApiPost }>(`/api/promotion/posts/${postId}`);
+  const response = await requestPublicWebApi<{ post?: PromotionApiPost }>(`/promotion/posts/${postId}`);
   if (response.status === 404) {
     return null;
   }
@@ -152,7 +152,7 @@ const fetchPromotionAdjacentPosts = async (id: number) => {
     return { previous: null, next: null };
   }
 
-  const response = await requestPublicWebApi<PromotionAdjacentPayload>(`/api/promotion/posts/${postId}/adjacent`);
+  const response = await requestPublicWebApi<PromotionAdjacentPayload>(`/promotion/posts/${postId}/adjacent`);
   if (response.status === 404) {
     return { previous: null, next: null };
   }

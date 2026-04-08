@@ -421,7 +421,7 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
   };
 
   const response = await requestWebApi<{ inquiry?: ContactApiInquiry; inquiryId?: number | string }>(
-    "/api/contact/manage",
+    "/contact/manage",
     {
       method: "POST",
       body: JSON.stringify(requestBody),
@@ -452,7 +452,7 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
 
 // 문의관리 목록 조회 API 호출
 export const listContactInquiry = async () => {
-  const response = await requestWebApi<{ inquiry?: ContactApiInquiry[] }>("/api/contact/manage");
+  const response = await requestWebApi<{ inquiry?: ContactApiInquiry[] }>("/contact/manage");
   if (!response.ok) {
     throw new Error(getApiErrorMessage(response.payload, "문의 목록 조회 중 오류가 발생했습니다."));
   }
@@ -470,7 +470,7 @@ export const getContactInquiryById = async (id: number) => {
   }
 
   const response = await requestWebApi<{ inquiry?: ContactApiInquiry }>(
-    `/api/contact/manage/${inquiryId}`
+    `/contact/manage/${inquiryId}`
   );
   if (response.status === 404) {
     return null;
@@ -490,7 +490,7 @@ export const getContactInquiryReplyByInquiryId = async (inquiryId: number) => {
   }
 
   const response = await requestWebApi<{ reply?: ContactApiReply | null }>(
-    `/api/contact/manage/${parsedInquiryId}/reply`
+    `/contact/manage/${parsedInquiryId}/reply`
   );
 
   if (response.status === 404) {
@@ -516,7 +516,7 @@ export const upsertContactInquiryReply = async (inquiryId: number, input: Contac
   }
 
   const response = await requestWebApi<{ reply?: ContactApiReply }>(
-    `/api/contact/manage/${parsedInquiryId}/reply`,
+    `/contact/manage/${parsedInquiryId}/reply`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -548,7 +548,7 @@ export const deleteContactInquiry = async (id: number, deletedBy = "admin") => {
     return false;
   }
 
-  const response = await requestWebApi<{ message?: string }>(`/api/contact/manage/${inquiryId}`, {
+  const response = await requestWebApi<{ message?: string }>(`/contact/manage/${inquiryId}`, {
     method: "DELETE",
     body: JSON.stringify({
       deletedBy: normalizeText(deletedBy) || "admin",
