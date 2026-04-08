@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// 운영 공개 웹 기본 주소
+const DEFAULT_PUBLIC_WEB_ORIGIN = "http://n.thefull.kr";
 // ERP와 공개 웹이 함께 읽는 사용자 식별 쿠키 키 목록
 const SHARED_USER_COOKIE_KEYS = ["erp_user_id", "login_user_id", "user_id", "thefull_user_id"];
 // ERP와 공개 웹이 함께 읽는 세션 식별 쿠키 키 목록
@@ -13,6 +15,8 @@ const SHARED_ADMIN_COOKIE_KEYS = ["thefull_admin", "promotion_admin"];
 const normalizeText = (value: FormDataEntryValue | null) => (typeof value === "string" ? value.trim() : "");
 // 권한 코드는 대문자로 정규화
 const normalizeWebPosition = (value: FormDataEntryValue | null) => normalizeText(value).toUpperCase();
+// 프록시 헤더 값이 여러 개 들어오면 첫 번째 값만 사용
+const normalizeForwardedHeader = (value: string | null) => normalizeText(value).split(",")[0]?.trim() ?? "";
 
 // 외부 주소로 빠지지 않게 공개 웹 내부 경로만 허용
 const normalizeRedirectPath = (value: FormDataEntryValue | null) => {
@@ -29,6 +33,26 @@ const normalizeRedirectPath = (value: FormDataEntryValue | null) => {
 const isSharedAdminUser = (position: string, department: string) =>
   position === "0" || position === "1" || department === "6";
 
+// 프록시 뒤에서 내부 localhost 주소가 노출되지 않도록 공개 웹 기준 origin을 계산
+const resolvePublicWebOrigin = (request: NextRequest) => {
+  const forwardedProto = normalizeForwardedHeader(request.headers.get("x-forwarded-proto"));
+  const forwardedHost =
+    normalizeForwardedHeader(request.headers.get("x-forwarded-host")) ||
+    normalizeForwardedHeader(request.headers.get("host"));
+  const normalizedHost = forwardedHost.toLowerCase();
+
+  if (
+    normalizedHost &&
+    !/^localhost(?::\d+)?$/iu.test(normalizedHost) &&
+    !/^127\.0\.0\.1(?::\d+)?$/iu.test(normalizedHost) &&
+    !/^0\.0\.0\.0(?::\d+)?$/iu.test(normalizedHost)
+  ) {
+    return `${forwardedProto || "http"}://${forwardedHost}`;
+  }
+
+  return DEFAULT_PUBLIC_WEB_ORIGIN;
+};
+
 // ERP에서 넘어온 세션 정보를 현재 공개 웹 도메인 쿠키로 저장하고 목적 화면으로 이동시킨다.
 export async function handleErpSessionBridge(request: NextRequest) {
   const formData = await request.formData();
@@ -38,8 +62,9 @@ export async function handleErpSessionBridge(request: NextRequest) {
   const position = normalizeText(formData.get("position"));
   const department = normalizeText(formData.get("department"));
   const redirectPath = normalizeRedirectPath(formData.get("redirect_path"));
+  const publicWebOrigin = resolvePublicWebOrigin(request);
 
-  const response = NextResponse.redirect(new URL(redirectPath, request.url), { status: 303 });
+  const response = NextResponse.redirect(new URL(redirectPath, `${publicWebOrigin}/`), { status: 303 });
 
   if (!userId || !sessionId) {
     return response;
