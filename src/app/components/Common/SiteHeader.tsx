@@ -293,7 +293,7 @@ export default function SiteHeader({
               variant={resolvedLogoVariant}
               format={logoFormat}
               width={220}
-              height={56}
+              height={70}
               className="h-auto w-[178px] md:w-[220px]"
             />
           </PageNavigationLink>
@@ -317,7 +317,7 @@ export default function SiteHeader({
                 variant={resolvedLogoVariant}
                 format={logoFormat}
                 width={160}
-                height={48}
+                height={51}
                 className="h-auto w-[145px]"
               />
             </PageNavigationLink>

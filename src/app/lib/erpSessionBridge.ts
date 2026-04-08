@@ -29,8 +29,8 @@ const normalizeRedirectPath = (value: FormDataEntryValue | null) => {
 const isSharedAdminUser = (position: string, department: string) =>
   position === "0" || position === "1" || department === "6";
 
-// 공개 웹 현재 도메인에 공용 세션 쿠키를 심고 원하는 화면으로 넘긴다.
-export async function POST(request: NextRequest) {
+// ERP에서 넘어온 세션 정보를 현재 공개 웹 도메인 쿠키로 저장하고 목적 화면으로 이동시킨다.
+export async function handleErpSessionBridge(request: NextRequest) {
   const formData = await request.formData();
   const userId = normalizeText(formData.get("user_id"));
   const sessionId = normalizeText(formData.get("session_id"));
