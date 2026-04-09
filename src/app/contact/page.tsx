@@ -28,7 +28,7 @@ const contactHeaderLeftItems: SiteHeaderMenuItem[] = [
 
 // 고객문의 화면: 헤더 우측 메뉴 목록
 const contactHeaderRightBaseItems: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   // 고객문의 화면: 타 페이지와 헤더 메뉴 위치/구성을 동일하게 유지
   { label: "고객문의", href: "/contact", isCta: true },

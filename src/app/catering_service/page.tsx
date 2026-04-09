@@ -72,7 +72,7 @@ const cateringHeaderLeftItems: SiteHeaderMenuItem[] = [
 
 // 급식서비스 페이지 헤더 우측 메뉴 데이터
 const cateringHeaderRightBaseItems: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];
@@ -150,24 +150,24 @@ const cateringEducationCards: CateringEducationCard[] = [
       "현장 직원 대상 정기 교육을 실시하고,\n교육 결과에 대한 평가를 통해\n인사고과에 반영합니다.\n이를 바탕으로 지속적인 역량 향상과\n현장 운영 개선을 도모합니다.",
   },
   {
-    title: "세스코 위생 모니터링",
-    description:
-      "현장 관리 경험이 풍부한 영양사와 본사가 함께 참여하여\n정기적인 위생 모니터링을 실시합니다.\n세스코 기준에 따른 체계적인 점검으로\n현장의 위생 상태를 지속적으로 관리합니다.",
-  },
-  {
     title: "본사 소통",
     description:
       "현장 영양사와 본사 간 월 1회\n정기 미팅을 통해 현장 이슈를 공유하고\n개선 방향을 논의합니다.\n또한 현장 정기 방문을 통해\n세스코 자료를 기반으로\n한 위생 평가와 교육을 실시합니다.",
   },
   {
+    title: "협력사 주관 교육",
+    description:
+      "위생·안전 강화를 위해 월 1회\n세스코 교육을 진행합니다.\n이중 점검 체계를 통해 현장 관리 수준을 높이고, \n 최신 위생 기준과 관리 방안을 \n 현장에 적용합니다.",
+  },
+  {
+    title: "세스코 위생 모니터링",
+    description:
+      "현장 관리 경험이 풍부한 영양사와 \n 본사가 함께 참여하여 정기적인 \n 위생 모니터링을 실시합니다.\n세스코 기준에 따른 체계적인 점검으로\n현장의 위생 상태를 지속적으로 관리합니다.",
+  },
+  {
     title: "위생 / 안전 관리",
     description:
       "㈜더채움 전 사업장에 세스코 멤버십 서비스를 \n 적용하여 통합적인 위생·안전 관리 시스템을 \n 운영하고 있습니다.\n일관된 기준과 철저한 관리로\n안심할 수 있는 급식 환경을 제공합니다.",
-  },
-  {
-    title: "협력사 주관 교육",
-    description:
-      "위생·안전 강화를 위해 월 1회\n세스코 교육을 진행합니다.\n이중 점검 체계를 통해 현장 관리 수준을 높이고,\n최신 위생 기준과 관리 방안을 현장에 적용합니다.",
   },
 ];
 

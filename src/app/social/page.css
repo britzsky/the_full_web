@@ -1,0 +1,124 @@
+.social-page {
+  position: relative;
+  scrollbar-gutter: stable;
+  background-color: #ffffff;
+}
+
+.social-page .site-header-light {
+  border-bottom: none;
+}
+
+.social-header-shell {
+  min-height: 156px;
+  background-color: #ffffff;
+}
+
+/* 소셜 페이지 본문을 다른 내부 페이지와 같은 높이 기준으로 정렬 */
+.social-list-section {
+  min-height: calc(100svh - 156px);
+  padding: clamp(1.85rem, 4.1vh, 2.5rem) 0 clamp(3.5rem, 7vh, 5rem);
+}
+
+.social-content-wrap {
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.social-gallery-shell {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.social-list-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: var(--section-title-pad-left-mobile);
+  padding-right: 0.75rem;
+  margin-bottom: clamp(1.2rem, 2.3vh, 1.7rem);
+}
+
+.social-section-title {
+  margin: 0;
+  color: #111111;
+  font-size: var(--section-title-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  transform: translateY(-0.38rem);
+}
+
+/* 소셜 카드 6장이 한 화면 안에서 최대한 안정적으로 보이도록 간격과 크기를 조정 */
+.social-card-grid {
+  width: 100%;
+  justify-content: center;
+  column-gap: clamp(0.55rem, 0.9vw, 0.95rem);
+  row-gap: clamp(0.7rem, 1.5vh, 0.95rem);
+}
+
+.social-gallery-card {
+  max-width: clamp(146px, 15vw, 198px) !important;
+}
+
+@media (max-width: 1440px) and (min-width: 1024px) {
+  .social-list-section {
+    padding-top: clamp(0.7rem, 1.5vh, 1rem);
+  }
+
+  .social-list-header {
+    margin-bottom: clamp(0.55rem, 1vh, 0.8rem);
+  }
+
+  .social-card-grid {
+    column-gap: clamp(0.4rem, 0.6vw, 0.62rem);
+    row-gap: clamp(0.45rem, 0.95vh, 0.7rem);
+  }
+
+  .social-gallery-card {
+    max-width: clamp(126px, 12.6vw, 164px) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .social-list-header {
+    padding-left: var(--section-title-pad-left-desktop);
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .social-list-section {
+    min-height: calc(100svh - 156px);
+    padding-top: clamp(1.45rem, 3.2vh, 1.8rem);
+  }
+
+  .social-gallery-card {
+    max-width: clamp(142px, 29vw, 182px) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .social-header-shell {
+    min-height: 126px;
+  }
+
+  .social-list-section {
+    min-height: calc(100svh - 126px);
+    padding-top: clamp(1.2rem, 3.2vh, 1.5rem);
+    padding-bottom: clamp(2.2rem, 6vh, 3rem);
+  }
+
+  .social-list-header {
+    margin-bottom: 0.85rem;
+  }
+
+  .social-card-grid {
+    column-gap: 0.5rem;
+    row-gap: 0.6rem;
+  }
+
+  .social-gallery-card {
+    max-width: clamp(132px, 42vw, 166px) !important;
+  }
+}

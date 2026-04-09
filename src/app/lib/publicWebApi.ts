@@ -1,7 +1,41 @@
-"use client";
+// 운영 ERP IP 도메인
+const PROD_ERP_HOST = "52.64.151.137";
+// 운영 공개 웹 도메인
+const PROD_PUBLIC_WEB_ORIGIN = "http://n.thefull.kr";
 
-// 브라우저에서 사용할 공개 API 베이스 주소 정규화
+// 브라우저/서버 공용 문자열 정규화
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+
+// 공개 웹 주소 판별에 사용할 후보 URL을 순서대로 조회한다.
+export const resolvePublicWebBaseUrlFromEnv = (...candidates: Array<string | undefined>) => {
+  for (const candidate of candidates) {
+    const normalizedCandidate = normalizeText(candidate);
+    if (!normalizedCandidate) {
+      continue;
+    }
+
+    try {
+      const parsedUrl = new URL(normalizedCandidate);
+
+      // 운영 ERP IP가 잡힌 환경이면 공개 웹 도메인으로 연결한다.
+      if (parsedUrl.hostname === PROD_ERP_HOST) {
+        return PROD_PUBLIC_WEB_ORIGIN;
+      }
+
+      // 이미 공개 웹 도메인이면 그대로 사용한다.
+      if (parsedUrl.hostname === "n.thefull.kr" || parsedUrl.hostname === "www.n.thefull.kr") {
+        return PROD_PUBLIC_WEB_ORIGIN;
+      }
+
+      // 그 외에는 같은 호스트의 로컬 공개 웹 포트를 사용한다.
+      return `${parsedUrl.protocol}//${parsedUrl.hostname}:8081`;
+    } catch (error) {
+      // URL 파싱에 실패한 값은 건너뛴다.
+    }
+  }
+
+  return "http://localhost:8081";
+};
 
 // 브라우저에서 직접 호출할 web_api 주소를 정규화
 const normalizePublicWebApiBaseUrl = (value: string) =>

@@ -65,7 +65,7 @@ const companyHeaderLeftItems: SiteHeaderMenuItem[] = [
 
 // 회사소개 페이지 공통 헤더 우측 메뉴
 const companyHeaderRightBaseItems: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];
@@ -209,5 +209,3 @@ export default async function CompanyPage() {
     </main>
   );
 }
-
-

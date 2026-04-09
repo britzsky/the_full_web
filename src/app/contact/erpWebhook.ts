@@ -1,4 +1,5 @@
 import "server-only";
+import { resolvePublicWebBaseUrlFromEnv } from "@/app/lib/publicWebApi";
 
 // ERP 문의 연동에서 사용하는 이벤트 구분값
 export type ContactInquiryErpEventType = "CONTACT_INQUIRY_CREATED" | "CONTACT_INQUIRY_REPLIED";
@@ -53,10 +54,14 @@ const parseCsvNumbers = (value: unknown) =>
 
 // 문의관리 상세 URL 생성에 사용할 web 기준 주소 계산
 const getContactManageBaseUrl = () => {
-  const configuredBaseUrl =
-    normalizeText(process.env.THE_FULL_WEB_BASE_URL) || normalizeText(process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL);
-  const baseUrl = configuredBaseUrl || "http://n.thefull.kr";
-  return baseUrl.replace(/\/+$/, "");
+  return resolvePublicWebBaseUrlFromEnv(
+    process.env.THE_FULL_WEB_BASE_URL,
+    process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL,
+    process.env.NEXT_PUBLIC_BASE_URL,
+    process.env.NEXTAUTH_URL,
+    process.env.WEB_API_BASE_URL,
+    process.env.ERP_INQUIRY_WEBHOOK_URL
+  ).replace(/\/+$/, "");
 };
 
 // ERP 알림에서 문의 상세로 이동할 문의관리 링크 생성

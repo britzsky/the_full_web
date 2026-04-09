@@ -3,6 +3,7 @@ import "server-only";
 import * as nodemailer from "nodemailer";
 import type { SendMailOptions } from "nodemailer";
 import sharp from "sharp";
+import { resolvePublicWebBaseUrlFromEnv } from "@/app/lib/publicWebApi";
 import { toCkEditorDataFromStoredContent } from "./editorTextUtils";
 
 // 고객문의 답변 메일 발송/미리보기 입력 모델
@@ -37,8 +38,13 @@ const MAIL_LOGO_PUBLIC_PATH = "/images/logo/thefull_logo.png";
 const MAIL_LOGO_HEIGHT_PX = 70;
 // 메일/미리보기 공통 로고 인라인 스타일
 const MAIL_LOGO_INLINE_STYLE = `display:block;height:${MAIL_LOGO_HEIGHT_PX}px;width:auto;`;
-const MAIL_BASE_URL = normalizeText(
-  process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL || process.env.THE_FULL_WEB_BASE_URL || process.env.NEXTAUTH_URL
+const MAIL_BASE_URL = resolvePublicWebBaseUrlFromEnv(
+  process.env.THE_FULL_WEB_BASE_URL,
+  process.env.NEXT_PUBLIC_THE_FULL_WEB_BASE_URL,
+  process.env.NEXT_PUBLIC_BASE_URL,
+  process.env.NEXTAUTH_URL,
+  process.env.WEB_API_BASE_URL,
+  process.env.ERP_INQUIRY_WEBHOOK_URL
 ).replace(/\/+$/g, "");
 const MAIL_LOGO_FALLBACK_PUBLIC_URL = MAIL_BASE_URL ? `${MAIL_BASE_URL}${MAIL_LOGO_PUBLIC_PATH}` : "";
 type ContactReplyLogoRenderMode = "email" | "preview";

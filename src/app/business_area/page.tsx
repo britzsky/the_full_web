@@ -42,6 +42,12 @@ const businessValueCards = [
   },
 ];
 
+// 모바일에서는 한 화면에 3개 카드씩 노출하기 위해 6개 강점 카드를 2개 그룹으로 나눈다.
+const businessValueMobileGroups = [
+  businessValueCards.slice(0, 3),
+  businessValueCards.slice(3, 6),
+];
+
 // 사업영역 2번 화면(이미지 3분할) 데이터
 const cateringPanels = [
   {
@@ -107,6 +113,30 @@ const distributionBottomBadgesBottom = [
   "4. ISO 품질관리 시행",
   "5. 각종 위생설비 구축",
 ];
+
+// 모바일 식자재유통은 정보량이 많아 2개 화면으로 나누어 상단 핵심 내용을 배치한다.
+const distributionFeatureMobileGroups = [
+  {
+    label: "식자재유통 핵심 01",
+    items: distributionTopBadges.slice(0, 2),
+  },
+  {
+    label: "식자재유통 핵심 02",
+    items: distributionTopBadges.slice(2),
+  },
+];
+
+// 모바일 식자재유통 하단 안전 기준도 2개 화면으로 나눠 한 화면 안에서 읽히게 정리한다.
+const distributionComplianceMobileGroups = [
+  {
+    label: "안전 관리 기준 01",
+    items: [...distributionBottomBadgesTop, distributionBottomBadgesBottom[0]],
+  },
+  {
+    label: "안전 관리 기준 02",
+    items: distributionBottomBadgesBottom.slice(1),
+  },
+];
 // 사업영역 페이지 공통 헤더 메뉴 데이터
 const businessHeaderLeftItems: SiteHeaderMenuItem[] = [
   { label: "회사소개", href: "/company_profile" },
@@ -116,7 +146,7 @@ const businessHeaderLeftItems: SiteHeaderMenuItem[] = [
 
 // 사업영역 페이지 공통 헤더 우측 메뉴 데이터
 const businessHeaderRightBaseItems: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];
@@ -137,8 +167,9 @@ export default async function BusinessPage() {
       id="business-scroll"
       className="business-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-white text-[#111111]"
     >
+      <div id="business-overview" className="business-screen-anchor" aria-hidden="true" />
       {/* 1번 화면: 핵심 강점 6개 카드 */}
-      <section id="business-overview" className="business-screen business-screen-with-header snap-start relative">
+      <section className="business-screen business-screen-with-header business-desktop-only snap-start relative">
         {/* 공통 헤더(최상단 1회 노출) */}
         <SiteHeader
           leftItems={businessHeaderLeftItems}
@@ -164,8 +195,41 @@ export default async function BusinessPage() {
         </div>
       </section>
 
+      {/* 모바일 1번 화면: 핵심 강점 3개씩 2개 화면으로 분리 */}
+      {businessValueMobileGroups.map((group, index) => (
+        <section
+          key={`business-mobile-group-${index + 1}`}
+          className={`business-screen business-mobile-only snap-start ${
+            index === 0 ? "business-screen-with-header" : ""
+          }`}
+        >
+          {index === 0 && (
+            <SiteHeader
+              leftItems={businessHeaderLeftItems}
+              rightItems={businessHeaderRightItems}
+              lightBackground
+            />
+          )}
+
+          <div className="business-screen-body">
+            <div className="business-mobile-inner business-mobile-overview-inner">
+              <div className="business-mobile-value-grid">
+                {group.map((card, cardIndex) => (
+                  <article key={card.title} className="business-value-card business-mobile-value-card">
+                    <h2 className="business-value-title business-mobile-value-title">
+                      {index * 3 + cardIndex + 1}. {card.title}
+                    </h2>
+                    <EmphasisCopy html={card.descriptionHtml} className="business-value-copy" />
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
       {/* 2번 화면: 사업군별 3분할 이미지 카드 */}
-      <section id="business-catering" className="business-screen business-screen-catering snap-start">
+      <section id="business-catering" className="business-screen business-screen-catering business-desktop-only snap-start">
         {/* 2번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
           {/* 2번 화면 풀폭 콘텐츠 래퍼 */}
@@ -194,8 +258,46 @@ export default async function BusinessPage() {
         </div>
       </section>
 
+      {/* 모바일 2번 화면: 사업군별 패널을 1개씩 분리 */}
+      {cateringPanels.map((panel) => (
+        <section key={panel.title} className="business-screen business-mobile-only snap-start">
+          <div className="business-screen-body">
+            <div className="business-mobile-inner business-mobile-catering-inner">
+              <article className="business-mobile-panel-shell">
+                <div className="business-mobile-panel-orbit">
+                  <div className="business-mobile-panel-media">
+                    <div className="business-mobile-panel-media-frame">
+                      <Image
+                        src={panel.image}
+                        alt={`${panel.title} 급식서비스`}
+                        fill
+                        quality={100}
+                        sizes="100vw"
+                        className="object-cover business-catering-image"
+                      />
+                    </div>
+                    <svg
+                      className="business-mobile-panel-ring"
+                      viewBox="0 0 800 800"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <ellipse cx="400" cy="400" rx="390" ry="128" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="business-mobile-panel-body">
+                  <h2 className="business-mobile-panel-title">{panel.title}</h2>
+                  <p className="business-mobile-panel-description">{panel.description}</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      ))}
+
       {/* 3번 화면: 이벤트 안내 + 토성 고리 */}
-      <section id="business-event" className="business-screen snap-start">
+      <section id="business-event" className="business-screen business-desktop-only snap-start">
         <SectionTitle>이벤트</SectionTitle>
         {/* 3번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
@@ -243,8 +345,36 @@ export default async function BusinessPage() {
         </div>
       </section>
 
+      {/* 모바일 3번 화면: 이벤트 내용을 카드형으로 재배치 */}
+      <section className="business-screen business-mobile-only snap-start">
+        <SectionTitle>이벤트</SectionTitle>
+        <div className="business-screen-body">
+          <div className="business-mobile-inner business-mobile-event-inner">
+            <div className="business-mobile-event-visual">
+              <Image
+                src="/images/business_area/business_area_4.jpg"
+                alt="이벤트 이미지"
+                fill
+                quality={100}
+                sizes="100vw"
+                className="object-cover business-event-image"
+              />
+            </div>
+
+            <div className="business-mobile-event-list">
+              {eventGroups.map((group) => (
+                <article key={group.title} className="business-mobile-event-card">
+                  <h3 className="business-mobile-event-title">{group.title}</h3>
+                  <p className="business-mobile-event-description">{group.description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 4번 화면: 식자재유통 기준/강점 카드 */}
-      <section id="business-distribution" className="business-screen snap-start">
+      <section id="business-distribution" className="business-screen business-desktop-only snap-start">
         <SectionTitle>식자재유통</SectionTitle>
         {/* 4번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
@@ -304,9 +434,69 @@ export default async function BusinessPage() {
         </div>
       </section>
 
+      {/* 모바일 4번 화면: 식자재유통 핵심 정보 상단 그룹 */}
+      {distributionFeatureMobileGroups.map((group, index) => (
+        <section key={group.label} className="business-screen business-mobile-only snap-start">
+          {index === 0 && <SectionTitle>식자재유통</SectionTitle>}
+          <div className="business-screen-body">
+            <div className="business-mobile-inner">
+              <p className="business-mobile-kicker">{group.label}</p>
+              <div className="business-mobile-info-grid">
+                {group.items.map((item) => (
+                  <article key={item.label} className="business-mobile-info-card">
+                    <h3 className="business-mobile-info-card-title">{item.label}</h3>
+                    <p className="business-mobile-info-card-copy">{item.tooltip}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* 모바일 5번 화면: 식자재 구매기준 */}
+      <section className="business-screen business-mobile-only snap-start">
+        <div className="business-screen-body">
+          <div className="business-mobile-inner business-mobile-criteria-inner">
+            <p className="business-mobile-kicker">식자재유통 기준</p>
+            <div className="business-mobile-criteria-box">
+              <h3 className="business-distribution-center-title">식자재 구매기준</h3>
+              <p className="business-mobile-criteria-copy">
+                대기업 물류사와의 복수 거래를 기반으로, 대한민국 최대 농산물 유통 허브인
+                <br />
+                가락시장 새벽 경매에 매일 참여하며 축적된 구매 노하우를 바탕으로
+                <br />
+                우수한 품질과 합리적인 가격의 식자재를 선별합니다. 또한 각 지역 농·수산물 시장과의 네트워크를 구축해
+                <br />
+                전국 어디서나 동일한 기준의 안전하고 신선한 식자재를 안정적으로 공급하는
+                <br />
+                더채움만의 유통 시스템을 운영하고 있습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 모바일 6번 화면: 안전/품질 기준 목록 */}
+      {distributionComplianceMobileGroups.map((group) => (
+        <section key={group.label} className="business-screen business-mobile-only snap-start">
+          <div className="business-screen-body">
+            <div className="business-mobile-inner">
+              <p className="business-mobile-kicker">{group.label}</p>
+              <div className="business-mobile-compliance-list">
+                {group.items.map((item) => (
+                  <div key={item} className="business-mobile-compliance-item">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
       {/* 사업영역 페이지 공통 상단 이동 버튼 */}
       <ScrollToTopButton targetId="business-scroll" />
     </main>
   );
 }
-

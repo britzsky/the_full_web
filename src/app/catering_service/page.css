@@ -578,7 +578,7 @@
 .catering_education_inner {
   display: grid;
   align-content: center;
-  gap: clamp(2rem, 4vh, 3.4rem);
+  gap: clamp(5.3rem, 8.4vh, 7rem);
 }
 
 /* 4번 화면: 상단 정기/비정기 교육 지표 */
@@ -586,7 +586,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-items: center;
-  transform: translateY(-0.9rem);
+  transform: translateY(-0.1rem);
 }
 
 /* 4번 화면: 지표 카드 */
@@ -619,20 +619,15 @@
 
 /* 4번 화면: 좌우 네비/본문 카드 묶음 */
 .catering_education_cards_wrap {
-  --catering-education-gap: clamp(1rem, 2.4vw, 2rem);
+  --catering-education-gap: clamp(2.5rem, 4.6vw, 4.2rem);
   position: relative;
+  margin-top: clamp(3.9rem, 6.6vh, 5.6rem);
+  padding-inline: clamp(0.7rem, 1.3vw, 1.2rem);
 }
 
 /* 4번 화면: 카드 슬라이드 표시 영역 */
 .catering_education_cards_viewport {
   overflow: hidden;
-}
-
-/* 4번 화면: 카드 페이지 트랙 */
-.catering_education_cards_track {
-  display: flex;
-  transition: transform 0.55s ease;
-  will-change: transform;
 }
 
 /* 4번 화면: 좌우 화살표 버튼 */
@@ -662,31 +657,44 @@
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_left */
 .catering_education_nav_left {
-  left: -0.8rem;
+  left: -2.5rem;
 }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_right */
 .catering_education_nav_right {
-  right: -0.8rem;
+  right: -2.5rem;
 }
 
 /* 4번 화면: 교육/소통/협력사 카드 3열 */
 .catering_education_cards {
-  flex: 0 0 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--catering-education-gap);
 }
 
-/* 4번 화면: 슬라이드 한 장 안에서 카드 폭을 3열 기준으로 맞춘다. */
+/* 4번 화면: 카드 트랙을 실제로 한 칸씩 이동시키는 전환 */
+.catering_education_cards_track_animated {
+  transition: transform 0.42s ease;
+  will-change: transform;
+}
+
+/* 4번 화면: 카드 폭은 화면 측정값에 맞춰 인라인 스타일로 주입한다. */
 .catering_education_card {
   flex: 0 0 calc((100% - var(--catering-education-gap) - var(--catering-education-gap)) / 3);
   max-width: calc((100% - var(--catering-education-gap) - var(--catering-education-gap)) / 3);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 4번 화면: 카드 제목/본문 */
 .catering_education_card h3 {
   margin: 0;
+  min-height: calc(1.35em * 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: #111111 !important;
   font-size: clamp(17px, 1.18vw, 22px);
@@ -696,6 +704,11 @@
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_card p */
 .catering_education_card p {
   margin: 2.1rem 0 0;
+  height: calc(1.45em * 6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
   text-align: center;
   color: #111111;
   white-space: pre-line;
@@ -705,6 +718,8 @@
 
 /* 5번 화면: 레시피/채용 섹션 본문 레이아웃 */
 .catering_research_inner {
+  --catering-research-lift-offset: -0.85rem;
+  --catering-research-top-extra-lift: -0.45rem;
   display: grid;
   align-content: center;
   gap: clamp(2.7rem, 5.1vh, 4.8rem);
@@ -716,7 +731,7 @@
   gap: clamp(1.7rem, 3vh, 2.5rem);
   width: min(100%, 1140px);
   margin: 0 auto;
-  transform: none;
+  transform: translateY(calc(var(--catering-research-lift-offset) + var(--catering-research-top-extra-lift)));
 }
 
 /* 5번 화면: 한 줄 아이템 */
@@ -771,6 +786,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(2.2rem, 4.6vw, 4.4rem);
   margin-top: clamp(0.75rem, 1.6vh, 1.4rem);
+  transform: translateY(var(--catering-research-lift-offset));
 }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_safety_chip */
@@ -885,6 +901,12 @@
 
 /* 급식서비스 태블릿 구간 보정 */
 @media (max-width: 1024px) {
+/* 급식서비스 화면: 모바일/태블릿에서는 카드 사이 여백 없이 1장씩 표시 */
+  .catering_education_cards_wrap {
+    --catering-education-gap: 0px;
+    padding-inline: 0;
+  }
+
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_board */
   .catering_flow_board {
     transform: scale(0.82);
@@ -946,7 +968,7 @@
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_card */
   .catering_education_card {
     flex-basis: 100%;
-    max-width: 100%;
+    max-width: none;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav */

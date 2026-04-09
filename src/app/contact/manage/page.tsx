@@ -42,7 +42,7 @@ const contactManageHeaderLeftItems: SiteHeaderMenuItem[] = [
 
 // 문의관리 페이지 헤더 우측 기본 메뉴
 const contactManageHeaderRightBaseItems: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];

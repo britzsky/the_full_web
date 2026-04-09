@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type TouchEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type TouchEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "../../Common/SiteHeader";
 import ScrollToTopButton from "../../Common/ScrollToTopButton";
 import SectionTitle from "../../Common/SectionTitle";
@@ -107,7 +107,7 @@ const leftMenu: SiteHeaderMenuItem[] = [
 
 // 메인 헤더 우측 메뉴(현재 페이지 내부 섹션 이동 중심)
 const rightMenuBase: SiteHeaderMenuItem[] = [
-  { label: "홍보", href: "/promotion" },
+  { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];
@@ -201,6 +201,11 @@ const historyRight: HistoryItem[] = [
   { year: "2025", lines: ["매출액 160억 돌파"] },
 ];
 
+// 모바일 연혁은 연도 순으로 한 줄씩 교차 배치하기 위해 전체 항목을 합친다.
+const historyTimelineItems: HistoryItem[] = [...historyLeft, ...historyRight].sort(
+  (left, right) => Number(left.year) - Number(right.year)
+);
+
 // 지도 표시에 사용되는 지점 기본 정보
 const HEAD_OFFICE_NAME = "(주) 더채움 본사";
 // 메인 화면: HEAD_OFFICE_ADDRESS 정의
@@ -226,6 +231,8 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationResetKey, setAnimationResetKey] = useState(0);
   const [autoPlayResetKey, setAutoPlayResetKey] = useState(0);
+  const [isDesktopHeroLayout, setIsDesktopHeroLayout] = useState<boolean | null>(null);
+  const [activeServiceIndex, setActiveServiceIndex] = useState(0);
   const [socialMediaItems, setSocialMediaItems] = useState<InstagramMediaItem[]>([]);
   const [isSocialLoading, setIsSocialLoading] = useState(true);
   const [instagramUser, setInstagramUser] = useState("thefull");
@@ -234,12 +241,15 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   const [activeSocialMediaIndex, setActiveSocialMediaIndex] = useState(0);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState("");
-// 메인 화면: mapContainerRef 정의
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+// 메인 화면: 데스크탑 지도 컨테이너 ref
+  const desktopMapContainerRef = useRef<HTMLDivElement | null>(null);
+// 메인 화면: 모바일 지도 컨테이너 ref
+  const mobileMapContainerRef = useRef<HTMLDivElement | null>(null);
   const socialTouchStartXRef = useRef<number | null>(null);
 
   const activeSocialMediaSlides = getSocialMediaSlides(activeSocialMedia);
   const activeSocialMediaSlideCount = activeSocialMediaSlides.length;
+  const activeService = serviceBlocks[activeServiceIndex];
   const currentActiveSocialMediaIndex =
     activeSocialMediaSlideCount > 0
       ? Math.min(activeSocialMediaIndex, activeSocialMediaSlideCount - 1)
@@ -304,6 +314,11 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
     }
 
     setIsPaused(true);
+  };
+
+  // 모바일 서비스 카드 좌우 이동
+  const moveServiceCard = (nextDirection: 1 | -1) => {
+    setActiveServiceIndex((prev) => (prev + nextDirection + serviceBlocks.length) % serviceBlocks.length);
   };
 
   // 소셜 카드 클릭 시 게시물의 첫 번째 미디어부터 모달을 연다
@@ -507,11 +522,15 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 
   // 카카오 지도 SDK 로드 및 지도 초기화
   useEffect(() => {
+    const isMobileViewport = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 // 메인 화면: container 정의
-    const container = mapContainerRef.current;
+    const container = isMobileViewport ? mobileMapContainerRef.current : desktopMapContainerRef.current;
     if (!container) {
       return;
     }
+
+    setIsMapReady(false);
+    setMapError("");
 
 // 메인 화면: appKey 정의
     const appKey =
@@ -532,12 +551,14 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 
     // 카카오맵 SDK 준비 후 지도/마커/인포윈도우 생성, 주소 기준 핀 위치 보정
     const initMap = () => {
-      if (!window.kakao?.maps || !mapContainerRef.current || cancelled) {
+      const targetContainer = isMobileViewport ? mobileMapContainerRef.current : desktopMapContainerRef.current;
+      if (!window.kakao?.maps || !targetContainer || cancelled) {
         return;
       }
 
       window.kakao.maps.load(() => {
-        if (!window.kakao?.maps || !mapContainerRef.current || cancelled) {
+        const nextTargetContainer = isMobileViewport ? mobileMapContainerRef.current : desktopMapContainerRef.current;
+        if (!window.kakao?.maps || !nextTargetContainer || cancelled) {
           return;
         }
 
@@ -546,7 +567,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 // 메인 화면: center 정의
         const center = new kakao.maps.LatLng(defaultCenter.lat, defaultCenter.lng);
 // 메인 화면: map 정의
-        const map = new kakao.maps.Map(mapContainerRef.current, {
+        const map = new kakao.maps.Map(nextTargetContainer, {
           center,
           level: 4,
         });
@@ -660,6 +681,24 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 // 메인 화면: previousSlide 정의
   const previousSlide =
     previousIndex !== null ? heroSlides[previousIndex] : null;
+
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const syncHeroLayout = () => {
+      setIsDesktopHeroLayout(mediaQuery.matches);
+    };
+
+    syncHeroLayout();
+    mediaQuery.addEventListener("change", syncHeroLayout);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncHeroLayout);
+    };
+  }, []);
 
   // 슬라이드 좌우 버튼 화살표 SVG 렌더링
   const renderArrow = (dir: "left" | "right") => {
@@ -876,25 +915,104 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         />
 
         <div className="relative z-10 mx-auto h-[100svh] max-w-6xl px-4">
-          <div className="flex h-full flex-col items-center text-center text-white">
-            <div
-              key={activeSlide.heading}
-              className={`${copyAnimationClass} pt-[31vh] md:pt-[36vh]`}
-            >
-              <h1 className="text-[34px] font-bold md:text-[48px]">{activeSlide.heading}</h1>
-              <p className="mx-auto mt-12 min-h-[96px] max-w-3xl whitespace-pre-line text-[15px] leading-[1.55] text-white md:min-h-[118px] md:text-[20px]">
-                {activeSlide.description}
-              </p>
+          {isDesktopHeroLayout === false && (
+            <div className="hero-mobile-shell">
+              <div className="hero-mobile-copy">
+                <div
+                  key={`mobile-${activeSlide.heading}`}
+                  className={`hero-mobile-copy-inner ${copyAnimationClass}`}
+                >
+                  <h1 className="text-[34px] font-bold">{activeSlide.heading}</h1>
+                  <p className="mx-auto mt-12 min-h-[96px] max-w-3xl whitespace-pre-line text-[15px] leading-[1.55] text-white">
+                    {activeSlide.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="hero-mobile-actions">
+                <div className="hero-main-actions">
+                  <div className="hero-control-group text-white">
+                    <button
+                      type="button"
+                      onClick={handlePrevSlide}
+                      aria-label="이전 슬라이드"
+                      className="hero-control-button"
+                    >
+                      {renderArrow("left")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleToggleAutoPlay}
+                      aria-label={isPaused ? "자동재생 시작" : "자동재생 일시정지"}
+                      className="hero-control-button hero-control-toggle"
+                    >
+                      {isPaused ? "▶" : "❚❚"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleNextSlide}
+                      aria-label="다음 슬라이드"
+                      className="hero-control-button"
+                    >
+                      {renderArrow("right")}
+                    </button>
+                  </div>
+
+                  <a
+                    href="/business_area"
+                    className="hero-cta-button"
+                  >
+                    더보기
+                  </a>
+                  <a
+                    href="/contact"
+                    className="hero-cta-button"
+                  >
+                    문의하기
+                  </a>
+                </div>
+
+                <div className="mt-6 flex justify-center gap-2">
+                  {heroSlides.map((slide, index) => (
+                    <button
+                      key={`mobile-dot-${slide.heading}`}
+                      type="button"
+                      onClick={() => jumpToSlide(index)}
+                      aria-label={`${index + 1}번 슬라이드`}
+                      className={`h-2.5 w-2.5 rounded-full border border-white transition-all duration-300 ${
+                        index === activeIndex
+                          ? "scale-110 bg-white"
+                          : "bg-white/25 hover:bg-white/45"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isDesktopHeroLayout === true && (
+            <div className="hero-content-shell flex h-full flex-col items-center text-center text-white">
+            <div className="hero-copy-zone">
+              <div
+                key={activeSlide.heading}
+                className={`hero-copy-block ${copyAnimationClass}`}
+              >
+                <h1 className="text-[48px] font-bold">{activeSlide.heading}</h1>
+                <p className="mx-auto mt-12 min-h-[118px] max-w-3xl whitespace-pre-line text-[20px] leading-[1.55] text-white">
+                  {activeSlide.description}
+                </p>
+              </div>
             </div>
 
-            <div className="mt-auto flex w-full flex-col items-center pb-28 md:pb-40">
-              <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-                <div className="flex items-center text-white">
+            <div className="hero-action-zone flex w-full flex-col items-center">
+              <div className="hero-main-actions">
+                <div className="hero-control-group text-white">
                   <button
                     type="button"
                     onClick={handlePrevSlide}
                     aria-label="이전 슬라이드"
-                    className="flex h-12 w-10 items-center justify-center transition hover:opacity-80"
+                    className="hero-control-button"
                   >
                     {renderArrow("left")}
                   </button>
@@ -902,7 +1020,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     type="button"
                     onClick={handleToggleAutoPlay}
                     aria-label={isPaused ? "자동재생 시작" : "자동재생 일시정지"}
-                    className="flex h-12 w-10 items-center justify-center text-base font-bold transition hover:opacity-80"
+                    className="hero-control-button hero-control-toggle"
                   >
                     {isPaused ? "▶" : "❚❚"}
                   </button>
@@ -910,7 +1028,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     type="button"
                     onClick={handleNextSlide}
                     aria-label="다음 슬라이드"
-                    className="flex h-12 w-10 items-center justify-center transition hover:opacity-80"
+                    className="hero-control-button"
                   >
                     {renderArrow("right")}
                   </button>
@@ -918,13 +1036,13 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 
                 <a
                   href="/business_area"
-                  className="inline-flex min-w-28 items-center justify-center rounded-full border border-white/80 px-6 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-black"
+                  className="hero-cta-button"
                 >
                   더보기
                 </a>
                 <a
                   href="/contact"
-                  className="inline-flex min-w-28 items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-bold text-black transition hover:bg-white/90"
+                  className="hero-cta-button"
                 >
                   문의하기
                 </a>
@@ -946,7 +1064,8 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 ))}
               </div>
             </div>
-          </div>
+            </div>
+          )}
         </div>
 
         <style jsx>{`
@@ -1103,6 +1222,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
               transform: scale(1.12) translate3d(-1.45%, -0.65%, 0);
             }
           }
+
         `}</style>
       </section>
 
@@ -1116,13 +1236,12 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 
         {/* 고객~솔루션 본문 세로 정렬 래퍼 */}
         <div className="main-section-body-flex">
-          {/* 고객~솔루션 카드 묶음 컨테이너 */}
+          {/* 데스크탑 고객~솔루션 카드 묶음 컨테이너 */}
           <div className="main-services-wrap w-full">
           {serviceBlocks.map((item) => (
             <article
               key={item.title}
-              id={item.id}
-              className={`grid items-start gap-5 md:grid-cols-2 md:gap-10 ${
+              className={`service-block-${item.id} grid items-start gap-5 md:grid-cols-2 md:gap-10 ${
                 item.reverse
                   ? "md:[&>.service-media]:order-2 md:[&>.service-copy]:order-1"
                   : ""
@@ -1158,6 +1277,71 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
             </article>
           ))}
           </div>
+
+          {/* 모바일 고객~솔루션 카드 캐러셀 */}
+          <div className="main-services-mobile-wrap">
+            <article className="main-service-mobile-card">
+              <div className="main-service-mobile-media main-service-media-frame relative overflow-hidden">
+                <Image
+                  src={activeService.image}
+                  alt={activeService.title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="service-copy text-left">
+                <div className="main-body-bar" />
+                <div className="px-4">
+                  <div className="flex items-end justify-between gap-3">
+                    <h3 className="main-body-title">
+                      {activeService.title}
+                    </h3>
+                    <span className="main-mobile-sequence-text">
+                      {String(activeServiceIndex + 1).padStart(2, "0")} / {String(serviceBlocks.length).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <EmphasisCopy html={activeService.descriptionHtml} className="main-body-copy" />
+                </div>
+              </div>
+            </article>
+
+            <div className="main-mobile-carousel-controls">
+              <button
+                type="button"
+                onClick={() => moveServiceCard(-1)}
+                aria-label="이전 서비스 카드"
+                className="main-mobile-carousel-arrow"
+              >
+                {renderArrow("left")}
+              </button>
+
+              <div className="main-mobile-carousel-dots" aria-label="서비스 카드 순서">
+                {serviceBlocks.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setActiveServiceIndex(index)}
+                    aria-label={`${index + 1}번 서비스 카드`}
+                    aria-pressed={index === activeServiceIndex}
+                    className={`main-mobile-carousel-dot ${
+                      index === activeServiceIndex ? "main-mobile-carousel-dot-active" : ""
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => moveServiceCard(1)}
+                aria-label="다음 서비스 카드"
+                className="main-mobile-carousel-arrow"
+              >
+                {renderArrow("right")}
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1175,7 +1359,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
           <div className="main-social-grid grid grid-cols-2 place-items-center md:grid-cols-3">
             {isSocialLoading &&
               Array.from({ length: 6 }).map((_, index) => (
-                <div key={`social-skeleton-${index}`} className="main-social-card block w-full">
+                <div key={`social-skeleton-${index}`} className="main-social-card main-social-card-item block w-full">
                   <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#ece9e4]" />
                 </div>
               ))}
@@ -1197,7 +1381,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     key={item.id}
                     type="button"
                     onClick={() => handleOpenSocialMedia(item)}
-                    className="main-social-card group relative block w-full"
+                    className="main-social-card main-social-card-item group relative block w-full"
                     aria-label={`${overlayText || `Instagram ${index + 1}`} 열기`}
                   >
                     {/* 소셜 카드: 세로 직사각형 비율(3:4) 유지 + 프레임 꽉 채우기(확대) */}
@@ -1255,6 +1439,38 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
             className="relative w-full max-w-5xl overflow-y-auto bg-[#f7f2e5] shadow-[0_40px_90px_rgba(0,0,0,0.4)] max-h-[88vh] md:grid md:max-h-[80vh] md:grid-cols-[1fr_1fr] md:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
+            <div className="flex items-center justify-between border-b border-[#cbbca8]/60 bg-[#f7f2e5] px-4 py-3 text-xs text-[#6b7a8f] md:hidden">
+              <a
+                href={instagramProfileHref}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-w-0 items-center gap-2 transition hover:opacity-80"
+              >
+                {instagramProfileImage ? (
+                  <img
+                    src={instagramProfileImage}
+                    alt={`${instagramUser} profile`}
+                    className="h-10 w-10 rounded-full object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={() => setInstagramProfileImage("")}
+                  />
+                ) : (
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d8ccbb] text-[12px] font-semibold text-[#5f6c80]">
+                    {(instagramUser?.trim().charAt(0) || "@").toUpperCase()}
+                  </span>
+                )}
+                <span className="truncate text-sm tracking-[0.2em]">@{instagramUser}</span>
+              </a>
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={handleCloseSocialMedia}
+                className="text-base text-[#6b7a8f]"
+              >
+                ×
+              </button>
+            </div>
             {/* 소셜 모달: 카드와 동일한 고정 3:4 프레임 + 검정 배경 */}
             <div
               className="relative aspect-[3/4] w-full overflow-hidden bg-black md:max-h-[80vh]"
@@ -1326,8 +1542,8 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 </>
               )}
             </div>
-            <div className="flex max-h-none flex-col gap-6 overflow-auto p-6 text-[#6b7a8f] md:max-h-[80vh]">
-              <div className="flex items-center justify-between border-b border-[#cbbca8]/60 pb-3 text-xs">
+            <div className="flex max-h-none flex-col gap-4 overflow-auto px-4 pb-4 pt-4 text-[#6b7a8f] md:max-h-[80vh] md:gap-6 md:p-6">
+              <div className="hidden items-center justify-between border-b border-[#cbbca8]/60 pb-3 text-xs md:flex">
                 <a
                   href={instagramProfileHref}
                   target="_blank"
@@ -1360,7 +1576,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                   ×
                 </button>
               </div>
-              <p className="text-base leading-relaxed whitespace-pre-line">
+              <p className="text-sm leading-relaxed whitespace-pre-line md:text-base">
                 {renderSocialBodyText(activeSocialMedia.caption ?? activeSocialMedia.label ?? "")}
               </p>
               <div className="mt-auto w-full">
@@ -1395,7 +1611,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         <SectionTitle>연혁</SectionTitle>
         {/* 연혁/오시는길 본문 세로 정렬 래퍼 */}
         <div className="main-section-body-flex">
-          {/* 연혁/오시는길 콘텐츠 컨테이너 */}
+          {/* 데스크탑 연혁/오시는길 콘텐츠 컨테이너 */}
           <div className="main-history-wrap">
             <div className="mx-auto w-full max-w-[1120px]">
               <div className="mt-4 grid gap-7 md:grid-cols-2 md:gap-x-14 md:gap-y-8">
@@ -1441,7 +1657,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
               <div className="mx-auto mt-4 w-full max-w-[1120px] px-3 md:px-6">
                 <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-8">
                   <div className="main-map-frame relative overflow-hidden border border-[#d2b79a] bg-[#f4efe8]">
-                    <div ref={mapContainerRef} className="h-full w-full" />
+                    <div ref={desktopMapContainerRef} className="h-full w-full" />
                     {!isMapReady && !mapError && (
                       <div className="absolute inset-0 flex items-center justify-center bg-[#f4efe8]/80 text-sm text-[#7a6b5a]">
                         지도를 불러오는 중입니다.
@@ -1489,6 +1705,93 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     카카오맵으로 이동
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 모바일 연혁 카드 콘텐츠 */}
+          <div className="main-history-mobile-wrap">
+            <div className="main-history-mobile-timeline">
+              {historyTimelineItems.map((item, index) => {
+                const isRight = index % 2 === 1;
+
+                return (
+                  <div
+                    key={`mobile-history-${item.year}`}
+                    className={`main-history-mobile-timeline-row ${
+                      isRight ? "main-history-mobile-timeline-row-right" : ""
+                    }`}
+                  >
+                    <article className="main-history-mobile-entry">
+                      <p className="main-history-mobile-entry-year">{item.year}</p>
+                      <div className="main-history-mobile-entry-lines">
+                        {item.lines.map((line) => (
+                          <p key={`${item.year}-${line}`} className="main-history-line">
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    </article>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 모바일 오시는 길 전용 섹션 */}
+      <section className="main-location-mobile-section h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col md:hidden">
+        <SectionTitle>오시는 길</SectionTitle>
+        <div className="main-section-body-flex">
+          <div className="main-location-mobile-wrap">
+            <div className="main-location-mobile-card">
+              <div className="main-map-frame relative overflow-hidden border border-[#d2b79a] bg-[#f4efe8]">
+                <div ref={mobileMapContainerRef} className="h-full w-full" />
+                {!isMapReady && !mapError && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#f4efe8]/80 px-4 text-center text-sm text-[#7a6b5a]">
+                    지도를 불러오는 중입니다.
+                  </div>
+                )}
+                {mapError && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#f4efe8]/90 px-4 text-center text-sm text-[#7a6b5a]">
+                    <p>{mapError}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="main-location-info">
+                <div className="grid grid-cols-[80px_1fr] items-center gap-3">
+                  <p className="main-location-label">{renderJustifiedLabel("회사명")}</p>
+                  <p className="main-location-value">(주) 더채움</p>
+                </div>
+                <div className="grid grid-cols-[80px_1fr] items-center gap-3">
+                  <p className="main-location-label">{renderJustifiedLabel("사업자명")}</p>
+                  <p className="main-location-value">875 - 87 - 02546</p>
+                </div>
+                <div className="grid grid-cols-[80px_1fr] items-center gap-3">
+                  <p className="main-location-label">{renderJustifiedLabel("대표자")}</p>
+                  <p className="main-location-value">최희영</p>
+                </div>
+                <div className="grid grid-cols-[80px_1fr] items-center gap-3">
+                  <p className="main-location-label">{renderJustifiedLabel("설립일")}</p>
+                  <p className="main-location-value">2016. 01. 20</p>
+                </div>
+                <div className="grid grid-cols-[80px_1fr] items-start gap-3">
+                  <p className="main-location-label pt-0.5">{renderJustifiedLabel("소재지")}</p>
+                  <p className="main-location-value">경기도 수원시 세류로 32 404호 (본사)</p>
+                </div>
+              </div>
+
+              <div className="mt-1">
+                <a
+                  href={`https://map.kakao.com/link/search/${encodeURIComponent(HEAD_OFFICE_ADDRESS)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center border border-[#cbbca8] px-4 py-2 text-xs uppercase tracking-[0.2em] text-[#7a6b5a] hover:bg-[#efe6d8]"
+                >
+                  카카오맵으로 이동
+                </a>
               </div>
             </div>
           </div>

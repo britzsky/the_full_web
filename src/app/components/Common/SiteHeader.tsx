@@ -131,7 +131,8 @@ const findClosestScrollContainer = (element: HTMLElement | null) => {
 const renderMenuLink = (
   item: SiteHeaderMenuItem,
   className: string,
-  onHashLinkClick?: (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => void
+  onHashLinkClick?: (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => void,
+  onNavigate?: () => void
 ) => {
   if (!item.href) {
     return <span className={className}>{item.label}</span>;
@@ -139,14 +140,21 @@ const renderMenuLink = (
 
   if (item.href.startsWith("#")) {
     return (
-      <a href={item.href} className={className} onClick={(event) => onHashLinkClick?.(event, item.href!)}>
+      <a
+        href={item.href}
+        className={className}
+        onClick={(event) => {
+          onHashLinkClick?.(event, item.href!);
+          onNavigate?.();
+        }}
+      >
         {item.label}
       </a>
     );
   }
 
   return (
-    <PageNavigationLink href={item.href} className={className}>
+    <PageNavigationLink href={item.href} className={className} onClick={onNavigate}>
       {item.label}
     </PageNavigationLink>
   );
@@ -173,6 +181,7 @@ export default function SiteHeader({
   const [canShowContactManage, setCanShowContactManage] = useState(
     CONTACT_MANAGE_MENU_MODE === "all" || rightItems.some((item) => isContactManageMenu(item))
   );
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // 첫 렌더부터 헤더 위치가 고정되도록 핵심 레이아웃 속성은 인라인 스타일로 고정
   const headerLayoutStyle: CSSProperties = {
     position: sticky ? "fixed" : "absolute",
@@ -237,6 +246,34 @@ export default function SiteHeader({
     }
     return `site-header-link ${isActive ? "site-header-link-cta" : ""}`;
   };
+
+  const getMobileDrawerMenuClassName = (item: SiteHeaderMenuItem) => {
+    const isActive = Boolean(item.href) && item.href === activeMenuHref;
+    return `site-header-mobile-panel-link ${isActive ? "site-header-mobile-panel-link-active" : ""}`;
+  };
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+
+    if (isMobileMenuOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+    };
+  }, [isMobileMenuOpen]);
 
   // 현재 페이지 안의 해시 링크는 내부 스크롤 컨테이너 기준으로 부드럽게 이동시킨다.
   const handleHashLinkClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
@@ -308,7 +345,7 @@ export default function SiteHeader({
         </div>
 
         <div className="md:hidden">
-          <div className="flex flex-col items-center gap-4">
+          <div className="site-header-mobile-bar">
             {/* 모바일 로고 링크 */}
             <PageNavigationLink href={logoHref} className="inline-flex items-center justify-center">
               <TheFullLogo
@@ -321,19 +358,74 @@ export default function SiteHeader({
                 className="h-auto w-[145px]"
               />
             </PageNavigationLink>
-            <ul className="grid w-full grid-cols-3 gap-x-3 gap-y-2 text-center">
-              {leftItems.map((item) => (
-                <li key={`mobile-left-${item.label}`}>
-                  {renderMenuLink(item, getMenuClassName(item, true), handleHashLinkClick)}
-                </li>
-              ))}
-              {resolvedRightItems.map((item) => (
-                <li key={`mobile-right-${item.label}`}>
-                  {renderMenuLink(item, getMenuClassName(item, true), handleHashLinkClick)}
-                </li>
-              ))}
-            </ul>
+            <button
+              type="button"
+              className={`site-header-mobile-trigger ${
+                isMobileMenuOpen ? "site-header-mobile-trigger-active" : ""
+              }`}
+              aria-label={isMobileMenuOpen ? "모바일 메뉴 닫기" : "모바일 메뉴 열기"}
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              <span className="site-header-mobile-trigger-line" />
+              <span className="site-header-mobile-trigger-line" />
+              <span className="site-header-mobile-trigger-line" />
+            </button>
           </div>
+
+          {isMobileMenuOpen && (
+            <>
+              <button
+                type="button"
+                aria-label="모바일 메뉴 닫기 배경"
+                className="site-header-mobile-backdrop"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+
+              <div className="site-header-mobile-panel" role="dialog" aria-modal="true" aria-label="모바일 메뉴">
+                <div className="site-header-mobile-panel-top">
+                  <div>
+                    <p className="site-header-mobile-kicker">THE FULL</p>
+                    <p className="site-header-mobile-title">메뉴</p>
+                  </div>
+                </div>
+
+                <div className="site-header-mobile-groups">
+                  <section className="site-header-mobile-group">
+                    <p className="site-header-mobile-group-title">서비스</p>
+                    <ul className="site-header-mobile-list">
+                      {leftItems.map((item) => (
+                        <li key={`mobile-left-${item.label}`}>
+                          {renderMenuLink(
+                            item,
+                            getMobileDrawerMenuClassName(item),
+                            handleHashLinkClick,
+                            () => setIsMobileMenuOpen(false)
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section className="site-header-mobile-group">
+                    <p className="site-header-mobile-group-title">바로가기</p>
+                    <ul className="site-header-mobile-list">
+                      {resolvedRightItems.map((item) => (
+                        <li key={`mobile-right-${item.label}`}>
+                          {renderMenuLink(
+                            item,
+                            getMobileDrawerMenuClassName(item),
+                            handleHashLinkClick,
+                            () => setIsMobileMenuOpen(false)
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>

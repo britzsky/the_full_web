@@ -7,8 +7,11 @@
     "clean:next": "node scripts/clean-next-safe.cjs",
     "clean:next:force": "node scripts/clean-next-safe.cjs --force",
     "dev:clean": "npm run clean:next && next dev -H 0.0.0.0 -p 8081",
+    "build:local": "node --env-file=.env.local ./node_modules/next/dist/bin/next build",
     "build": "node --env-file=.env.real ./node_modules/next/dist/bin/next build",
+    "start:local": "node --env-file=.env.local ./node_modules/next/dist/bin/next start",
     "start": "node --env-file=.env.real ./node_modules/next/dist/bin/next start",
+    "start:lan:local": "node --env-file=.env.local ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p 8081",
     "start:lan": "node --env-file=.env.real ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p 8081",
     "lint": "next lint"
   },

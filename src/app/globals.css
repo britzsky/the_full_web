@@ -375,6 +375,129 @@
   background-color: var(--main-body-bar-color);
 }
 
+/* 메인 첫 화면 본문 전체 정렬 영역 */
+.hero-content-shell {
+  padding-top: clamp(6.8rem, 13.5vh, 8.6rem);
+  padding-bottom: clamp(6.9rem, 13.5vh, 8.8rem);
+}
+
+/* 모바일 첫 화면 전체 레이아웃을 화면 높이 기준으로 고정 */
+.hero-mobile-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: clamp(7.1rem, 13.8svh, 8.1rem) 1rem clamp(4.9rem, 9.4svh, 6.4rem);
+}
+
+/* 모바일 첫 화면 텍스트 배치 영역 */
+.hero-mobile-copy {
+  display: flex;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding-top: clamp(1.5rem, 3.8svh, 2.65rem);
+  text-align: center;
+  color: #ffffff;
+}
+
+/* 모바일 첫 화면 본문은 컨테이너 기준으로만 아래로 보정 */
+.hero-mobile-copy-inner {
+  width: 100%;
+}
+
+/* 모바일 첫 화면 하단 액션 영역 */
+.hero-mobile-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 메인 첫 화면 텍스트를 남는 영역 기준으로 가운데에 배치 */
+.hero-copy-zone {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 메인 첫 화면 텍스트 블록은 실제 시각 중심에 맞춰 조금 아래로 둔다 */
+.hero-copy-block {
+  width: 100%;
+  transform: translateY(clamp(0.75rem, 2.6vh, 1.35rem));
+}
+
+/* 메인 첫 화면 하단 액션 영역 */
+.hero-action-zone {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* 메인 첫 화면 메인 액션 한 줄 정렬 */
+.hero-main-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+/* 메인 첫 화면 슬라이드 제어 버튼 그룹 */
+.hero-control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+/* 메인 첫 화면 슬라이드 제어 버튼 */
+.hero-control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background-color: transparent;
+  color: #ffffff;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* 메인 첫 화면 재생/일시정지 버튼 텍스트 강조 */
+.hero-control-toggle {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* 메인 첫 화면 CTA 버튼 */
+.hero-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.3rem;
+  height: 2.25rem;
+  padding: 0 0.95rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* 메인 첫 화면 액션 hover */
+.hero-control-button:hover,
+.hero-cta-button:hover {
+  opacity: 0.9;
+}
+
 /* 메인 각 섹션 제목 텍스트 스타일 */
 .main-section-title {
   margin-top: 0;
@@ -418,19 +541,31 @@
 /* 회사 소개 본문 영역(해상도에 따라 여백/간격 자동 조정) */
 .main-services-wrap {
   margin-top: 0;
-  display: grid;
+  display: none;
   row-gap: clamp(1.95rem, 3.8vh, 3rem);
 }
 
 /* 메인 고객~솔루션 카드 위치 */
 @media (min-width: 768px) {
-/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap > article#company */
-  .main-services-wrap > article#company {
+/* 전역 공통 스타일: 데스크탑에서는 원래 서비스/연혁 그리드만 노출 */
+  .main-services-wrap,
+  .main-history-wrap {
+    display: grid !important;
+  }
+
+  /* 전역 공통 스타일: 데스크탑에서는 모바일 전용 래퍼를 숨긴다 */
+  .main-services-mobile-wrap,
+  .main-history-mobile-wrap {
+    display: none !important;
+  }
+
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - 첫 번째 서비스 카드 */
+  .main-services-wrap > article.service-block-company {
     transform: translateY(-0.55rem);
   }
 
-/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap > article#service */
-  .main-services-wrap > article#service {
+/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - 세 번째 서비스 카드 */
+  .main-services-wrap > article.service-block-service {
     transform: translateY(0.55rem);
   }
 }
@@ -443,8 +578,295 @@
 /* 연혁 본문 영역(해상도에 따라 상단 간격/블록 간격 자동 조정) */
 .main-history-wrap {
   margin-top: 0;
-  display: grid;
+  display: none;
   row-gap: clamp(1.25rem, 2.8vh, 2rem);
+}
+
+/* 모바일 서비스 카드 래퍼 */
+.main-services-mobile-wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+/* 모바일 서비스 카드 본문 */
+.main-service-mobile-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  flex: 0 0 auto;
+}
+
+/* 모바일 서비스 카드 이미지 영역 */
+.main-service-mobile-media {
+  border: 1px solid rgba(39, 57, 28, 0.12);
+}
+
+/* 모바일 연혁/오시는 길 래퍼 */
+.main-history-mobile-wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+/* 모바일 오시는 길 전용 섹션 래퍼 */
+.main-location-mobile-wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+/* 모바일 연혁 목록 */
+.main-history-mobile-list {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 0.75rem;
+  border: 1px solid rgba(43, 43, 43, 0.08);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #faf6ef 0%, #f1ebe2 100%);
+  box-shadow: 0 16px 34px rgba(17, 17, 26, 0.08);
+}
+
+/* 모바일 연혁 한 줄 블록 */
+.main-history-mobile-item {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.7rem;
+}
+
+/* 모바일 연혁 홀수 항목은 연도를 오른쪽으로 보낸다 */
+.main-history-mobile-item-reverse {
+  grid-template-columns: minmax(0, 1fr) 78px;
+}
+
+/* 모바일 연혁 연도 영역 */
+.main-history-mobile-item-year-wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 0.08rem;
+}
+
+/* 모바일 연혁 우측 연도 정렬 */
+.main-history-mobile-item-reverse .main-history-mobile-item-year-wrap {
+  justify-content: flex-end;
+}
+
+/* 모바일 연혁 연도 텍스트 */
+.main-history-mobile-item-year {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4rem;
+  padding: 0.34rem 0.58rem 0.28rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #1f1f1f 0%, #444444 100%);
+  box-shadow: 0 8px 18px rgba(17, 17, 26, 0.12);
+  color: #ffffff;
+  font-family: var(--font-family-year);
+  font-size: clamp(15px, 2.2vh, 19px);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 모바일 연혁 설명 영역 */
+.main-history-mobile-item-copy {
+  display: grid;
+  gap: 0.16rem;
+  min-width: 0;
+  padding: 0.38rem 0.52rem;
+  border: 1px solid rgba(43, 43, 43, 0.06);
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.84);
+}
+
+/* 모바일 연혁 우측 항목 본문은 연도 반대편으로 정렬 */
+.main-history-mobile-item-reverse .main-history-mobile-item-copy {
+  text-align: right;
+}
+
+/* 모바일 연혁은 원래 구조처럼 좌/우 컬럼을 반으로 나눈다 */
+.main-history-mobile-columns {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.82rem;
+}
+
+/* 모바일 연혁 좌/우 컬럼 */
+.main-history-mobile-column {
+  display: grid;
+  align-content: start;
+  gap: 0.72rem;
+  min-width: 0;
+}
+
+/* 모바일 우측 컬럼은 오른쪽 정렬 */
+.main-history-mobile-column-right {
+  text-align: right;
+}
+
+/* 모바일 연혁 개별 블록 */
+.main-history-mobile-entry {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+/* 모바일 연혁 연도 텍스트 */
+.main-history-mobile-entry-year {
+  color: #000000;
+  font-family: var(--font-family-year);
+  font-size: clamp(17px, 2.45vh, 22px);
+  line-height: 1;
+}
+
+/* 모바일 연혁 본문 묶음 */
+.main-history-mobile-entry-lines {
+  display: grid;
+  gap: 0.14rem;
+}
+
+/* 모바일 우측 컬럼 본문 끝 정렬 */
+.main-history-mobile-column-right .main-history-mobile-entry-lines {
+  justify-items: end;
+}
+
+/* 모바일 연혁은 한 줄씩 좌/우 교차 배치한다 */
+.main-history-mobile-timeline {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0.62rem;
+}
+
+/* 모바일 연혁 한 줄은 2단 그리드로 나눠 한쪽에만 내용을 둔다 */
+.main-history-mobile-timeline-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 0.88rem;
+  align-items: start;
+}
+
+/* 홀수 연도 줄은 오른쪽 칸에 배치 */
+.main-history-mobile-timeline-row-right .main-history-mobile-entry {
+  grid-column: 2;
+  text-align: right;
+}
+
+/* 오른쪽 줄의 본문도 끝 정렬 */
+.main-history-mobile-timeline-row-right .main-history-mobile-entry-lines {
+  justify-items: end;
+}
+
+/* 모바일 오시는 길 카드 */
+.main-location-mobile-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* 모바일 탭 버튼 묶음 */
+.main-mobile-tab-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* 모바일 탭 버튼 */
+.main-mobile-tab-button {
+  min-height: 42px;
+  border: 1px solid rgba(39, 57, 28, 0.18);
+  background-color: #ffffff;
+  color: #7a6b5a;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* 모바일 활성 탭 강조 */
+.main-mobile-tab-button-active {
+  border-color: #2b2b2b;
+  background-color: #2b2b2b;
+  color: #ffffff;
+}
+
+/* 모바일 카드 순번 텍스트 */
+.main-mobile-sequence-text {
+  color: #7a6b5a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+}
+
+/* 모바일 카드 좌우 이동/점 네비게이션 묶음 */
+.main-mobile-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.95rem auto 0;
+}
+
+/* 모바일 카드 화살표 버튼 */
+.main-mobile-carousel-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(39, 57, 28, 0.2);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #2b2b2b;
+  flex: 0 0 auto;
+}
+
+/* 모바일 카드 점 네비게이션 */
+.main-mobile-carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+/* 모바일 카드 점 버튼 */
+.main-mobile-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: rgba(39, 57, 28, 0.18);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* 모바일 현재 카드 점 강조 */
+.main-mobile-carousel-dot-active {
+  background-color: #2b2b2b;
+  transform: scale(1.15);
 }
 
 /* 서비스 이미지 영역 높이 자동 축소 */
@@ -454,25 +876,311 @@
 
 /* 작은 화면에서는 고객~솔루션 이미지 3개를 공통으로 조금 더 아래 배치 */
 @media (max-width: 767px) {
-/* 전역 공통 스타일: 메인 고객~솔루션 섹션 - .main-services-wrap .service-media */
-  .main-services-wrap .service-media {
-    margin-top: clamp(0.55rem, 1.8vh, 0.95rem);
+/* 전역 공통 스타일: 모바일 메인 섹션 본문은 다음 섹션과 겹치지 않도록 내부에서만 정리 */
+  #company,
+  #social,
+  #history,
+  .main-location-mobile-section {
+    overflow: hidden;
   }
 
-  /* 작은 화면 소셜 카드 이미지를 조금 더 크게 표시 */
-  .main-social-card {
-    max-width: clamp(150px, 45vw, 230px);
+/* 전역 공통 스타일: 섹션 제목 아래 본문은 모바일에서 위쪽 기준으로 정렬 */
+  .main-section-title-wrap + .main-section-body-flex {
+    margin-top: 0;
+    padding-top: clamp(0.2rem, 0.9vh, 0.45rem);
   }
 
-  /* 작은 화면에서는 좌우 패딩/카드 간격을 줄여 카드 실폭이 커지도록 보정 */
+/* 전역 공통 스타일: 모바일 섹션 본문 래퍼는 내부 스크롤만 허용 */
+  #company .main-section-body-flex,
+  #social .main-section-body-flex,
+  #history .main-section-body-flex,
+  .main-location-mobile-section .main-section-body-flex {
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* 모바일 서비스/연혁 탭 섹션은 한 화면 안에서 카드 중심으로 정렬 */
+  .main-services-mobile-wrap,
+  .main-history-mobile-wrap,
+  .main-location-mobile-wrap {
+    justify-content: center;
+    padding: 0 1rem clamp(0.85rem, 2.3vh, 1.1rem);
+    gap: clamp(0.9rem, 2.1vh, 1.2rem);
+  }
+
+  /* 모바일 서비스/연혁 카드 폭은 부모 안에서만 반응형으로 유지 */
+  .main-service-mobile-card,
+  .main-history-mobile-list,
+  .main-history-mobile-columns,
+  .main-history-mobile-timeline,
+  .main-location-mobile-card,
+  .main-mobile-carousel-controls {
+    max-width: min(420px, 100%);
+  }
+
+  /* 모바일 서비스 카드는 이미지와 본문 사이 간격을 더 압축 */
+  .main-service-mobile-card .main-body-title {
+    margin-top: 0.65rem;
+    font-size: clamp(18px, 4.8vw, 22px);
+  }
+
+  /* 모바일 서비스 카드 설명은 줄간격을 줄여 한 화면 안에 맞춘다 */
+  .main-service-mobile-card .main-body-copy {
+    margin-top: 0.55rem;
+    font-size: clamp(12px, 3.2vw, 13px);
+    line-height: clamp(19px, 4.9vw, 22px);
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
+
+  /* 모바일 본문은 수동 줄바꿈을 무시하고 문장 단위로 자연스럽게 흘려 보낸다 */
+  .main-service-mobile-card .main-body-copy br,
+  .main-service-mobile-card .common-emphasis-copy br {
+    display: none;
+  }
+
+  /* 모바일 서비스 카드 이미지는 단일 카드 노출에 맞춰 조금 더 크게 확보 */
+  .main-service-mobile-media {
+    height: clamp(186px, 28vh, 248px);
+  }
+
+  /* 모바일 소셜 본문은 내부에서만 스크롤되도록 보정 */
   .main-social-wrap {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 348px !important;
+    padding-left: 0.35rem !important;
+    padding-right: 0.35rem !important;
+    padding-bottom: 0.55rem;
+  }
+
+  /* 모바일 소셜은 2열 3행으로 6장을 모두 노출한다 */
+  .main-social-card {
+    max-width: clamp(106px, 32vw, 118px);
   }
 
 /* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-grid */
   .main-social-grid {
-    column-gap: clamp(0.45rem, 1.8vw, 0.7rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.46rem;
+    row-gap: 0.52rem;
+  }
+
+  /* 모바일 홈에서는 6장 모두 보이도록 숨김 규칙을 해제한다 */
+  .main-social-card-item:nth-child(n + 5) {
+    display: block;
+  }
+
+  /* 모바일 연혁은 좌우 2단으로 나눠 원래 구조를 유지한다 */
+  .main-history-mobile-columns {
+    gap: 0.68rem;
+    flex: 0 0 auto;
+  }
+
+  .main-history-mobile-timeline {
+    gap: 0.52rem;
+    flex: 0 0 auto;
+  }
+
+  .main-history-mobile-timeline-row {
+    column-gap: 0.72rem;
+  }
+
+  .main-history-mobile-column {
+    gap: 0.56rem;
+  }
+
+  .main-history-mobile-entry {
+    gap: 0.18rem;
+  }
+
+  .main-history-mobile-entry-year {
+    font-size: clamp(15px, 2.05vh, 18px);
+  }
+
+  .main-history-mobile-entry-lines {
+    gap: 0.12rem;
+  }
+
+  /* 모바일 오시는 길 카드 여백 보정 */
+  .main-location-mobile-card {
+    display: grid;
+    gap: 0.9rem;
+    flex: 0 0 auto;
+  }
+
+  /* 모바일 오시는 길 정보는 줄 간격을 더 촘촘하게 유지 */
+  .main-location-mobile-card .main-location-info {
+    gap: 0.6rem;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  /* 모바일 오시는 길 지도는 카드 안에서 과도하게 커지지 않도록 제한 */
+  .main-location-mobile-card .main-map-frame {
+    min-height: clamp(150px, 23vh, 205px);
+  }
+}
+
+/* 화면 높이가 낮은 모바일에서는 텍스트/지도/이미지를 한 번 더 압축 */
+@media (max-width: 767px) and (max-height: 780px) {
+  .main-section-title-wrap {
+    padding-top: 1rem;
+  }
+
+  .main-services-mobile-wrap,
+  .main-history-mobile-wrap,
+  .main-location-mobile-wrap {
+    gap: 0.8rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .main-service-mobile-media {
+    height: clamp(154px, 24vh, 208px);
+  }
+
+  .main-service-mobile-card .main-body-title {
+    font-size: clamp(17px, 4.5vw, 20px);
+  }
+
+  .main-service-mobile-card .main-body-copy {
+    font-size: 11px;
+    line-height: clamp(17px, 4.2vw, 19px);
+  }
+
+  .main-history-mobile-item {
+    grid-template-columns: 68px minmax(0, 1fr);
+    column-gap: 0.52rem;
+  }
+
+  .main-history-mobile-item-reverse {
+    grid-template-columns: minmax(0, 1fr) 68px;
+  }
+
+  .main-history-mobile-item-year {
+    font-size: clamp(16px, 2.25vh, 21px);
+  }
+
+  .main-history-line {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .main-location-mobile-card .main-map-frame {
+    min-height: clamp(128px, 18vh, 168px);
+  }
+
+  .main-location-mobile-card .main-location-info {
+    font-size: 11px;
+    gap: 0.5rem;
+  }
+
+  .main-social-wrap {
+    max-width: 326px !important;
+    padding-bottom: 0.45rem;
+  }
+
+  .main-social-grid {
+    column-gap: 0.42rem;
+    row-gap: 0.42rem;
+  }
+
+  .main-social-wrap .main-social-card {
+    max-width: clamp(98px, 30vw, 110px) !important;
+  }
+
+  .main-history-mobile-columns {
+    gap: 0.58rem;
+  }
+
+  .main-history-mobile-timeline {
+    gap: 0.44rem;
+  }
+
+  .main-history-mobile-timeline-row {
+    column-gap: 0.62rem;
+  }
+
+  .main-history-mobile-column {
+    gap: 0.48rem;
+  }
+
+  .main-history-mobile-entry-year {
+    font-size: clamp(14px, 1.95vh, 17px);
+  }
+}
+
+/* 더 짧은 모바일에서는 한 화면 고정을 위해 한 단계 더 압축 */
+@media (max-width: 767px) and (max-height: 700px) {
+  .main-service-mobile-media {
+    height: clamp(132px, 20vh, 176px);
+  }
+
+  .main-service-mobile-card .main-body-title {
+    font-size: 16px;
+  }
+
+  .main-service-mobile-card .main-body-copy {
+    font-size: 10.5px;
+    line-height: clamp(15px, 3.9vw, 17px);
+  }
+
+  .main-history-mobile-columns {
+    gap: 0.5rem;
+  }
+
+  .main-history-mobile-timeline {
+    gap: 0.38rem;
+  }
+
+  .main-history-mobile-timeline-row {
+    column-gap: 0.54rem;
+  }
+
+  .main-history-mobile-column {
+    gap: 0.42rem;
+  }
+
+  .main-history-mobile-entry-year {
+    font-size: 13px;
+  }
+
+  .main-history-line {
+    font-size: 9.5px;
+    line-height: 1.16;
+  }
+
+  .main-location-mobile-card .main-map-frame {
+    min-height: 118px;
+  }
+
+  .main-social-wrap .main-social-card {
+    max-width: clamp(90px, 28vw, 100px) !important;
+  }
+}
+
+/* 폭이 더 좁은 모바일에서는 좌우 여백과 카드 폭을 한 번 더 축소 */
+@media (max-width: 380px) {
+  .main-services-mobile-wrap,
+  .main-history-mobile-wrap,
+  .main-location-mobile-wrap {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+
+  .main-service-mobile-card .main-body-copy {
+    font-size: 11px;
+  }
+
+  .main-social-wrap {
+    max-width: 306px !important;
+  }
+
+  .main-social-wrap .main-social-card {
+    max-width: clamp(86px, 27vw, 94px) !important;
   }
 }
 
@@ -485,6 +1193,44 @@
 /* 소셜 카드 크기 자동 축소 */
 .main-social-card {
   max-width: clamp(162px, 18.8vw, 252px);
+}
+
+/* 모바일 소셜 카드 제목은 이미지 위에만 표시 */
+.main-social-card-mobile-title {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  right: 0.45rem;
+  z-index: 1;
+  padding: 0.38rem 0.48rem;
+  border-radius: 14px;
+  background-color: rgba(17, 17, 17, 0.68);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  backdrop-filter: blur(8px);
+}
+
+/* 모바일 소셜 카드 본문은 이미지 아래로 분리 */
+.main-social-card-mobile-body {
+  padding-top: 0.38rem;
+}
+
+/* 모바일 소셜 카드 본문은 2줄까지만 노출 */
+.main-social-card-mobile-copy {
+  color: #2b2b2b;
+  font-size: 10.5px;
+  line-height: 1.3;
+  text-align: left;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 /* 소셜 오버레이 문구 길이/줄 수 제한 */
@@ -579,6 +1325,58 @@
 
 /* 메인 데스크톱 구간(768 이상) 제목 여백 보정 */
 @media (min-width: 768px) {
+  .hero-mobile-shell,
+  .hero-mobile-copy,
+  .hero-mobile-actions {
+    display: none !important;
+  }
+
+  .hero-content-shell {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .hero-copy-zone {
+    flex: 0 0 auto;
+    display: block;
+  }
+
+  .hero-copy-block {
+    transform: none;
+    padding-top: 36vh;
+  }
+
+  .hero-action-zone {
+    margin-top: auto;
+    padding-bottom: 10rem;
+  }
+
+  .hero-main-actions {
+    gap: 0.75rem;
+    width: auto;
+  }
+
+  .hero-control-group {
+    gap: 0;
+  }
+
+  .hero-control-button {
+    width: 2.5rem;
+    height: 3rem;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .hero-cta-button {
+    min-width: 7rem;
+    height: auto;
+    padding: 0.5rem 1.5rem;
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+  }
+
 /* 전역 공통 스타일: 전역 공통 스타일 스타일 영역 - .main-section-title-wrap */
   .main-section-title-wrap {
     padding-left: var(--section-title-pad-left-desktop);
@@ -651,7 +1449,7 @@
 @media (max-width: 767px) {
 /* 전역 공통 스타일: 메인 소셜 섹션 - .main-social-wrap .main-social-card */
   .main-social-wrap .main-social-card {
-    max-width: clamp(150px, 45vw, 230px) !important;
+    max-width: clamp(132px, 41vw, 168px) !important;
   }
 }
 
@@ -768,13 +1566,27 @@
 
 /* 오버레이 헤더 상단 여백 */
 .site-header-overlay .site-header-inner {
-  padding-top: 2rem;
+  padding-top: 1.15rem;
+  padding-bottom: 0.3rem;
 }
 
 /* 고정 헤더 상단 여백 */
 .site-header-sticky .site-header-inner {
-  padding-top: 2rem;
-  padding-bottom: 0;
+  padding-top: 1.15rem;
+  padding-bottom: 0.3rem;
+}
+
+/* 작은 데스크톱에서는 헤더 상단 여백을 조금 더 압축 */
+@media (max-width: 1440px) and (min-width: 1024px) {
+  .site-header-overlay .site-header-inner {
+    padding-top: 0.65rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .site-header-sticky .site-header-inner {
+    padding-top: 0.65rem;
+    padding-bottom: 0.5rem;
+  }
 }
 
 /* 헤더 일반 메뉴 링크 */
@@ -844,6 +1656,173 @@
 /* 모바일에서는 pill 여백만 축소 */
 .site-header-link-mobile::before {
   inset: -0.42rem -0.66rem;
+}
+
+/* 모바일 헤더 상단 바 */
+.site-header-mobile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+/* 모바일 햄버거 버튼 */
+.site-header-mobile-trigger {
+  position: relative;
+  z-index: 52;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--main-body-bar-color);
+  border-radius: 9999px;
+  background-color: var(--main-body-bar-color);
+  box-shadow: 0 12px 28px rgba(17, 17, 26, 0.14);
+}
+
+/* 햄버거 버튼 내부 선 */
+.site-header-mobile-trigger-line {
+  position: absolute;
+  left: 50%;
+  width: 18px;
+  height: 1.8px;
+  background-color: #ffffff;
+  border-radius: 9999px;
+  transform: translateX(-50%);
+  transition: transform 0.2s ease, opacity 0.2s ease, top 0.2s ease;
+}
+
+.site-header-mobile-trigger-line:nth-child(1) {
+  top: 15px;
+}
+
+.site-header-mobile-trigger-line:nth-child(2) {
+  top: 22px;
+}
+
+.site-header-mobile-trigger-line:nth-child(3) {
+  top: 29px;
+}
+
+/* 모바일 메뉴가 열리면 햄버거를 X 형태로 전환 */
+.site-header-mobile-trigger-active .site-header-mobile-trigger-line:nth-child(1) {
+  top: 22px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.site-header-mobile-trigger-active .site-header-mobile-trigger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header-mobile-trigger-active .site-header-mobile-trigger-line:nth-child(3) {
+  top: 22px;
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+/* 모바일 메뉴 배경 오버레이 */
+.site-header-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  border: 0;
+  background-color: rgba(12, 14, 12, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+/* 모바일 메뉴 패널 */
+.site-header-mobile-panel {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 0.9rem);
+  left: 1rem;
+  right: 1rem;
+  z-index: 50;
+  border-radius: 28px;
+  background-color: var(--main-body-bar-color);
+  color: #ffffff;
+  padding: 1.15rem;
+  box-shadow: 0 24px 48px rgba(17, 17, 26, 0.2);
+}
+
+/* 모바일 메뉴 상단 영역 */
+.site-header-mobile-panel-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+/* 모바일 메뉴 상단 보조 텍스트 */
+.site-header-mobile-kicker {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+/* 모바일 메뉴 타이틀 */
+.site-header-mobile-title {
+  margin-top: 0.35rem;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 모바일 메뉴 그룹 래퍼 */
+.site-header-mobile-groups {
+  margin-top: 1.1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+/* 모바일 메뉴 그룹 */
+.site-header-mobile-group {
+  display: grid;
+  gap: 0.6rem;
+}
+
+/* 모바일 메뉴 그룹 제목 */
+.site-header-mobile-group-title {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* 모바일 메뉴 버튼 리스트 */
+.site-header-mobile-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+/* 모바일 메뉴 링크 버튼 */
+.site-header-mobile-panel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* 모바일 메뉴 활성/CTA 버튼 */
+.site-header-mobile-panel-link-active {
+  border-color: #ffffff;
+  background-color: #ffffff;
+  color: var(--main-body-bar-color);
+}
+
+/* 모바일 메뉴 링크 hover */
+.site-header-mobile-panel-link:hover {
+  opacity: 0.92;
 }
 
 /* 우하단 상단 이동 버튼 */
