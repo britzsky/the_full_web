@@ -192,7 +192,7 @@
   align-items: center;
   min-height: 168px;
   border: 3px solid #3f3026;
-  border-radius: 2rem;
+  border-radius: 1.2rem;
   background-color: #ffffff;
   padding: 1.8rem 1.25rem 1.25rem;
   box-shadow: 0 22px 40px rgba(63, 48, 38, 0.16);
@@ -267,6 +267,16 @@
   stroke-linejoin: round;
 }
 
+/* 1번 화면: 데스크톱/모바일 흐름선 세트 기본 토글 */
+.catering_flow_lines_default {
+  display: inline;
+}
+
+/* 1번 화면: 모바일 전용 흐름선은 기본 숨김 */
+.catering_flow_lines_mobile {
+  display: none;
+}
+
 /* 1번 화면 화살표: 기본/작은 화면 버전 토글 */
 .catering_flow_arrow_default {
   display: inline;
@@ -300,10 +310,36 @@
 /* 2번 화면: 3단 카드 공통(왼쪽/가운데/오른쪽 배경색 분할) */
 .catering_stage_panel {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   min-height: 100%;
   display: flex;
   align-items: flex-end;
+}
+
+/* 2번 화면: 글로벌 기준색 패널 배경에만 그레인 질감을 적용한다 */
+.catering_stage_panel::before,
+.catering_stage_panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+.catering_stage_panel::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20220%20220'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.95'%20numOctaves='2'%20seed='7'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='220'%20height='220'%20filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 190px 190px;
+  mix-blend-mode: soft-light;
+  opacity: 0.35;
+}
+
+.catering_stage_panel::after {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20220%20220'%3E%3Cfilter%20id='m'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.62'%20numOctaves='3'%20seed='21'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='220'%20height='220'%20filter='url(%23m)'/%3E%3C/svg%3E");
+  background-size: 132px 132px;
+  mix-blend-mode: overlay;
+  opacity: 0.30;
 }
 
 /* 2번 화면: 왼쪽 카드 배경색(기준색) */
@@ -940,6 +976,23 @@
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_table */
   .catering_compare_table {
     grid-template-columns: 1fr;
+    gap: 0.9rem;
+    width: min(100%, 720px);
+    padding-inline: 0.35rem;
+  }
+
+  .catering_compare_row_group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    align-items: stretch;
+  }
+
+  .catering_compare_cell_side {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 1rem;
   }
 
   .catering_compare_cell,
@@ -992,7 +1045,107 @@
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_board */
   .catering_flow_board {
-    transform: scale(0.68);
+    width: min(100%, 420px);
+    height: clamp(470px, 76svh, 560px);
+    transform: none;
+  }
+
+/* 급식서비스 화면: 모바일 1번 섹션 내부 여백 보정 */
+  #catering_flow .catering_screen_inner {
+    width: 100%;
+    padding-inline: 0.65rem;
+  }
+
+/* 급식서비스 화면: 모바일 1번 섹션 상단 정렬 보정 */
+  #catering_flow .catering_screen_body {
+    align-items: flex-start;
+    padding-top: clamp(0.9rem, 3vh, 1.4rem);
+  }
+
+/* 급식서비스 화면: 모바일 1번 섹션 노드 공통 크기/줄바꿈 보정 */
+  #catering_flow .catering_flow_node {
+    min-height: 46px;
+    padding: 0.5rem 0.68rem;
+    font-size: clamp(11px, 3.1vw, 13px);
+    line-height: 1.24;
+    white-space: normal;
+    text-align: center;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+/* 급식서비스 화면: 모바일 1번 섹션 강조 노드 크기 보정 */
+  #catering_flow .catering_flow_node_outline {
+    min-height: 44px;
+    border-radius: 0.85rem;
+    padding: 0.48rem 0.75rem;
+  }
+
+/* 급식서비스 화면: 모바일 상단 1번 노드 */
+  #catering_flow .catering_flow_node_left_top {
+    left: 2%;
+    top: 20%;
+    width: 30%;
+  }
+
+/* 급식서비스 화면: 모바일 상단 2번 노드 */
+  #catering_flow .catering_flow_node_left_mid {
+    left: 35%;
+    top: 20%;
+    width: 30%;
+  }
+
+/* 급식서비스 화면: 모바일 상단 3번 노드 */
+  #catering_flow .catering_flow_node_left_bottom {
+    left: 68%;
+    top: 20%;
+    width: 30%;
+  }
+
+/* 급식서비스 화면: 모바일 중단 1번 노드(본사 메뉴팀 검증) */
+  #catering_flow .catering_flow_node_center_top {
+    left: 21%;
+    top: 40%;
+    width: 58%;
+  }
+
+/* 급식서비스 화면: 모바일 중단 2번 노드(사업장 메뉴 구성) */
+  #catering_flow .catering_flow_node_center_mid {
+    left: 21%;
+    top: 56%;
+    width: 58%;
+  }
+
+/* 급식서비스 화면: 모바일 하단 1번 노드(운영 결과 분석) */
+  #catering_flow .catering_flow_node_right_mid {
+    left: 21%;
+    top: 72%;
+    width: 58%;
+  }
+
+/* 급식서비스 화면: 모바일 하단 2번 노드(고객 입맛 식단 구성) */
+  #catering_flow .catering_flow_node_right_end {
+    left: 21%;
+    top: 86%;
+    width: 58%;
+  }
+
+/* 급식서비스 화면: 모바일 1번 섹션 상단 강조 노드 */
+  #catering_flow .catering_flow_node_top_right {
+    left: 20%;
+    right: auto;
+    top: 2%;
+    width: 60%;
+  }
+
+/* 급식서비스 화면: 모바일에서는 모바일 전용 흐름선 세트 사용 */
+  #catering_flow .catering_flow_lines_default {
+    display: none;
+  }
+
+/* 급식서비스 화면: 모바일 흐름선 표시 */
+  #catering_flow .catering_flow_lines_mobile {
+    display: inline;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_text strong */
@@ -1010,6 +1163,18 @@
   .catering_compare_top_tabs span {
     min-width: 0;
     width: 100%;
+  }
+
+  .catering_compare_row_group {
+    grid-template-columns: 1fr;
+  }
+
+  .catering_compare_cell_side {
+    padding-left: 0.95rem;
+  }
+
+  .catering_compare_table {
+    padding-inline: 1rem;
   }
 
 /* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_row */

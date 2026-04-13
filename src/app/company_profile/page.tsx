@@ -9,10 +9,12 @@ import "./page.css";
 // 1번 화면 대표 인사 이미지 경로
 const companyGreetingImage = "/images/company_profile/ceo.jpg";
 const companyGreetingSignImage = "/images/company_profile/ceo_sign1.png";
+// 회사명은 줄바꿈 시 '(주)'와 본문이 분리되지 않도록 단어 결합자를 사용한다.
+const companyName = "(주)\u2060더채움";
 
 // 1번 화면(대표 인사) 데이터
 const companyGreetingParagraphs = [
-  "안녕하십니까, (주)더채움 대표이사 최희영입니다.\n저희 (주)더채움은 고객 한 분 한 분의 건강과 행복을 위해 정직과 신뢰를 바탕으로 \n항상 최선을 다해왔습니다.",
+  `안녕하십니까, ${companyName} 대표이사 최희영입니다.\n저희 ${companyName}은 고객 한 분 한 분의 건강과 행복을 위해 정직과 신뢰를 바탕으로 \n항상 최선을 다해왔습니다.`,
   "엄선된 식재료와 정성 어린 조리, 철저한 위생 관리로 맛과 안전을 모두 담은 식사를 준비하며, 늘 고객의 목소리에 귀 기울이고 함께 성장하는 파트너가 되겠습니다.",
   "여러분의 일상에 작은 감동을 더하는 한 끼, \n그 마음을 담아 오늘도 최선을 다하겠습니다.",
 ];

@@ -239,6 +239,20 @@ export default function SiteHeader({
     return hashMenu?.href ?? "";
   }, [leftItems, resolvedRightItems, pathname]);
 
+  // 모바일 메뉴 단일리스트 구성
+  const mobileMenuItems = useMemo(() => {
+    const allMenuItems = [...leftItems, ...resolvedRightItems];
+    const pickMenuItem = (label: string) => allMenuItems.find((item) => item.label === label);
+    const orderedLabels = ["회사소개", "사업영역", "급식서비스", "홍보", "채용", "고객문의", "문의관리"];
+    const orderedItems = orderedLabels
+      .map((label) => pickMenuItem(label))
+      .filter((item): item is SiteHeaderMenuItem => Boolean(item));
+    const orderedLabelSet = new Set(orderedItems.map((item) => item.label));
+    const remainingItems = allMenuItems.filter((item) => !orderedLabelSet.has(item.label));
+
+    return [...orderedItems, ...remainingItems];
+  }, [leftItems, resolvedRightItems]);
+
   const getMenuClassName = (item: SiteHeaderMenuItem, mobile = false) => {
     const isActive = Boolean(item.href) && item.href === activeMenuHref;
     if (mobile) {
@@ -389,39 +403,19 @@ export default function SiteHeader({
                     <p className="site-header-mobile-title">메뉴</p>
                   </div>
                 </div>
-
                 <div className="site-header-mobile-groups">
-                  <section className="site-header-mobile-group">
-                    <p className="site-header-mobile-group-title">서비스</p>
-                    <ul className="site-header-mobile-list">
-                      {leftItems.map((item) => (
-                        <li key={`mobile-left-${item.label}`}>
-                          {renderMenuLink(
-                            item,
-                            getMobileDrawerMenuClassName(item),
-                            handleHashLinkClick,
-                            () => setIsMobileMenuOpen(false)
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-
-                  <section className="site-header-mobile-group">
-                    <p className="site-header-mobile-group-title">바로가기</p>
-                    <ul className="site-header-mobile-list">
-                      {resolvedRightItems.map((item) => (
-                        <li key={`mobile-right-${item.label}`}>
-                          {renderMenuLink(
-                            item,
-                            getMobileDrawerMenuClassName(item),
-                            handleHashLinkClick,
-                            () => setIsMobileMenuOpen(false)
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
+                  <ul className="site-header-mobile-list">
+                    {mobileMenuItems.map((item) => (
+                      <li key={`mobile-${item.label}`}>
+                        {renderMenuLink(
+                          item,
+                          getMobileDrawerMenuClassName(item),
+                          handleHashLinkClick,
+                          () => setIsMobileMenuOpen(false)
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </>
