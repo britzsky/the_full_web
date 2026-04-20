@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import ContactInquiryForm from "./ContactInquiryForm";
+import { ContactQualitySectionAnimated, ContactFormSectionAnimated } from "./ContactAnimatedSections";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
@@ -88,7 +89,7 @@ export default async function ContactPage() {
         </div>
       </section>
 
-      <section className="contact-quality-section">
+      <ContactQualitySectionAnimated>
         <div className="contact-content-wrap">
           <h2 className="contact-section-title">식자재 품질관리 기준</h2>
           <div className="contact-quality-table-wrap">
@@ -104,9 +105,9 @@ export default async function ContactPage() {
             </div>
           </div>
         </div>
-      </section>
+      </ContactQualitySectionAnimated>
 
-      <section id="contact_form" className="contact-form-section">
+      <ContactFormSectionAnimated>
         <div className="contact-content-wrap">
           <h2 className="contact-section-title contact-form-title">고객문의</h2>
           <p className="contact-form-notice">
@@ -115,7 +116,7 @@ export default async function ContactPage() {
           <hr className="contact-form-divider" />
           <ContactInquiryForm />
         </div>
-      </section>
+      </ContactFormSectionAnimated>
 
       <ScrollToTopButton targetId="contact_scroll" />
     </main>

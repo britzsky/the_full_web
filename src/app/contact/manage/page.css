@@ -573,6 +573,8 @@
   word-break: keep-all;
 }
 
+
+
 /* 문의관리 상세 답변 입력 항목 1줄 블록 */
 .contact-manage-reply-field {
   display: grid;

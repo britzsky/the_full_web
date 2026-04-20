@@ -63,7 +63,7 @@
   padding-bottom: 0 !important;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_screen_stage .catering_screen_body */
+/* 2번 화면: 패널 본문이 세로로 꽉 차도록 stretch 정렬 */
 .catering_screen_stage .catering_screen_body {
   align-items: stretch;
   padding-top: 0;
@@ -82,7 +82,7 @@
 
 /* 1번 화면: 전체 흐름도 본문을 아래로 이동 */
 #catering_flow .catering_screen_body {
-  padding-top: clamp(3.2rem, 7vh, 5.4rem);
+  padding-top: clamp(2.1rem, 4.9vh, 3.8rem);
 }
 
 /* 1번 화면: 메뉴구성 흐름도 공통 노드 셀 */
@@ -100,6 +100,45 @@
   line-height: 1.3;
   white-space: nowrap;
   overflow: visible;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  animation: catering_flow_node_enter 0.54s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: calc(0.08s + (var(--catering-flow-node-order, 0) * 0.16s));
+}
+
+/* 1번 화면: 마인드맵 노드 순차 생성 애니메이션 */
+@keyframes catering_flow_node_enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 1번 화면: 모션 축소 환경에서는 즉시 표시 */
+@media (prefers-reduced-motion: reduce) {
+  .catering_flow_node {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .catering_stage_panel_visible .catering_stage_image,
+  .catering_stage_panel_visible .catering_stage_text,
+  .catering_compare_visible {
+    animation: none;
+    opacity: 1;
+  }
+
+  .catering_flow_path,
+  .catering_flow_svg_arrowhead {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    animation: none;
+  }
 }
 
 /* 1번 화면: 검정색 셀(메인 바 색 연동) */
@@ -127,14 +166,14 @@
   width: 300px;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_node_left_mid */
+/* 1번 화면: 좌측 중간 셀 위치 */
 .catering_flow_node_left_mid {
   left: 2%;
   top: 35%;
   width: 300px;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_node_left_bottom */
+/* 1번 화면: 좌측 하단 셀 위치 */
 .catering_flow_node_left_bottom {
   left: 2%;
   top: 62%;
@@ -148,7 +187,7 @@
   width: 300px;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_node_center_mid */
+/* 1번 화면: 중앙 사업장 메뉴 구성 셀 위치 */
 .catering_flow_node_center_mid {
   left: 33%;
   top: 48%;
@@ -162,7 +201,7 @@
   width: 190px;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_node_right_end */
+/* 1번 화면: 우측 끝 식단 구성 셀 위치 */
 .catering_flow_node_right_end {
   left: 81%;
   top: 48%;
@@ -255,6 +294,10 @@
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: catering_flow_line_draw 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: calc(0.04s + (var(--catering-flow-line-order, 0) * 0.26s));
 }
 
 /* 1번 화면: 화살표 머리 스타일 */
@@ -265,6 +308,20 @@
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: catering_flow_line_draw 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: calc(0.04s + (var(--catering-flow-line-order, 0) * 0.26s));
+}
+
+/* 1번 화면: 흐름선 순차 그리기 애니메이션 */
+@keyframes catering_flow_line_draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* 1번 화면: 데스크톱/모바일 흐름선 세트 기본 토글 */
@@ -277,22 +334,22 @@
   display: none;
 }
 
-/* 1번 화면 화살표: 기본/작은 화면 버전 토글 */
+/* 1번 화면 화살표: 기본 화면 버전 표시 */
 .catering_flow_arrow_default {
   display: inline;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_arrow_small */
+/* 1번 화면 화살표: 작은 화면 버전 기본 숨김 */
 .catering_flow_arrow_small {
   display: none;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_needs_line_default */
+/* 1번 화면: Needs 연결선 기본 화면 버전 표시 */
 .catering_flow_needs_line_default {
   display: inline;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_needs_line_small */
+/* 1번 화면: Needs 연결선 작은 화면 버전 기본 숨김 */
 .catering_flow_needs_line_small {
   display: none;
 }
@@ -305,6 +362,49 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
+}
+
+/* 2번 화면: 이미지 래퍼 오른쪽에서 슬라이드 인 애니메이션 */
+@keyframes catering_stage_image_enter {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 2번 화면: 텍스트 아래에서 위로 진입 애니메이션 */
+@keyframes catering_stage_text_enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2번 화면: 섹션 진입 시 이미지 래퍼 오른쪽에서 슬라이드 인 */
+.catering_stage_panel_visible .catering_stage_image_wrap {
+  animation: catering_stage_image_enter 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 2번 화면: 섹션 진입 시 텍스트 아래에서 위로 진입 */
+.catering_stage_panel_visible .catering_stage_text {
+  animation: catering_stage_text_enter 0.62s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 2번 화면: 진입 전 이미지/텍스트 숨김(JS에서 클래스 부여) */
+.catering_stage_wrap_hidden {
+  opacity: 0;
+}
+
+.catering_stage_text_hidden {
+  opacity: 0;
 }
 
 /* 2번 화면: 3단 카드 공통(왼쪽/가운데/오른쪽 배경색 분할) */
@@ -328,6 +428,7 @@
   background-repeat: repeat;
 }
 
+/* 2번 화면: 패널 배경 거친 노이즈 질감 레이어 */
 .catering_stage_panel::before {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20220%20220'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.95'%20numOctaves='2'%20seed='7'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='220'%20height='220'%20filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 190px 190px;
@@ -335,6 +436,7 @@
   opacity: 0.35;
 }
 
+/* 2번 화면: 패널 배경 부드러운 노이즈 질감 레이어 */
 .catering_stage_panel::after {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20220%20220'%3E%3Cfilter%20id='m'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.62'%20numOctaves='3'%20seed='21'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='220'%20height='220'%20filter='url(%23m)'/%3E%3C/svg%3E");
   background-size: 132px 132px;
@@ -387,13 +489,13 @@
   --catering-plate-top: 51%;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_image_center */
+/* 2번 화면: 가운데 패널 접시 이미지 위치 */
 .catering_stage_image_center {
   --catering-plate-right: -82%;
   --catering-plate-top: 51%;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_image_right */
+/* 2번 화면: 오른쪽 패널 접시 이미지 위치 */
 .catering_stage_image_right {
   --catering-plate-right: -82%;
   --catering-plate-top: 51%;
@@ -410,7 +512,7 @@
   color: #ffffff;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_text strong */
+/* 2번 화면: 단계 텍스트 제목(STEP 번호) */
 .catering_stage_text strong {
   display: block;
   font-size: clamp(16px, 1.12vw, 20px);
@@ -418,7 +520,7 @@
   line-height: 1.25;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_text p */
+/* 2번 화면: 단계 텍스트 본문 설명 */
 .catering_stage_text p {
   margin: 0.28rem 0 0;
   min-height: calc(1.45em * 2);
@@ -427,6 +529,28 @@
   white-space: pre-line;
   font-size: clamp(15px, 1.02vw, 19px);
   line-height: 1.45;
+}
+
+/* 3번 화면: 요소 밑에서 올라오는 진입 애니메이션 */
+@keyframes catering_compare_enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 3번 화면: 진입 전 숨김 상태 */
+.catering_compare_hidden {
+  opacity: 0;
+}
+
+/* 3번 화면: 진입 시 애니메이션 실행 */
+.catering_compare_visible {
+  animation: catering_compare_enter 0.62s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 /* 3번 화면: 비교표/프로세스 섹션 전체 간격 */
@@ -448,7 +572,7 @@
   justify-items: center;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_top_tabs span */
+/* 3번 화면: 메뉴개발/품질연구 라벨 셀 스타일 */
 .catering_compare_top_tabs span {
   min-width: 250px;
   border: 1.5px solid #3f3026;
@@ -470,12 +594,12 @@
   background-color: #ffffff;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_table > .catering_compare_cell_head:nth-child(1) */
+/* 3번 화면: 비교표 좌상단 모서리 둥글게 */
 .catering_compare_table > .catering_compare_cell_head:nth-child(1) {
   border-top-left-radius: 0.9rem;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_table > .catering_compare_cell_head:nth-child(3) */
+/* 3번 화면: 비교표 우상단 모서리 둥글게 */
 .catering_compare_table > .catering_compare_cell_head:nth-child(3) {
   border-top-right-radius: 0.9rem;
 }
@@ -561,7 +685,7 @@
   border-bottom-right-radius: 0.9rem;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_card_body p */
+/* 3번 화면: 프로세스 카드 본문 항목 텍스트 */
 .catering_process_card_body p {
   margin: 0;
   width: 100%;
@@ -575,39 +699,22 @@
   white-space: pre-line;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_card_body p + p */
+/* 3번 화면: 프로세스 카드 항목 사이 구분선 */
 .catering_process_card_body p + p {
   border-top: 1px solid #d2d2d2;
 }
 
-/* 3번 화면: 카드 사이 가로 화살표 */
+/* 3번 화면: 카드 사이 화살표 이미지 */
 .catering_process_arrow {
   position: absolute;
   left: calc(100% + (var(--catering-process-gap) - var(--catering-process-arrow-length)) / 2);
-  right: auto;
   top: calc(var(--catering-process-head-height) / 2);
   transform: translateY(-50%);
-  width: var(--catering-process-arrow-length);
-  height: 0;
-  border-top: 1.5px solid #bcb7b1;
+  width: var(--catering-process-arrow-length) !important;
+  height: auto !important;
   z-index: 3;
-  color: transparent;
-  font-size: 0;
-  line-height: 0;
   pointer-events: none;
-}
-
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_arrow::after */
-.catering_process_arrow::after {
-  content: "";
-  position: absolute;
-  right: -1px;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  border-top: 1.5px solid #bcb7b1;
-  border-right: 1.5px solid #bcb7b1;
-  transform: translateY(-50%) rotate(45deg);
+  object-fit: contain;
 }
 
 /* 4번 화면: 교육 섹션 본문 레이아웃 */
@@ -632,7 +739,8 @@
   gap: 1.25rem;
 }
 
-/* 4번 화면: 검정 라벨 셀(메인 바 색 연동) */
+/* 4번 화면: 라벨 진입 전 흐림 상태 */
+/* 4번 화면: 검정 라벨 셀 — 기본 흐린 상태, .catering_education_label_clear 부여 시 선명해짐 */
 .catering_education_stat_label {
   border-radius: 0.75rem;
   background-color: var(--catering-dark-cell-color);
@@ -642,6 +750,14 @@
   font-weight: 700;
   line-height: 1;
   transform: translateY(-0.3rem);
+  opacity: 0.25;
+  filter: blur(2px);
+  transition: opacity 0.6s ease, filter 0.6s ease;
+}
+
+.catering_education_label_clear {
+  opacity: 1;
+  filter: blur(0px);
 }
 
 /* 4번 화면: 퍼센트 수치 텍스트 */
@@ -650,7 +766,15 @@
   font-size: clamp(30px, 2.45vw, 48px);
   line-height: 1;
   color: #f26464;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  transition: transform 0.1s ease;
+  display: inline-block;
+}
+
+/* 4번 화면: 카운트업 중 강조 상태 */
+.catering_education_stat_value.counting {
+  transform: scale(1.06);
 }
 
 /* 4번 화면: 좌우 네비/본문 카드 묶음 */
@@ -691,12 +815,12 @@
   color: #9f968d;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_left */
+/* 4번 화면: 왼쪽 화살표 버튼 위치 */
 .catering_education_nav_left {
   left: -2.5rem;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_right */
+/* 4번 화면: 오른쪽 화살표 버튼 위치 */
 .catering_education_nav_right {
   right: -2.5rem;
 }
@@ -724,7 +848,7 @@
   align-items: center;
 }
 
-/* 4번 화면: 카드 제목/본문 */
+/* 4번 화면: 카드 제목 */
 .catering_education_card h3 {
   margin: 0;
   min-height: calc(1.35em * 1);
@@ -737,7 +861,7 @@
   font-weight: 800;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_card p */
+/* 4번 화면: 카드 본문 설명 */
 .catering_education_card p {
   margin: 2.1rem 0 0;
   height: calc(1.45em * 6);
@@ -779,12 +903,12 @@
   transform: none;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_research_item:nth-child(1) */
+/* 5번 화면: 첫 번째 아이템 위치 보정 */
 .catering_research_item:nth-child(1) {
   transform: none;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_research_item:nth-child(2) */
+/* 5번 화면: 두 번째 아이템 위치 보정 */
 .catering_research_item:nth-child(2) {
   transform: none;
 }
@@ -825,7 +949,7 @@
   transform: translateY(var(--catering-research-lift-offset));
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_safety_chip */
+/* 5번 화면: 위생/안전 강조 박스 */
 .catering_safety_chip {
   border: 1.5px solid rgba(52, 43, 35, 0.62);
   border-radius: 0.9rem;
@@ -847,13 +971,13 @@
   transform: none;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_block */
+/* 5번 화면: 채용 블록 카드 */
 .catering_recruit_block {
   display: grid;
   justify-items: center;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_block h3 */
+/* 5번 화면: 채용 블록 제목 */
 .catering_recruit_block h3 {
   margin: 0;
   text-align: center;
@@ -862,7 +986,7 @@
   color: #111111;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_block ul */
+/* 5번 화면: 채용 블록 목록 */
 .catering_recruit_block ul {
   margin: 1.2rem auto 0;
   padding: 0;
@@ -874,7 +998,7 @@
   max-width: min(100%, 430px);
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_block li */
+/* 5번 화면: 채용 블록 목록 항목 */
 .catering_recruit_block li {
   position: relative;
   padding-left: 0.8rem;
@@ -884,7 +1008,7 @@
   line-height: 1.38;
 }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_block li::before */
+/* 5번 화면: 채용 블록 목록 항목 대시 */
 .catering_recruit_block li::before {
   content: "-";
   position: absolute;
@@ -894,19 +1018,19 @@
 
 /* 급식서비스 태블릿/작은 데스크톱 공통 보정 */
 @media (max-width: 1200px) {
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_board */
+/* 태블릿/작은 데스크톱: 흐름도 보드 축소 */
   .catering_flow_board {
     transform: scale(0.94);
     transform-origin: center center;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_text */
+/* 태블릿/작은 데스크톱: 단계 텍스트 좌측 여백 보정 */
   .catering_stage_text {
     margin-left: 1.3rem;
     margin-right: auto;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_top_tabs */
+/* 태블릿/작은 데스크톱: 상단 탭 간격 축소 */
   .catering_compare_top_tabs {
     gap: clamp(1.8rem, 4vw, 3.4rem);
   }
@@ -914,22 +1038,22 @@
 
 /* 작은 화면: 작은 화면용 화살표 세트로 교체 */
 @media (max-width: 1700px) {
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_arrow_default */
+/* 작은 화면: 기본 화살표 숨김 */
   .catering_flow_arrow_default {
     display: none !important;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_arrow_small */
+/* 작은 화면: 작은 화면 화살표 표시 */
   .catering_flow_arrow_small {
     display: inline !important;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_needs_line_default */
+/* 작은 화면: 기본 Needs 연결선 숨김 */
   .catering_flow_needs_line_default {
     display: none !important;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_needs_line_small */
+/* 작은 화면: 작은 화면 Needs 연결선 표시 */
   .catering_flow_needs_line_small {
     display: inline !important;
   }
@@ -937,29 +1061,29 @@
 
 /* 급식서비스 태블릿 구간 보정 */
 @media (max-width: 1024px) {
-/* 급식서비스 화면: 모바일/태블릿에서는 카드 사이 여백 없이 1장씩 표시 */
+/* 태블릿: 카드 사이 여백 없이 1장씩 표시 */
   .catering_education_cards_wrap {
     --catering-education-gap: 0px;
     padding-inline: 0;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_board */
+/* 태블릿: 흐름도 보드 추가 축소 */
   .catering_flow_board {
     transform: scale(0.82);
     height: clamp(420px, 62vh, 560px);
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_grid */
+/* 태블릿: 메뉴 관리 패널 1열 전환 */
   .catering_stage_grid {
     grid-template-columns: 1fr;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_panel */
+/* 태블릿: 메뉴 관리 패널 최소 높이 */
   .catering_stage_panel {
     min-height: 32svh;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_image */
+/* 태블릿: 접시 이미지 크기 보정 */
   .catering_stage_image {
     width: var(--catering-plate-width, 134%) !important;
     height: var(--catering-plate-height, 102%) !important;
@@ -968,12 +1092,12 @@
     transform: translateY(-50%) !important;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_image_wrap */
+/* 태블릿: 접시 이미지 래퍼 inset 유지 */
   .catering_stage_image_wrap {
     inset: 0;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_table */
+/* 태블릿: 비교표 1열 전환 */
   .catering_compare_table {
     grid-template-columns: 1fr;
     gap: 0.9rem;
@@ -981,6 +1105,7 @@
     padding-inline: 0.35rem;
   }
 
+/* 태블릿: 비교표 행 묶음 2열 그리드 전환 */
   .catering_compare_row_group {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -988,6 +1113,7 @@
     align-items: stretch;
   }
 
+/* 태블릿: 구분 셀 전체 너비 확장 및 좌측 정렬 */
   .catering_compare_cell_side {
     grid-column: 1 / -1;
     justify-content: flex-start;
@@ -997,40 +1123,40 @@
 
   .catering_compare_cell,
   .catering_compare_cell_head,
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_cell_side */
+/* 태블릿: 비교표 셀 최소 높이 통일 */
   .catering_compare_cell_side {
     min-height: 52px;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_row */
+/* 태블릿: 프로세스 카드 2열 전환 */
   .catering_process_row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     --catering-process-gap: clamp(1.1rem, 3vw, 2rem);
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_arrow */
+/* 태블릿: 카드 사이 화살표 숨김 */
   .catering_process_arrow {
     display: none;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_cards */
+/* 태블릿: 교육 카드 간격 제거 */
   .catering_education_cards {
     gap: 0;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_card */
+/* 태블릿: 교육 카드 1열 전환 */
   .catering_education_card {
     flex-basis: 100%;
     max-width: none;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav */
+/* 태블릿: 교육 화살표 버튼 위치 보정 */
   .catering_education_nav {
     top: 50%;
     font-size: 52px;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_safety_chip_row */
+/* 태블릿: 안전 강조 박스 1열 전환 */
   .catering_safety_chip_row {
     grid-template-columns: 1fr;
   }
@@ -1038,12 +1164,12 @@
 
 /* 급식서비스 모바일 구간 보정 */
 @media (max-width: 768px) {
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_screen_with_header */
+/* 모바일: 첫 화면 헤더 오프셋 축소 */
   .catering_screen_with_header {
     padding-top: calc(126px + 0.1rem);
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_flow_board */
+/* 모바일: 흐름도 보드 폭/높이 보정 */
   .catering_flow_board {
     width: min(100%, 420px);
     height: clamp(470px, 76svh, 560px);
@@ -1148,73 +1274,76 @@
     display: inline;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_stage_text strong */
+/* 모바일: 단계 텍스트 제목 크기 확대 */
   .catering_stage_text strong {
     font-size: clamp(25px, 6vw, 34px);
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_top_tabs */
+/* 모바일: 상단 탭 1열 전환 */
   .catering_compare_top_tabs {
     grid-template-columns: 1fr;
     gap: 0.7rem;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_compare_top_tabs span */
+/* 모바일: 상단 탭 라벨 폭 확장 */
   .catering_compare_top_tabs span {
     min-width: 0;
     width: 100%;
   }
 
+/* 모바일: 비교표 행 묶음 1열 전환 */
   .catering_compare_row_group {
     grid-template-columns: 1fr;
   }
 
+/* 모바일: 구분 셀 좌측 패딩 보정 */
   .catering_compare_cell_side {
     padding-left: 0.95rem;
   }
 
+/* 모바일: 비교표 좌우 패딩 */
   .catering_compare_table {
     padding-inline: 1rem;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_process_row */
+/* 모바일: 프로세스 카드 1열 전환 */
   .catering_process_row {
     grid-template-columns: 1fr;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_stats */
+/* 모바일: 교육 지표 1열 전환 */
   .catering_education_stats {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_cards_wrap */
+/* 모바일: 교육 카드 래퍼 좌우 패딩 */
   .catering_education_cards_wrap {
     padding-inline: 1.8rem;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav */
+/* 모바일: 교육 화살표 버튼 크기 축소 */
   .catering_education_nav {
     font-size: 40px;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_left */
+/* 모바일: 왼쪽 화살표 버튼 위치 */
   .catering_education_nav_left {
     left: 0;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_education_nav_right */
+/* 모바일: 오른쪽 화살표 버튼 위치 */
   .catering_education_nav_right {
     right: 0;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_research_item */
+/* 모바일: 레시피 아이템 1열 전환 */
   .catering_research_item {
     grid-template-columns: 1fr;
     row-gap: 0.8rem;
   }
 
-/* 급식서비스 화면: 급식서비스 화면 영역 - .catering_recruit_blocks */
+/* 모바일: 채용 블록 1열 전환 */
   .catering_recruit_blocks {
     grid-template-columns: 1fr;
   }

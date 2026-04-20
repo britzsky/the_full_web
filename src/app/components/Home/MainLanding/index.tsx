@@ -229,10 +229,14 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isPaused, setIsPaused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isInitialCopyAnimating, setIsInitialCopyAnimating] = useState(true);
   const [animationResetKey, setAnimationResetKey] = useState(0);
   const [autoPlayResetKey, setAutoPlayResetKey] = useState(0);
   const [isDesktopHeroLayout, setIsDesktopHeroLayout] = useState<boolean | null>(null);
   const [activeServiceIndex, setActiveServiceIndex] = useState(0);
+  const [serviceAnimationCycle, setServiceAnimationCycle] = useState(0);
+  const [historyAnimationCycle, setHistoryAnimationCycle] = useState(0);
+  const [locationAnimationCycle, setLocationAnimationCycle] = useState(0);
   const [socialMediaItems, setSocialMediaItems] = useState<InstagramMediaItem[]>([]);
   const [isSocialLoading, setIsSocialLoading] = useState(true);
   const [instagramUser, setInstagramUser] = useState("thefull");
@@ -245,6 +249,15 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   const desktopMapContainerRef = useRef<HTMLDivElement | null>(null);
 // 메인 화면: 모바일 지도 컨테이너 ref
   const mobileMapContainerRef = useRef<HTMLDivElement | null>(null);
+  const landingScrollRef = useRef<HTMLElement | null>(null);
+  const companySectionRef = useRef<HTMLElement | null>(null);
+  const isCompanySectionVisibleRef = useRef(false);
+  const historySectionRef = useRef<HTMLElement | null>(null);
+  const isHistorySectionVisibleRef = useRef(false);
+  const desktopLocationBlockRef = useRef<HTMLDivElement | null>(null);
+  const mobileLocationSectionRef = useRef<HTMLElement | null>(null);
+  const isDesktopLocationVisibleRef = useRef(false);
+  const isMobileLocationVisibleRef = useRef(false);
   const socialTouchStartXRef = useRef<number | null>(null);
 
   const activeSocialMediaSlides = getSocialMediaSlides(activeSocialMedia);
@@ -256,6 +269,10 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       : 0;
   const currentActiveSocialSlide =
     activeSocialMediaSlides[currentActiveSocialMediaIndex] ?? null;
+  const locationEnterUpClass =
+    locationAnimationCycle % 2 === 0
+      ? "main-location-enter-up-a"
+      : "main-location-enter-up-b";
 
   // 이전 슬라이드 인덱스와 방향을 기록해 전환 애니메이션 연결
   const goToSlide = useCallback(
@@ -394,6 +411,15 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
 
     return () => window.clearTimeout(timer);
   }, [activeIndex, goToSlide, isPaused, autoPlayResetKey]);
+
+  // 메인 첫 진입 시 텍스트만 오른쪽에서 들어오도록 초기 애니메이션을 1회 재생
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsInitialCopyAnimating(false);
+    }, 560);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // 전환 완료 후 이전 슬라이드 상태 정리
   useEffect(() => {
@@ -674,7 +700,9 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
     ? direction === 1
       ? "hero-copy-enter-right"
       : "hero-copy-enter-left"
-    : "";
+    : isInitialCopyAnimating
+      ? "hero-copy-enter-right"
+      : "";
 
 // 메인 화면: activeSlide 정의
   const activeSlide = heroSlides[activeIndex];
@@ -698,6 +726,137 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
     return () => {
       mediaQuery.removeEventListener("change", syncHeroLayout);
     };
+  }, []);
+
+  // 고객~솔루션 섹션이 다시 화면에 들어오면 카드 진입 애니메이션을 재실행한다
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const sectionElement = companySectionRef.current;
+    if (!sectionElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const isVisible = entry.isIntersecting;
+
+        if (isVisible && !isCompanySectionVisibleRef.current) {
+          setServiceAnimationCycle((prev) => prev + 1);
+        }
+
+        isCompanySectionVisibleRef.current = isVisible;
+      },
+      {
+        root: landingScrollRef.current ?? null,
+        threshold: [0, 0.01],
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    observer.observe(sectionElement);
+    return () => observer.disconnect();
+  }, []);
+
+  // 연혁 섹션이 다시 화면에 들어오면 좌/우 컬럼 진입 애니메이션을 재실행한다
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const sectionElement = historySectionRef.current;
+    if (!sectionElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.55;
+
+        if (isVisible && !isHistorySectionVisibleRef.current) {
+          setHistoryAnimationCycle((prev) => prev + 1);
+        }
+
+        isHistorySectionVisibleRef.current = isVisible;
+      },
+      {
+        root: landingScrollRef.current,
+        threshold: [0.35, 0.55, 0.75],
+      }
+    );
+
+    observer.observe(sectionElement);
+    return () => observer.disconnect();
+  }, []);
+
+  // 오시는 길(데스크탑 블록)이 다시 화면에 들어오면 하단 진입 애니메이션을 재실행한다
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const locationElement = desktopLocationBlockRef.current;
+    if (!locationElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const isVisible = entry.isIntersecting;
+
+        if (isVisible && !isDesktopLocationVisibleRef.current) {
+          setLocationAnimationCycle((prev) => prev + 1);
+        }
+
+        isDesktopLocationVisibleRef.current = isVisible;
+      },
+      {
+        root: landingScrollRef.current ?? null,
+        threshold: [0, 0.01],
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    observer.observe(locationElement);
+    return () => observer.disconnect();
+  }, []);
+
+  // 오시는 길(모바일 섹션)이 다시 화면에 들어오면 하단 진입 애니메이션을 재실행한다
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const sectionElement = mobileLocationSectionRef.current;
+    if (!sectionElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const isVisible = entry.isIntersecting;
+
+        if (isVisible && !isMobileLocationVisibleRef.current) {
+          setLocationAnimationCycle((prev) => prev + 1);
+        }
+
+        isMobileLocationVisibleRef.current = isVisible;
+      },
+      {
+        root: landingScrollRef.current ?? null,
+        threshold: [0, 0.01],
+        rootMargin: "0px 0px -12% 0px",
+      }
+    );
+
+    observer.observe(sectionElement);
+    return () => observer.disconnect();
   }, []);
 
   // 슬라이드 좌우 버튼 화살표 SVG 렌더링
@@ -865,7 +1024,8 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   return (
     <main
       id="main-landing-scroll"
-      className="main-page h-[100svh] overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#FFFFFF] text-[#1b140f]"
+      ref={landingScrollRef}
+      className="main-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#FFFFFF] text-[#1b140f]"
     >
       {/* 히어로 섹션 */}
       <section className="relative h-[100svh] min-h-[100svh] snap-start overflow-hidden !py-0">
@@ -1229,6 +1389,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       {/* 회사 소개/사업 영역 섹션 */}
       <section
         id="company"
+        ref={companySectionRef}
         className="h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col"
       >
         {/* 섹션 제목 위치 통일 */}
@@ -1237,51 +1398,65 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         {/* 고객~솔루션 본문 세로 정렬 래퍼 */}
         <div className="main-section-body-flex">
           {/* 데스크탑 고객~솔루션 카드 묶음 컨테이너 */}
-          <div className="main-services-wrap w-full">
-          {serviceBlocks.map((item) => (
-            <article
-              key={item.title}
-              className={`service-block-${item.id} grid items-start gap-5 md:grid-cols-2 md:gap-10 ${
-                item.reverse
-                  ? "md:[&>.service-media]:order-2 md:[&>.service-copy]:order-1"
-                  : ""
-              }`}
-            >
-              <div
-                className={`service-media main-service-media-frame relative overflow-hidden ${
-                  item.reverse ? "md:ml-auto md:w-[96%]" : "md:w-[96%]"
+          <div key={`main-services-desktop-${serviceAnimationCycle}`} className="main-services-wrap w-full">
+          {serviceBlocks.map((item, index) => {
+            // 고객~솔루션 카드는 순서대로 진입하도록 카드별 지연 시간을 적용
+            const mediaDelay = `${(index * 0.24).toFixed(2)}s`;
+            const copyDelay = `${(index * 0.24 + 0.06).toFixed(2)}s`;
+
+            return (
+              <article
+                key={item.title}
+                className={`service-block-${item.id} grid items-start gap-5 md:grid-cols-2 md:gap-10 ${
+                  item.reverse
+                    ? "md:[&>.service-media]:order-2 md:[&>.service-copy]:order-1"
+                    : ""
                 }`}
               >
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-
-              <div
-                className={`service-copy self-start ${
-                  item.align === "right" ? "text-right" : "text-left"
-                } ${item.reverse ? "md:-mr-[4%]" : "md:-ml-[4%]"}`}
-              >
-                <div className="main-body-bar" />
-                <div className={`${item.align === "right" ? "px-4 md:pl-8 md:pr-0" : "px-4 md:pl-0 md:pr-8"}`}>
-                  <h3 className="main-body-title">
-                    {item.title}
-                  </h3>
-                  <EmphasisCopy html={item.descriptionHtml} className="main-body-copy" />
+                <div
+                  className={`service-media main-service-media-frame relative overflow-hidden ${
+                    item.reverse ? "md:ml-auto md:w-[96%]" : "md:w-[96%]"
+                  } ${item.reverse ? "main-service-media-enter-right" : "main-service-media-enter-left"}`}
+                  style={{ animationDelay: mediaDelay }}
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
-              </div>
-            </article>
-          ))}
+
+                <div
+                  className={`service-copy self-start ${
+                    item.align === "right" ? "text-right" : "text-left"
+                  } ${item.reverse ? "md:-mr-[4%]" : "md:-ml-[4%]"} ${
+                    item.reverse ? "main-service-copy-enter-left" : "main-service-copy-enter-right"
+                  }`}
+                  style={{ animationDelay: copyDelay }}
+                >
+                  <div className="main-body-bar" />
+                  <div className={`${item.align === "right" ? "px-4 md:pl-8 md:pr-0" : "px-4 md:pl-0 md:pr-8"}`}>
+                    <h3 className="main-body-title">
+                      {item.title}
+                    </h3>
+                    <EmphasisCopy html={item.descriptionHtml} className="main-body-copy" />
+                  </div>
+                </div>
+              </article>
+            );
+          })}
           </div>
 
           {/* 모바일 고객~솔루션 카드 캐러셀 */}
           <div className="main-services-mobile-wrap">
-            <article className="main-service-mobile-card">
-              <div className="main-service-mobile-media main-service-media-frame relative overflow-hidden">
+            <article key={`main-services-mobile-${serviceAnimationCycle}-${activeService.id}`} className="main-service-mobile-card">
+              <div
+                className={`main-service-mobile-media main-service-media-frame relative overflow-hidden ${
+                  activeService.reverse ? "main-service-media-enter-right" : "main-service-media-enter-left"
+                }`}
+              >
                 <Image
                   src={activeService.image}
                   alt={activeService.title}
@@ -1291,7 +1466,11 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 />
               </div>
 
-              <div className="service-copy text-left">
+              <div
+                className={`service-copy text-left ${
+                  activeService.reverse ? "main-service-copy-enter-left" : "main-service-copy-enter-right"
+                }`}
+              >
                 <div className="main-body-bar" />
                 <div className="px-4">
                   <div className="flex items-end justify-between gap-3">
@@ -1348,83 +1527,96 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       {/* 소셜 미디어 섹션 */}
       <section
         id="social"
-        className="h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col"
+        className="relative h-[100svh] snap-start overflow-hidden bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col"
       >
-        {/* 섹션 제목 위치 통일 */}
-        <SectionTitle>Social</SectionTitle>
-        {/* 소셜 본문 세로 정렬 래퍼 */}
-        <div className="main-section-body-flex">
-          {/* 소셜 그리드 폭 컨테이너 */}
-          <div className="main-social-wrap mx-auto w-full max-w-[1240px] px-3 md:px-6">
-          <div className="main-social-grid grid grid-cols-2 place-items-center md:grid-cols-3">
-            {isSocialLoading &&
-              Array.from({ length: 6 }).map((_, index) => (
-                <div key={`social-skeleton-${index}`} className="main-social-card main-social-card-item block w-full">
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#ece9e4]" />
-                </div>
-              ))}
-            {!isSocialLoading &&
-              socialMediaItems.map((item, index) => {
-                // 메인 화면: 상태값
-                const previewMedia = getSocialPreviewMedia(item);
-                const slideCount = getSocialMediaSlides(item).length;
-                const isVideo = previewMedia?.media_type === "VIDEO";
-                // 메인 화면: overlayText 정의
-                const overlayText = getSocialOverlayText(item);
+        {/* 소셜 배경 이미지와 화이트 오버레이 레이어 */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <Image
+            src="/images/social/social_background.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-[0.3] blur-[3px] scale-110"
+          />
+          <div className="absolute inset-0 bg-white/50" />
+        </div>
+        <div className="relative z-[1] flex h-full flex-col">
+          {/* 섹션 제목 위치 통일 */}
+          <SectionTitle>Social</SectionTitle>
+          {/* 소셜 본문 세로 정렬 래퍼 */}
+          <div className="main-section-body-flex">
+            {/* 소셜 그리드 폭 컨테이너 */}
+            <div className="main-social-wrap mx-auto w-full max-w-[1240px] px-3 md:px-6">
+            <div className="main-social-grid grid grid-cols-2 place-items-center md:grid-cols-3">
+              {isSocialLoading &&
+                Array.from({ length: 6 }).map((_, index) => (
+                  <div key={`social-skeleton-${index}`} className="main-social-card main-social-card-item block w-full">
+                    <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#ece9e4]" />
+                  </div>
+                ))}
+              {!isSocialLoading &&
+                socialMediaItems.map((item, index) => {
+                  // 메인 화면: 상태값
+                  const previewMedia = getSocialPreviewMedia(item);
+                  const slideCount = getSocialMediaSlides(item).length;
+                  const isVideo = previewMedia?.media_type === "VIDEO";
+                  // 메인 화면: overlayText 정의
+                  const overlayText = getSocialOverlayText(item);
 
-                if (!previewMedia) {
-                  return null;
-                }
+                  if (!previewMedia) {
+                    return null;
+                  }
 
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => handleOpenSocialMedia(item)}
-                    className="main-social-card main-social-card-item group relative block w-full"
-                    aria-label={`${overlayText || `Instagram ${index + 1}`} 열기`}
-                  >
-                    {/* 소셜 카드: 세로 직사각형 비율(3:4) 유지 + 프레임 꽉 채우기(확대) */}
-                    <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
-                      {isVideo ? (
-                        <video
-                          src={previewMedia.media_url}
-                          poster={previewMedia.thumbnail_url}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                          preload="metadata"
-                          playsInline
-                        />
-                      ) : (
-                        <img
-                          src={previewMedia.media_url}
-                          alt={overlayText || `Instagram ${index + 1}`}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      )}
-                      {isVideo && (
-                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/70 text-base text-[#1f1b18]">
-                            ▶
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleOpenSocialMedia(item)}
+                      className="main-social-card main-social-card-item group relative block w-full"
+                      aria-label={`${overlayText || `Instagram ${index + 1}`} 열기`}
+                    >
+                      {/* 소셜 카드: 세로 직사각형 비율(3:4) 유지 + 프레임 꽉 채우기(확대) */}
+                      <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
+                        {isVideo ? (
+                          <video
+                            src={previewMedia.media_url}
+                            poster={previewMedia.thumbnail_url}
+                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            preload="metadata"
+                            playsInline
+                          />
+                        ) : (
+                          <img
+                            src={previewMedia.media_url}
+                            alt={overlayText || `Instagram ${index + 1}`}
+                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        )}
+                        {isVideo && (
+                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/70 text-base text-[#1f1b18]">
+                              ▶
+                            </div>
+                          </div>
+                        )}
+                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 text-center text-[13px] text-white/0 transition group-hover:bg-black/55 group-hover:text-white/100">
+                          <div className="main-social-overlay-copy px-5">
+                            {overlayText}
                           </div>
                         </div>
-                      )}
-                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 text-center text-[13px] text-white/0 transition group-hover:bg-black/55 group-hover:text-white/100">
-                        <div className="main-social-overlay-copy px-5">
-                          {overlayText}
-                        </div>
+                        {slideCount > 1 && (
+                          <div className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white">
+                            {slideCount}컷
+                          </div>
+                        )}
+                        <div className="pointer-events-none absolute inset-0 border border-white/40" />
                       </div>
-                      {slideCount > 1 && (
-                        <div className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white">
-                          {slideCount}컷
-                        </div>
-                      )}
-                      <div className="pointer-events-none absolute inset-0 border border-white/40" />
-                    </div>
-                  </button>
-                );
-              })}
-          </div>
+                    </button>
+                  );
+                })}
+            </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1605,17 +1797,18 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       {/* 연혁 + 오시는 길 섹션 */}
       <section
         id="history"
+        ref={historySectionRef}
         className="h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col"
       >
         {/* 섹션 제목 위치 통일 */}
-        <SectionTitle>연혁</SectionTitle>
+        <SectionTitle key={`history-title-${historyAnimationCycle}`} wrapClassName="main-history-enter-down">연혁</SectionTitle>
         {/* 연혁/오시는길 본문 세로 정렬 래퍼 */}
         <div className="main-section-body-flex">
           {/* 데스크탑 연혁/오시는길 콘텐츠 컨테이너 */}
           <div className="main-history-wrap">
             <div className="mx-auto w-full max-w-[1120px]">
               <div className="mt-4 grid gap-7 md:grid-cols-2 md:gap-x-14 md:gap-y-8">
-                <div className="space-y-7">
+                <div key={`history-left-${historyAnimationCycle}`} className="space-y-7 main-history-enter-down">
                   {historyLeft.map((item) => (
                     <div key={item.year} className="grid grid-cols-[120px_1fr] items-start gap-5 md:grid-cols-[136px_1fr]">
                       <p className="main-history-year">
@@ -1632,7 +1825,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                   ))}
                 </div>
 
-                <div className="space-y-7">
+                <div key={`history-right-${historyAnimationCycle}`} className="space-y-7 main-history-enter-down-delay">
                   {historyRight.map((item) => (
                     <div key={item.year} className="grid grid-cols-[120px_1fr] items-start gap-5 md:grid-cols-[136px_1fr]">
                       <p className="main-history-year">
@@ -1651,7 +1844,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
               </div>
             </div>
 
-            <div id="location">
+            <div id="location" ref={desktopLocationBlockRef} className={locationEnterUpClass}>
               {/* 오시는 길 섹션 제목 위치 통일 */}
               <SectionTitle wrapClassName="main-location-title-wrap">오시는 길</SectionTitle>
               <div className="mx-auto mt-4 w-full max-w-[1120px] px-3 md:px-6">
@@ -1741,10 +1934,13 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       </section>
 
       {/* 모바일 오시는 길 전용 섹션 */}
-      <section className="main-location-mobile-section h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col md:hidden">
-        <SectionTitle>오시는 길</SectionTitle>
+      <section
+        ref={mobileLocationSectionRef}
+        className="main-location-mobile-section h-[100svh] snap-start bg-[#FFFFFF] !py-0 text-[#000000] flex flex-col md:hidden"
+      >
+        <SectionTitle wrapClassName={locationEnterUpClass}>오시는 길</SectionTitle>
         <div className="main-section-body-flex">
-          <div className="main-location-mobile-wrap">
+          <div className={`main-location-mobile-wrap ${locationEnterUpClass}`}>
             <div className="main-location-mobile-card">
               <div className="main-map-frame relative overflow-hidden border border-[#d2b79a] bg-[#f4efe8]">
                 <div ref={mobileMapContainerRef} className="h-full w-full" />

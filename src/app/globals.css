@@ -115,9 +115,7 @@
   --section-title-pad-top: clamp(1.2rem, 2.6vh, 1.9rem);
 
   /* ----------------------- 메인 본문 바 기본 색상 ----------------------- */
-  /* --main-body-bar-color: #281D13; */
-  /* --main-body-bar-color: #586E34; */
-  --main-body-bar-color: #27391C;
+   --main-body-bar-color: #27391C; 
   --main-body-bar-height: 0.875rem;
 
   /* 공통 결과/확인 모달 포인트선/버튼 색상(메인 바 기본색 연동) */
@@ -1303,6 +1301,129 @@
   font-size: clamp(13px, 1.7vh, 16px);
   font-weight: 700;
   line-height: inherit;
+}
+
+/* 고객~솔루션 카드 이미지/본문 진입 애니메이션 */
+.main-service-media-enter-left {
+  animation: main-service-media-enter-left 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.main-service-media-enter-right {
+  animation: main-service-media-enter-right 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.main-service-copy-enter-left {
+  animation: main-service-copy-enter-left 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.main-service-copy-enter-right {
+  animation: main-service-copy-enter-right 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 고객~솔루션 카드 이미지는 좌측에서 원래 위치로 진입 */
+@keyframes main-service-media-enter-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-300px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 고객~솔루션 카드 이미지는 우측에서 원래 위치로 진입 */
+@keyframes main-service-media-enter-right {
+  from {
+    opacity: 0;
+    transform: translate3d(300px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 고객~솔루션 카드 본문은 좌측에서 원래 위치로 진입 */
+@keyframes main-service-copy-enter-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-300px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 고객~솔루션 카드 본문은 우측에서 원래 위치로 진입 */
+@keyframes main-service-copy-enter-right {
+  
+  from {
+    opacity: 0;
+    transform: translate3d(300px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 연혁 좌측 컬럼은 위에서 아래로 먼저 진입 */
+.main-history-enter-down {
+  animation: main-history-enter-down 0.88s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 연혁 우측 컬럼은 좌측 이후에 위에서 아래로 지연 진입 */
+.main-history-enter-down-delay {
+  animation: main-history-enter-down 0.88s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: 0.5s;
+}
+
+/* 오시는 길 영역은 아래에서 위로 진입 */
+.main-location-enter-up-a {
+  animation: main-location-enter-up-a 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 같은 동작을 번갈아 적용해 재진입 시 애니메이션을 다시 시작한다 */
+.main-location-enter-up-b {
+  animation: main-location-enter-up-b 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 연혁 컬럼 상단에서 하단으로 내려오는 진입 애니메이션 */
+@keyframes main-history-enter-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -56px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 오시는 길 하단에서 상단으로 올라오는 진입 애니메이션 */
+@keyframes main-location-enter-up-a {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 130px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 오시는 길 하단에서 상단으로 올라오는 진입 애니메이션(재진입 재생용) */
+@keyframes main-location-enter-up-b {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 130px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 /* 메인 연혁 텍스트 */

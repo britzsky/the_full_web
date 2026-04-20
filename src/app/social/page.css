@@ -1,35 +1,52 @@
+/* 소셜 페이지 전체 래퍼 */
 .social-page {
   position: relative;
   scrollbar-gutter: stable;
   background-color: #ffffff;
 }
 
+/* 소셜 페이지 헤더·본문을 묶는 배경 이미지 래퍼 */
+.social-bg-wrapper {
+  background-image: linear-gradient(rgba(255,255,255,0.90), rgba(255,255,255,0.90)), url("/images/social/social_background2.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* 소셜 페이지 헤더 영역 사이트 헤더 스타일 재정의 */
 .social-page .site-header-light {
   border-bottom: none;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
 }
 
+/* 소셜 페이지 헤더 영역 최소 높이 및 배경 투명 처리 */
 .social-header-shell {
   min-height: 156px;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
-/* 소셜 페이지 본문을 다른 내부 페이지와 같은 높이 기준으로 정렬 */
+/* 소셜 페이지 갤러리 본문 섹션 배경 투명 처리 */
 .social-list-section {
+  background-color: transparent;
   min-height: calc(100svh - 156px);
   padding: clamp(1.85rem, 4.1vh, 2.5rem) 0 clamp(3.5rem, 7vh, 5rem);
 }
 
+/* 소셜 페이지 갤러리 본문 최대 너비 및 좌우 여백 컨테이너 */
 .social-content-wrap {
   width: min(100%, 1320px);
   margin: 0 auto;
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 
+/* 소셜 페이지 갤러리 카드 목록 래퍼 */
 .social-gallery-shell {
   width: 100%;
   margin: 0 auto;
 }
 
+/* 소셜 페이지 갤러리 섹션 타이틀 행 */
 .social-list-header {
   width: 100%;
   display: flex;
@@ -40,6 +57,7 @@
   margin-bottom: clamp(1.2rem, 2.3vh, 1.7rem);
 }
 
+/* 소셜 페이지 섹션 타이틀 텍스트 */
 .social-section-title {
   margin: 0;
   color: #111111;
@@ -49,7 +67,7 @@
   transform: translateY(-0.38rem);
 }
 
-/* 소셜 카드 6장이 한 화면 안에서 최대한 안정적으로 보이도록 간격과 크기를 조정 */
+/* 소셜 페이지 인스타그램 카드 6장 그리드 */
 .social-card-grid {
   width: 100%;
   justify-content: center;
@@ -57,67 +75,84 @@
   row-gap: clamp(0.7rem, 1.5vh, 0.95rem);
 }
 
+/* 소셜 페이지 개별 갤러리 카드 최대 너비 */
 .social-gallery-card {
   max-width: clamp(146px, 15vw, 198px) !important;
 }
 
+/* 대형 데스크톱·중형 데스크톱 구간 (1024px~1440px) */
 @media (max-width: 1440px) and (min-width: 1024px) {
+  /* 소셜 페이지 갤러리 본문 섹션 상단 여백 축소 */
   .social-list-section {
     padding-top: clamp(0.7rem, 1.5vh, 1rem);
   }
 
+  /* 소셜 페이지 타이틀 행 하단 여백 축소 */
   .social-list-header {
     margin-bottom: clamp(0.55rem, 1vh, 0.8rem);
   }
 
+  /* 소셜 페이지 카드 그리드 열·행 간격 축소 */
   .social-card-grid {
     column-gap: clamp(0.4rem, 0.6vw, 0.62rem);
     row-gap: clamp(0.45rem, 0.95vh, 0.7rem);
   }
 
+  /* 소셜 페이지 개별 카드 최대 너비 축소 */
   .social-gallery-card {
     max-width: clamp(126px, 12.6vw, 164px) !important;
   }
 }
 
+/* 데스크톱 이상 구간 타이틀 행 좌우 여백 확대 (768px 이상) */
 @media (min-width: 768px) {
+  /* 소셜 페이지 타이틀 행 데스크톱 좌우 패딩 */
   .social-list-header {
     padding-left: var(--section-title-pad-left-desktop);
     padding-right: 1.5rem;
   }
 }
 
+/* 태블릿 구간 (1023px 이하) */
 @media (max-width: 1023px) {
+  /* 소셜 페이지 갤러리 본문 섹션 상단 여백 태블릿 보정 */
   .social-list-section {
     min-height: calc(100svh - 156px);
     padding-top: clamp(1.45rem, 3.2vh, 1.8rem);
   }
 
+  /* 소셜 페이지 개별 카드 최대 너비 태블릿 보정 */
   .social-gallery-card {
     max-width: clamp(142px, 29vw, 182px) !important;
   }
 }
 
+/* 모바일 구간 (768px 이하) */
 @media (max-width: 768px) {
+  /* 소셜 페이지 헤더 영역 최소 높이 모바일 축소 */
   .social-header-shell {
     min-height: 126px;
   }
 
+  /* 소셜 페이지 갤러리 본문 섹션 높이·여백 모바일 보정 */
   .social-list-section {
     min-height: calc(100svh - 126px);
     padding-top: clamp(1.2rem, 3.2vh, 1.5rem);
     padding-bottom: clamp(2.2rem, 6vh, 3rem);
   }
 
+  /* 소셜 페이지 타이틀 행 하단 여백 모바일 고정 */
   .social-list-header {
     margin-bottom: 0.85rem;
   }
 
+  /* 소셜 페이지 카드 그리드 열·행 간격 모바일 고정 */
   .social-card-grid {
     column-gap: 0.5rem;
     row-gap: 0.6rem;
   }
 
+  /* 소셜 페이지 개별 카드 최대 너비 모바일 보정 */
   .social-gallery-card {
     max-width: clamp(132px, 42vw, 166px) !important;
   }

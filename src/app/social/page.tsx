@@ -35,15 +35,16 @@ export default async function SocialPage() {
       id="social_scroll"
       className="social-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
     >
-      <section className="social-header-shell relative">
-        <SiteHeader
-          leftItems={socialHeaderLeftItems}
-          rightItems={socialHeaderRightItems}
-          lightBackground
-        />
-      </section>
+      <div className="social-bg-wrapper">
+        <section className="social-header-shell relative">
+          <SiteHeader
+            leftItems={socialHeaderLeftItems}
+            rightItems={socialHeaderRightItems}
+            lightBackground
+          />
+        </section>
 
-      <section id="social_list" className="social-list-section">
+        <section id="social_list" className="social-list-section">
         <div className="social-list-header">
           <h2 className="social-section-title">Social</h2>
         </div>
@@ -53,7 +54,8 @@ export default async function SocialPage() {
             <SocialMediaClient />
           </div>
         </div>
-      </section>
+        </section>
+      </div>
 
       <ScrollToTopButton targetId="social_scroll" />
     </main>

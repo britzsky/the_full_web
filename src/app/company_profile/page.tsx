@@ -4,6 +4,7 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
+import CompanyProfileMotion from "./CompanyProfileMotion";
 import "./page.css";
 
 // 1번 화면 대표 인사 이미지 경로
@@ -88,6 +89,8 @@ export default async function CompanyPage() {
       id="company-scroll"
       className="company-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
     >
+      <CompanyProfileMotion />
+
       {/* 1번 화면: 대표 인사 */}
       <section id="company-greeting" className="company-screen company-screen-with-header relative">
         <SiteHeader
@@ -102,7 +105,7 @@ export default async function CompanyPage() {
           <div className="company-screen-inner company-greeting-inner">
             {/* 대표 이미지/인사말 2열 레이아웃 */}
             <div className="company-greeting-grid">
-              <div className="company-greeting-image-frame">
+              <div className="company-greeting-image-frame company-enter-up">
                 <Image
                   src={companyGreetingImage}
                   alt="대표 인사 이미지"
@@ -113,7 +116,7 @@ export default async function CompanyPage() {
                 />
               </div>
 
-              <div className="company-greeting-copy">
+              <div className="company-greeting-copy company-enter-up company-enter-delay-1">
                 {companyGreetingParagraphs.map((paragraph) => (
                   <p key={paragraph} className="company-greeting-paragraph">
                     {paragraph}
@@ -146,8 +149,13 @@ export default async function CompanyPage() {
           <div className="company-screen-inner company-vm-inner">
             {/* 비전/미션 2열 그리드 */}
             <div className="company-vm-grid">
-              {companyVisionMission.map((item) => (
-                <article key={item.title} className="company-vm-item">
+              {companyVisionMission.map((item, index) => (
+                <article
+                  key={item.title}
+                  className={`company-vm-item company-enter-up ${
+                    index === 0 ? "company-enter-delay-vm-1" : "company-enter-delay-vm-2"
+                  }`}
+                >
                   <div className="company-vm-icon-frame">
                     <Image
                       src={item.image}
@@ -173,7 +181,7 @@ export default async function CompanyPage() {
         <div className="company-screen-body">
           {/* 로고/브랜드컬러 콘텐츠 컨테이너 */}
           <div className="company-screen-inner company-brand-inner">
-            <div className="company-logo-frame">
+            <div className="company-logo-frame" data-company-motion="zoom">
               <Image
                 src="/images/company_profile/thefull_logo.jpg"
                 alt="더채움 로고 이미지"
@@ -184,7 +192,7 @@ export default async function CompanyPage() {
               />
             </div>
 
-            <p className="company-intro-description">
+            <p className="company-intro-description" data-company-motion="up-delay-1">
               {companyBrandDescriptionLines.map((line) => (
                 <span key={line}>
                   {line}
@@ -194,8 +202,14 @@ export default async function CompanyPage() {
             </p>
 
             <div className="company-values-grid">
-              {companyCoreValues.map((item) => (
-                <article key={item.hex} className="company-value-item">
+              {companyCoreValues.map((item, index) => (
+                <article
+                  key={item.hex}
+                  className="company-value-item"
+                  data-company-motion={
+                    index === 0 ? "up-delay-1" : index === 1 ? "up-delay-2" : "up-delay-3"
+                  }
+                >
                   <span className="company-value-dot" style={{ backgroundColor: item.color }} aria-hidden="true" />
                   <strong className="company-value-hex">{item.hex}</strong>
                   <p className="company-value-copy">{item.message}</p>

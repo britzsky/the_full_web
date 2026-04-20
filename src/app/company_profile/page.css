@@ -39,6 +39,90 @@
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 
+/* 회사소개 화면: 상단 영역 진입 애니메이션 키프레임 */
+@keyframes company-enter-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 회사소개 화면: 첫 진입 시 즉시 실행되는 상단 모션 공통 클래스 */
+.company-enter-up {
+  opacity: 0;
+  animation: company-enter-up 0.74s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 회사소개 화면: 상단 영역 스태거 타이밍 */
+.company-enter-delay-1 {
+  animation-delay: 0.12s;
+}
+
+.company-enter-delay-2 {
+  animation-delay: 0.22s;
+}
+
+/* 회사소개 화면: 비전/미션 카드 전용 지연 타이밍 */
+.company-enter-delay-vm-1 {
+  animation-delay: 0.52s;
+}
+
+.company-enter-delay-vm-2 {
+  animation-delay: 0.64s;
+}
+
+/* 회사소개 화면: 스크롤 진입 모션 기본 상태 */
+.company-motion-ready [data-company-motion] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.72s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* 회사소개 화면: 로고는 미세 축소 상태에서 자연스럽게 진입 */
+.company-motion-ready [data-company-motion="zoom"] {
+  transform: scale(0.96);
+}
+
+/* 회사소개 화면: 영역별 스태거 타이밍 */
+.company-motion-ready [data-company-motion="up-delay-1"] {
+  transition-delay: 0.12s;
+}
+
+.company-motion-ready [data-company-motion="up-delay-2"] {
+  transition-delay: 0.2s;
+}
+
+.company-motion-ready [data-company-motion="up-delay-3"] {
+  transition-delay: 0.28s;
+}
+
+/* 회사소개 화면: 뷰포트 진입 후 표시 상태 */
+.company-motion-ready [data-company-motion].company-motion-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* 접근성: 모션 축소 환경에서는 즉시 표시 */
+@media (prefers-reduced-motion: reduce) {
+  .company-enter-up {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .company-motion-ready [data-company-motion] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* 1번 화면: 대표 인사 문구 배치 */
 .company-greeting-inner {
   width: min(100%, 1060px);

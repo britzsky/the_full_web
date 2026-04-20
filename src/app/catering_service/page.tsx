@@ -237,13 +237,14 @@ export default async function CateringServicePage() {
           <div className="catering_screen_inner">
             {/* 노드/연결선 좌표 보드 */}
             <div className="catering_flow_board">
-              {cateringFlowNodes.map((node) => (
+              {cateringFlowNodes.map((node, index) => (
                 <div
                   key={node.text}
                   className={`catering_flow_node ${node.className} ${
                     node.type === "outline" ? "catering_flow_node_outline" : "catering_flow_node_dark"
                   } ${node.tooltip ? "catering_flow_node_hover_anchor" : ""}`}
                   tabIndex={node.tooltip ? 0 : undefined}
+                  style={{ ["--catering-flow-node-order" as any]: index } as CSSProperties}
                 >
                   <span>{node.text}</span>
                   {node.tooltip ? (
@@ -262,25 +263,73 @@ export default async function CateringServicePage() {
               >
                 {/* 데스크톱/태블릿 흐름선 세트 */}
                 <g className="catering_flow_lines_default">
-                  <path d="M13.4 13.5 V67.5" className="catering_flow_path" />
-                  <path d="M13.4 40.5 H44.2" className="catering_flow_path catering_flow_needs_line_default" />
-                  <path d="M13.4 40.5 H44.3" className="catering_flow_path catering_flow_needs_line_small" />
-                  <path d="M44.4 25.5 V56.8" className="catering_flow_path" />
-                  <path d="M44.4 53.5 H68.2" className="catering_flow_path" />
-                  <path d="M68.2 53.5 H88.2" className="catering_flow_path" />
+                  <path
+                    d="M13.4 13.5 V67.5"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 0 } as CSSProperties}
+                  />
+                  <path
+                    d="M13.4 40.5 H44.2"
+                    className="catering_flow_path catering_flow_needs_line_default"
+                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                  />
+                  <path
+                    d="M13.4 40.5 H44.3"
+                    className="catering_flow_path catering_flow_needs_line_small"
+                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                  />
+                  <path
+                    d="M44.4 25.5 V53.5"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 2 } as CSSProperties}
+                  />
+                  <path
+                    d="M44.4 53.5 H68.2"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 3 } as CSSProperties}
+                  />
+                  <path
+                    d="M68.2 53.5 H88.2"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 4 } as CSSProperties}
+                  />
                   {/* 기본 화면: 화살표 */}
                   <g className="catering_flow_arrow_default">
-                    <path d="M44.4 61.2 V77.8" className="catering_flow_path" />
-                    <path d="M44.4 77.8 H88.2 V58.1" className="catering_flow_path" />
-                    <path d="M42.8 63.4 L44.4 60.8 L46 63.4" className="catering_flow_svg_arrowhead" />
+                    <path
+                      d="M88.2 53.5 V77.8 H44.4"
+                      className="catering_flow_path"
+                      style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
+                    />
+                    <path
+                      d="M44.4 61.2 V77.8"
+                      className="catering_flow_path"
+                      style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
+                    />
+                    <path
+                      d="M42.8 63.4 L44.4 60.8 L46 63.4"
+                      className="catering_flow_svg_arrowhead"
+                      style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                    />
                   </g>
 
                   {/* 작은 화면: 화살표 */}
                   <g className="catering_flow_arrow_small">
-                    <path d="M44.4 64.6 V80.4" className="catering_flow_path" />
-                    <path d="M44.4 80.4 H88.2 V60.7" className="catering_flow_path" />
+                    <path
+                      d="M88.2 60.7 V80.4 H44.4"
+                      className="catering_flow_path"
+                      style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
+                    />
+                    <path
+                      d="M44.4 64.6 V80.4"
+                      className="catering_flow_path"
+                      style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
+                    />
                     <g transform="translate(0 3.4)">
-                      <path d="M42.8 63.4 L44.4 60.8 L46 63.4" className="catering_flow_svg_arrowhead" />
+                      <path
+                        d="M42.8 63.4 L44.4 60.8 L46 63.4"
+                        className="catering_flow_svg_arrowhead"
+                        style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                      />
                     </g>
                   </g>
                 </g>
@@ -288,18 +337,50 @@ export default async function CateringServicePage() {
                 {/* 모바일 흐름선 세트 */}
                 <g className="catering_flow_lines_mobile">
                   {/* 상단 3개 분석 노드를 본사/사업장 사이 연결선에 합류 */}
-                  <path d="M17 29 V52" className="catering_flow_path" />
-                  <path d="M50 29 V52" className="catering_flow_path" />
-                  <path d="M83 29 V52" className="catering_flow_path" />
-                  <path d="M17 52 H83" className="catering_flow_path" />
-                  <path d="M50 48 V56" className="catering_flow_path" />
+                  <path
+                    d="M17 29 V52"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 0 } as CSSProperties}
+                  />
+                  <path
+                    d="M50 29 V52"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                  />
+                  <path
+                    d="M83 29 V52"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 2 } as CSSProperties}
+                  />
+                  <path
+                    d="M17 52 H83"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 3 } as CSSProperties}
+                  />
+                  <path
+                    d="M50 48 V56"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 4 } as CSSProperties}
+                  />
 
                   {/* 사업장 메뉴 구성 이후 하단 결과 노드로 순차 연결 */}
-                  <path d="M50 65 V86" className="catering_flow_path" />
+                  <path
+                    d="M50 65 V86"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
+                  />
 
                   {/* 고객 입맛 식단 구성에서 사업장 메뉴 구성으로 피드백 루프 */}
-                  <path d="M50 95 H88 V60 H50" className="catering_flow_path" />
-                  <path d="M52.2 58.6 L49.8 60 L52.2 61.4" className="catering_flow_svg_arrowhead" />
+                  <path
+                    d="M50 95 H88 V60 H50"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
+                  />
+                  <path
+                    d="M52.2 58.6 L49.8 60 L52.2 61.4"
+                    className="catering_flow_svg_arrowhead"
+                    style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                  />
                 </g>
               </svg>
             </div>
@@ -380,7 +461,15 @@ export default async function CateringServicePage() {
                       <p key={`${card.title}-${line}`}>{line}</p>
                     ))}
                   </div>
-                  {index < cateringProcessCards.length - 1 && <span className="catering_process_arrow">→</span>}
+                  {index < cateringProcessCards.length - 1 && (
+                    <Image
+                      src="/images/catering_service/arrow_1.svg"
+                      alt="다음 단계"
+                      width={40}
+                      height={20}
+                      className="catering_process_arrow"
+                    />
+                  )}
                 </article>
               ))}
             </div>
@@ -398,7 +487,7 @@ export default async function CateringServicePage() {
               {cateringEducationStats.map((item) => (
                 <article key={item.label} className="catering_education_stat_item">
                   <span className="catering_education_stat_label">{item.label}</span>
-                  <strong className="catering_education_stat_value">{item.value}</strong>
+                  <strong className="catering_education_stat_value" data-target={item.value}>0%</strong>
                 </article>
               ))}
             </div>

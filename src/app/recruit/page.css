@@ -1,5 +1,29 @@
 ﻿/* ---------------- 채용 ---------------- */
 
+/* 애니메이션 키프레임 */
+@keyframes recruit-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 스냅 섹션이 뷰포트에 들어올 때 애니메이션 트리거 */
+.recruit-screen {
+  /* IntersectionObserver 대신 :target/:has 없이 CSS만으로 처리:
+     snap-section이 활성화될 때 자식에 animation을 재생 */
+}
+
+/* 애니메이션 대상 요소 초기 상태: JS가 inline style로 제어 */
+.recruit-anim {
+  opacity: 0;
+}
+
+
 /* 채용 페이지 배경/스크롤 공통 설정 */
 .recruit-page {
   background-color: #ffffff;

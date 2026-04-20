@@ -1,8 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { ChangeEvent, FormEvent, useState } from "react";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
+import { isCkEditorContentMeaningful } from "./editorTextUtils";
+
+const ContactInquiryCkEditor = dynamic(() => import("@/app/promotion/PromotionCkEditor"), {
+  ssr: false,
+  loading: () => <div className="contact-inquiry-ckeditor-loading">에디터를 불러오는 중입니다.</div>,
+});
 
 // 고객문의 폼 입력값 모델
 type ContactInquiryFormValues = {
@@ -239,12 +246,13 @@ export default function ContactInquiryForm() {
     <form
       className={`contact-inquiry-form${showValidationErrors ? " contact-inquiry-form-show-validation" : ""}`}
       onSubmit={handleSubmit}
+      suppressHydrationWarning
     >
       {/* 기본 문의 항목(2열 그리드) */}
       <div className="contact-form-grid">
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="businessName">
-            업장명
+            업장명<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="businessName"
@@ -258,7 +266,7 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="managerName">
-            담당자 성함
+            담당자 성함<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="managerName"
@@ -272,7 +280,7 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="phonePrefix">
-            연락처
+            연락처<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <div className="contact-form-phone-composite">
             <select
@@ -316,7 +324,7 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="emailLocalPart">
-            이메일
+            이메일<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <div className="contact-form-email-composite">
             <input
@@ -364,7 +372,6 @@ export default function ContactInquiryForm() {
             value={formValues.currentMealPrice}
             onChange={handleValueChange}
             className="contact-form-field"
-            required
           />
         </div>
 
@@ -378,7 +385,6 @@ export default function ContactInquiryForm() {
             value={formValues.desiredMealPrice}
             onChange={handleValueChange}
             className="contact-form-field"
-            required
           />
         </div>
 
@@ -392,13 +398,12 @@ export default function ContactInquiryForm() {
             value={formValues.dailyMealCount}
             onChange={handleValueChange}
             className="contact-form-field"
-            required
           />
         </div>
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="mealType">
-            식사 구분
+            식사 구분<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <select
             id="mealType"
@@ -419,7 +424,7 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="businessType">
-            업장 구분
+            업장 구분<span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <select
             id="businessType"
@@ -455,7 +460,7 @@ export default function ContactInquiryForm() {
 
       <div className="contact-form-block contact-form-block-switching">
         <label className="contact-form-label" htmlFor="title">
-          제목
+          제목<span className="contact-form-required" aria-hidden="true">*</span>
         </label>
         <input
           id="title"
@@ -467,23 +472,33 @@ export default function ContactInquiryForm() {
         />
       </div>
 
-      {/* 문의 내용 textarea 블록 */}
+      {/* 문의 내용 CKEditor 블록 */}
       <div className="contact-form-block">
-        <label className="contact-form-label" htmlFor="inquiryContent">
-          문의 내용
+        <label className="contact-form-label">
+          문의 내용<span className="contact-form-required" aria-hidden="true">*</span>
         </label>
         <textarea
-          id="inquiryContent"
           name="inquiryContent"
-          value={formValues.inquiryContent}
-          onChange={handleValueChange}
-          className="contact-form-textarea"
+          value={isCkEditorContentMeaningful(formValues.inquiryContent) ? "filled" : ""}
+          onChange={() => {}}
+          className="contact-inquiry-ckeditor-proxy"
+          tabIndex={-1}
+          aria-hidden="true"
           required
+        />
+        <ContactInquiryCkEditor
+          value={formValues.inquiryContent}
+          onChange={(next) => setFormValues((prev) => ({ ...prev, inquiryContent: next }))}
+          disabled={isSubmitting || feedbackModal.open}
+          placeholder="문의 내용을 입력해 주세요."
         />
       </div>
 
       {/* 제출 상태/제출 버튼 영역 */}
       <div className="contact-form-actions">
+        <p className="contact-form-required-notice">
+          <span className="contact-form-required" aria-hidden="true">*</span> 표시는 필수값입니다.
+        </p>
         <button type="submit" className="contact-form-submit" disabled={isSubmitting || feedbackModal.open}>
           {isSubmitting ? "제출중..." : "제출하기"}
         </button>

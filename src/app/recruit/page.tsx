@@ -6,6 +6,7 @@ import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
+import RecruitAnimObserver from "./RecruitAnimObserver";
 import "./page.css";
 
 // 채용 페이지 1번 화면(인재상) 카드 데이터
@@ -132,8 +133,8 @@ export default async function RecruitPage() {
           {/* 1번 화면 콘텐츠 폭 컨테이너 */}
           <div className="recruit-screen-inner recruit-talent-inner">
             <div className="recruit-talent-grid">
-              {recruitTalentCards.map((card) => (
-                <article key={card.title} className="recruit-talent-card">
+              {recruitTalentCards.map((card, index) => (
+                <article key={card.title} className={`recruit-talent-card recruit-anim recruit-anim-d${index + 1}`}>
                   <div
                     className={`recruit-talent-badge ${card.badgeClassName}`}
                     style={{ "--recruit-badge-color": card.color } as CSSProperties}
@@ -165,7 +166,7 @@ export default async function RecruitPage() {
           <div className="recruit-screen-inner recruit-process-inner">
             <div className="recruit-process-grid">
               {recruitProcessCards.map((card, index) => (
-                <article key={card.title} className="recruit-process-card">
+                <article key={card.title} className={`recruit-process-card recruit-anim recruit-anim-d${index + 1}`}>
                   <div className={`recruit-process-badge ${card.badgeClassName}`}>
                     <Image
                       src={card.iconSrc}
@@ -193,8 +194,8 @@ export default async function RecruitPage() {
           {/* 3번 화면 콘텐츠 폭 컨테이너 */}
           <div className="recruit-screen-inner recruit-detail-inner">
             <div className="recruit-detail-list">
-              {recruitDetailRows.map((row) => (
-                <article key={row.title} className="recruit-detail-row">
+              {recruitDetailRows.map((row, index) => (
+                <article key={row.title} className={`recruit-detail-row recruit-anim recruit-anim-d${index + 1}`}>
                   <h3 className="recruit-detail-label">{row.title}</h3>
                   <div className="recruit-detail-content">
                     {row.lines.map((line, index) => (
@@ -210,6 +211,7 @@ export default async function RecruitPage() {
         </div>
       </section>
 
+      <RecruitAnimObserver />
       {/* 채용 페이지 공통 상단 이동 버튼 */}
       <ScrollToTopButton targetId="recruit-scroll" />
     </main>
