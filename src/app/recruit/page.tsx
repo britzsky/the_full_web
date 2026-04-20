@@ -164,7 +164,7 @@ export default async function RecruitPage() {
           {/* 2번 화면 콘텐츠 폭 컨테이너 */}
           <div className="recruit-screen-inner recruit-process-inner">
             <div className="recruit-process-grid">
-              {recruitProcessCards.map((card) => (
+              {recruitProcessCards.map((card, index) => (
                 <article key={card.title} className="recruit-process-card">
                   <div className={`recruit-process-badge ${card.badgeClassName}`}>
                     <Image
@@ -175,7 +175,10 @@ export default async function RecruitPage() {
                       className="recruit-process-icon"
                     />
                   </div>
-                  <h3 className="recruit-process-title">{card.title}</h3>
+                  <h3 className="recruit-process-title">
+                    <span className="recruit-process-mobile-order" aria-hidden="true">{index + 1}.</span>
+                    {card.title}
+                  </h3>
                 </article>
               ))}
             </div>

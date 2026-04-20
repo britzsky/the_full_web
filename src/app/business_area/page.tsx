@@ -14,59 +14,56 @@ const businessValueCards = [
   {
     title: "운영 부담 없는 안정적인 급식 관리",
     descriptionHtml:
-      "전문 인력이 상시 운영을 <strong>책임지기 때문에</strong><br />직접 운영 시 발생하는 <strong>인력 관리, 채용, 공백</strong>에<br />대한 부담을 줄일 수 있습니다.",
+      "전문 인력이 상시 운영을 <strong>책임지기 때문에</strong> <br /> 직접 운영 시 발생하는 <strong>인력 관리, 채용, 공백</strong>에 <br /> 대한 부담을 줄일 수 있습니다.",
   },
   {
     title: "전문성과 시스템이 만든 일관된 품질",
     descriptionHtml:
-      "표준화된 운영 시스템을 바탕으로<br /><strong>사업장별 편차 없이</strong> 항상 일정한 <strong>맛과</strong><br />품질의 급식을 제공합니다.",
+      "표준화된 운영 시스템을 바탕으로 <br /> <strong>사업장별 편차 없이</strong> 항상 일정한 <strong>맛과</strong> <br /> 품질의 급식을 제공합니다.",
   },
   {
     title: "전문 영양사가 설계하는 맞춤형 식단",
     descriptionHtml:
-      "사업장 특성과 구성원에 맞춰<br /><strong>전문 영양사가 체계적으로 식단을 설계</strong>하여<br />건강과 만족을 모두 고려한 급식을 제공합니다.",
+      "사업장 특성과 구성원에 맞춰 <br /> <strong>전문 영양사가 체계적으로 식단을 설계</strong>하여 <br /> 건강과 만족을 모두 고려한 급식을 제공합니다.",
   },
   {
     title: "비용 절감과 효율적인 운영",
     descriptionHtml:
-      "계획적인 급식 운영을 통해 직접 운영 시<br />발생하는 <strong>인건비, 관리비</strong> 등 불필요한<br /><strong>운영 비용을 효과적으로 절감</strong>할 수 있습니다.",
+      "계획적인 급식 운영을 통해 직접 운영 시 <br /> 발생하는 <strong>인건비, 관리비</strong> 등 불필요한 <br /> <strong>운영 비용을 효과적으로 절감</strong>할 수 있습니다.",
   },
   {
     title: "본사 영양팀 중심의 신속한 메뉴 개선",
     descriptionHtml:
-      "본사 영양팀을 분리·운영하여 <strong>신메뉴 개발과</strong><br /><strong>고객 니즈 파악</strong>이 신속하게 이루어지며,<br />현장 적용까지 빠르게 연결됩니다.",
+      "본사 영양팀을 분리·운영하여 <strong>신메뉴 개발과</strong> <br /> <strong>고객 니즈 파악</strong>이 신속하게 이루어지며, <br /> 현장 적용까지 빠르게 연결됩니다.",
   },
   {
     title: "엄선된 식자재와 안정적인 공급",
     descriptionHtml:
-      "식자재 유통을 직접 운영하여 <strong>품질 기준을</strong><br /><strong>충족한 식자재만을 엄선</strong>하고, 안정적인 공급으로<br />식사의 완성도를 높입니다.",
+      "식자재 유통을 직접 운영하여 <strong>품질 기준을</strong> <br /> <strong>충족한 식자재만을 엄선</strong>하고, 안정적인 공급으로 <br /> 식사의 완성도를 높입니다.",
   },
 ];
 
-// 모바일에서는 한 화면에 3개 카드씩 노출하기 위해 6개 강점 카드를 2개 그룹으로 나눈다.
-const businessValueMobileGroups = [
-  businessValueCards.slice(0, 3),
-  businessValueCards.slice(3, 6),
-];
+// 모바일에서도 태블릿과 동일하게 6개 카드를 3행 2열로 한 화면에 노출한다.
+const businessValueMobileGroups = [businessValueCards];
 
 // 사업영역 2번 화면(이미지 3분할) 데이터
 const cateringPanels = [
   {
     title: "산업체",
     description:
-      "근로자의 근무 환경과 활동량을 고려한 맞춤형 메뉴와 \n 테마 식단을 합리적인 가격으로 제공하여 \n 만족도 높은 급식 서비스를 실현합니다.",
+      "근로자의 근무 환경과 활동량을 고려한 맞춤형 메뉴와\n테마 식단을 합리적인 가격으로 제공하여\n만족도 높은 급식 서비스를 실현합니다.",
     image: "/images/business_area/business_area_1.jpg",
   },
   {
     title: "학교",
     description:
-      "성장기 학생을 위한 균형 잡힌 영양 관리를 \n 최우선으로 하며, 철저한 위생 관리로 \n 안심할 수 있는 급식을 제공합니다.",
+      "성장기 학생을 위한 균형 잡힌 영양 관리를\n최우선으로 하며, 철저한 위생 관리로\n안심할 수 있는 급식을 제공합니다.",
     image: "/images/business_area/business_area_2.jpg",
   },
   {
     title: "요양원",
     description:
-      "최상의 실버식 메뉴 편성을 기반으로 제철 식재료를 \n 활용한 식단과 다진찬, 갈찬, 죽 등 어르신의 \n 섭취 특성을 고려한 맞춤형 급식을 제공합니다.",
+      "최상의 실버식 메뉴 편성을 기반으로 제철 식재료를\n활용한 식단과 다진찬, 갈찬, 죽 등 어르신의\n섭취 특성을 고려한 맞춤형 급식을 제공합니다.",
     image: "/images/business_area/business_area_3.jpg",
   },
 ];
@@ -92,52 +89,31 @@ const eventGroups = [
 const distributionTopBadges = [
   {
     label: "업무협약",
-    tooltip: "HACCP인증 최대규모 식자재업체들과 업무협약을 통해 매일 새벽 경매시장에서 구입한 신선한 재료를 공급합니다."
+    tooltip: "HACCP인증 최대규모 식자재업체들과 업무협약을 통해 매일 새벽 경매시장에서 구입한 신선한 재료를 공급합니다."
   },
   {
     label: "구매관리",
-    tooltip: "전문 벤더가 엄선한 안전하고 신선한 제품을 확보하고, 전문 협력사의 다양한 구매 경로를 활용해 품질 경쟁력과 가격 경쟁력을 동시에 강화합니다. \n \n 또한 경매 참여를 통해 신선도는 높이고 원가와 운영 비용은 효율적으로 관리합니다."
+    tooltip: "전문 벤더가 엄선한 안전하고 신선한 제품을 확보하고, 전문 협력사의 다양한 구매 경로를 활용해 품질 경쟁력과 가격 경쟁력을 동시에 강화합니다.\n\n또한 경매 참여를 통해 신선도는 높이고 원가와 운영 비용은 효율적으로 관리합니다."
   },
   {
     label: "식자재유통 시스템",
-    tooltip: "대기업 물류사와의 복수 거래 체계를 통해 최상의 식자재를 안정적으로 확보하고, 가격 경쟁력을 지속적으로 강화하고 있습니다. \n \n 다양한 기업과의 협력을 바탕으로 고품질 식자재를 보다 합리적인 가격에 선점하며, 분기별 상품 가격 리뷰를 통해 항상 최적의 품질과 가격을 제시합니다."
+    tooltip: "대기업 물류사와의 복수 거래 체계를 통해 최상의 식자재를 안정적으로 확보하고, 가격 경쟁력을 지속적으로 강화하고 있습니다.\n\n다양한 기업과의 협력을 바탕으로 고품질 식자재를 보다 합리적인 가격에 선점하며, 분기별 상품 가격 리뷰를 통해 항상 최적의 품질과 가격을 제시합니다."
   },
 ];
 // 식자재유통 하단 1~2번 데이터
 const distributionBottomBadgesTop = [
-  "1. 전 분야 HACCP 시스템 준용 ISO 품질인증식품 안전 관련 무사고 2000일",
-  "2. 식자재 구매부터 검수, 출하, 배송 전분야에 HACCP시스템 적용",
+  "1. 전 분야 HACCP 시스템 준용, ISO 품질 인증, 식품 안전 관련 무사고 2000일",
+  "2. 식자재 구매부터 검수, 출하, 배송 전 분야에 HACCP 시스템 적용",
 ];
 // 식자재유통 하단 3~5번 데이터
 const distributionBottomBadgesBottom = [
-  "3. 위해요소를 분석하여 중요관리 Point를 기준으로 통제",
-  "4. ISO 품질관리 시행",
-  "5. 각종 위생설비 구축",
+  "3. 위해 요소를 분석하여 중요 관리 포인트를 기준으로 통제",
+  "4. ISO 품질 관리 시행",
+  "5. 각종 위생 설비 구축",
 ];
 
-// 모바일 식자재유통은 정보량이 많아 2개 화면으로 나누어 상단 핵심 내용을 배치한다.
-const distributionFeatureMobileGroups = [
-  {
-    label: "식자재유통 핵심 01",
-    items: distributionTopBadges.slice(0, 2),
-  },
-  {
-    label: "식자재유통 핵심 02",
-    items: distributionTopBadges.slice(2),
-  },
-];
-
-// 모바일 식자재유통 하단 안전 기준도 2개 화면으로 나눠 한 화면 안에서 읽히게 정리한다.
-const distributionComplianceMobileGroups = [
-  {
-    label: "안전 관리 기준 01",
-    items: [...distributionBottomBadgesTop, distributionBottomBadgesBottom[0]],
-  },
-  {
-    label: "안전 관리 기준 02",
-    items: distributionBottomBadgesBottom.slice(1),
-  },
-];
+// 모바일 식자재유통 하단 안전 기준은 식자재 구매기준 아래에서 1~5번을 한 번에 노출한다.
+const distributionComplianceMobileItems = [...distributionBottomBadgesTop, ...distributionBottomBadgesBottom];
 // 사업영역 페이지 공통 헤더 메뉴 데이터
 const businessHeaderLeftItems: SiteHeaderMenuItem[] = [
   { label: "회사소개", href: "/company_profile" },
@@ -171,12 +147,22 @@ export default async function BusinessPage() {
       <div id="business-overview" className="business-screen-anchor" aria-hidden="true" />
       {/* 1번 화면: 핵심 강점 6개 카드 */}
       <section className="business-screen business-screen-with-header business-desktop-only snap-start relative">
-        {/* 공통 헤더(최상단 1회 노출) */}
-        <SiteHeader
-          leftItems={businessHeaderLeftItems}
-          rightItems={businessHeaderRightItems}
-          lightBackground
-        />
+        {/* 공통 헤더(데스크톱 전용) */}
+        <div className="business-header-desktop-only">
+          <SiteHeader
+            leftItems={businessHeaderLeftItems}
+            rightItems={businessHeaderRightItems}
+            lightBackground
+          />
+        </div>
+        {/* 공통 헤더(태블릿 전용) */}
+        <div className="business-header-tablet-only">
+          <SiteHeader
+            leftItems={businessHeaderLeftItems}
+            rightItems={businessHeaderRightItems}
+            lightBackground
+          />
+        </div>
         {/* 1번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
           {/* 사업 영역 첫 화면 배경 이미지 영역 */}
@@ -207,7 +193,7 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 1번 화면: 핵심 강점 3개씩 2개 화면으로 분리 */}
+      {/* 모바일 1번 화면: 핵심 강점 6개 카드를 3행 2열로 배치 */}
       {businessValueMobileGroups.map((group, index) => (
         <section
           key={`business-mobile-group-${index + 1}`}
@@ -271,43 +257,30 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 2번 화면: 사업군별 패널을 1개씩 분리 */}
-      {cateringPanels.map((panel) => (
-        <section key={panel.title} className="business-screen business-mobile-only snap-start">
-          <div className="business-screen-body">
-            <div className="business-mobile-inner business-mobile-catering-inner">
-              <article className="business-mobile-panel-shell">
-                <div className="business-mobile-panel-orbit">
-                  <div className="business-mobile-panel-media">
-                    <div className="business-mobile-panel-media-frame">
-                      <Image
-                        src={panel.image}
-                        alt={`${panel.title} 급식서비스`}
-                        fill
-                        quality={100}
-                        sizes="100vw"
-                        className="object-cover business-catering-image"
-                      />
-                    </div>
-                    <svg
-                      className="business-mobile-panel-ring"
-                      viewBox="0 0 800 800"
-                      aria-hidden="true"
-                      focusable="false"
-                    >
-                      <ellipse cx="400" cy="400" rx="390" ry="128" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="business-mobile-panel-body">
-                  <h2 className="business-mobile-panel-title">{panel.title}</h2>
-                  <p className="business-mobile-panel-description">{panel.description}</p>
+      {/* 모바일 2번 화면: 데스크톱 3분할을 가로 3단으로 재배치 */}
+      <section className="business-screen business-mobile-only snap-start">
+        <div className="business-screen-body business-mobile-catering-screen-body">
+          <div className="business-mobile-catering-strips">
+            {cateringPanels.map((panel) => (
+              <article key={panel.title} className="business-mobile-catering-strip">
+                <Image
+                  src={panel.image}
+                  alt={`${panel.title} 급식서비스`}
+                  fill
+                  quality={100}
+                  sizes="100vw"
+                  className="object-cover business-catering-image"
+                />
+                <div className="business-panel-dim" />
+                <div className="business-mobile-catering-copy">
+                  <h2 className="business-mobile-catering-title">{panel.title}</h2>
+                  <p className="business-mobile-catering-description">{panel.description}</p>
                 </div>
               </article>
-            </div>
+            ))}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
       {/* 3번 화면: 이벤트 안내 + 토성 고리 */}
       <section id="business-event" className="business-screen business-desktop-only snap-start">
@@ -375,29 +348,46 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 3번 화면: 이벤트 내용을 카드형으로 재배치 */}
+      {/* 모바일 3번 화면: 원형 배지와 토성 고리 중심으로 재배치 */}
       <section className="business-screen business-mobile-only snap-start">
         <SectionTitle>이벤트</SectionTitle>
         <div className="business-screen-body">
           <div className="business-mobile-inner business-mobile-event-inner">
-            <div className="business-mobile-event-visual">
-              <Image
-                src="/images/business_area/business_area_4.jpg"
-                alt="이벤트 이미지"
-                fill
-                quality={100}
-                sizes="100vw"
-                className="object-cover business-event-image"
-              />
-            </div>
-
-            <div className="business-mobile-event-list">
-              {eventGroups.map((group) => (
-                <article key={group.title} className="business-mobile-event-card">
-                  <h3 className="business-mobile-event-title">{group.title}</h3>
+            <div className="business-mobile-event-top">
+              {eventGroups.slice(0, 2).map((group) => (
+                <article key={group.title} className="business-mobile-event-copy">
+                  <h3 className="business-mobile-event-heading">{group.title}</h3>
                   <p className="business-mobile-event-description">{group.description}</p>
                 </article>
               ))}
+            </div>
+
+            <div className="business-mobile-event-visual">
+              <div className="business-event-image-frame">
+                <Image
+                  src="/images/business_area/business_area_4.jpg"
+                  alt="이벤트 이미지"
+                  fill
+                  quality={100}
+                  sizes="100vw"
+                  className="object-cover business-event-image"
+                />
+              </div>
+              <svg
+                className="business-event-ring business-mobile-event-ring"
+                viewBox="0 0 800 800"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <ellipse cx="400" cy="400" rx="390" ry="128" />
+              </svg>
+            </div>
+
+            <div className="business-mobile-event-bottom">
+              <article className="business-mobile-event-copy business-mobile-event-copy-bottom">
+                <h3 className="business-mobile-event-heading">{eventGroups[2].title}</h3>
+                <p className="business-mobile-event-description">{eventGroups[2].description}</p>
+              </article>
             </div>
           </div>
         </div>
@@ -464,57 +454,46 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 4번 화면: 식자재유통 핵심 정보 상단 그룹 */}
-      {distributionFeatureMobileGroups.map((group, index) => (
-        <section key={group.label} className="business-screen business-mobile-only snap-start">
-          {index === 0 && <SectionTitle>식자재유통</SectionTitle>}
-          <div className="business-screen-body">
-            <div className="business-mobile-inner">
-              <p className="business-mobile-kicker">{group.label}</p>
-              <div className="business-mobile-info-grid">
-                {group.items.map((item) => (
-                  <article key={item.label} className="business-mobile-info-card">
-                    <h3 className="business-mobile-info-card-title">{item.label}</h3>
-                    <p className="business-mobile-info-card-copy">{item.tooltip}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      ))}
-
-      {/* 모바일 5번 화면: 식자재 구매기준 */}
+      {/* 모바일 4번 화면: 식자재유통 핵심 정보 */}
       <section className="business-screen business-mobile-only snap-start">
+        <SectionTitle>식자재유통</SectionTitle>
         <div className="business-screen-body">
-          <div className="business-mobile-inner business-mobile-criteria-inner">
-            <p className="business-mobile-kicker">식자재유통 기준</p>
-            <div className="business-mobile-criteria-box">
-              <h3 className="business-distribution-center-title">식자재 구매기준</h3>
-              <p className="business-mobile-criteria-copy">
-                대기업 물류사와의 복수 거래를 기반으로, 대한민국 최대 농산물 유통 허브인
-                <br />
-                가락시장 새벽 경매에 매일 참여하며 축적된 구매 노하우를 바탕으로
-                <br />
-                우수한 품질과 합리적인 가격의 식자재를 선별합니다. 또한 각 지역 농·수산물 시장과의 네트워크를 구축해
-                <br />
-                전국 어디서나 동일한 기준의 안전하고 신선한 식자재를 안정적으로 공급하는
-                <br />
-                더채움만의 유통 시스템을 운영하고 있습니다.
-              </p>
+          <div className="business-mobile-inner">
+            <div className="business-mobile-info-grid">
+              {distributionTopBadges.map((item) => (
+                <article key={item.label} className="business-mobile-info-card">
+                  <h3 className="business-mobile-info-card-title">{item.label}</h3>
+                  <p className="business-mobile-info-card-copy">{item.tooltip}</p>
+                </article>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 모바일 6번 화면: 안전/품질 기준 목록 */}
-      {distributionComplianceMobileGroups.map((group) => (
-        <section key={group.label} className="business-screen business-mobile-only snap-start">
-          <div className="business-screen-body">
-            <div className="business-mobile-inner">
-              <p className="business-mobile-kicker">{group.label}</p>
+      {/* 모바일 5번 화면: 식자재 구매기준 */}
+      <section className="business-screen business-mobile-only snap-start">
+        <div className="business-screen-body business-mobile-criteria-screen-body">
+          <div className="business-mobile-inner business-mobile-criteria-inner">
+            <div className="business-mobile-criteria-box">
+              <h3 className="business-distribution-center-title">식자재 구매기준</h3>
+              <p className="business-mobile-criteria-copy">
+                대기업 물류사와의 복수 거래를 기반으로,
+                <br />
+                대한민국 최대 농산물 유통 허브인
+                <br />
+                가락시장 새벽 경매에 매일 참여하며,
+                <br />
+                축적된 구매 노하우를 바탕으로 우수한 품질과 합리적인 가격의 식자재를 선별합니다.
+                <br />
+                또한 각 지역 농·수산물 시장 네트워크를 통해 전국 어디서나
+                <br />
+                동일한 기준의 안전하고 신선한 식자재를 안정적으로 공급합니다.
+              </p>
+            </div>
+            <div className="business-mobile-criteria-compliance">
               <div className="business-mobile-compliance-list">
-                {group.items.map((item) => (
+                {distributionComplianceMobileItems.map((item) => (
                   <div key={item} className="business-mobile-compliance-item">
                     {item}
                   </div>
@@ -522,8 +501,8 @@ export default async function BusinessPage() {
               </div>
             </div>
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
       {/* 사업영역 페이지 공통 상단 이동 버튼 */}
       <ScrollToTopButton targetId="business-scroll" />

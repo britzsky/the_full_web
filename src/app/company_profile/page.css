@@ -328,6 +328,11 @@
 /* 모바일 구간: 대표 인사 문단 글자 크기 축소 */
   .company-greeting-paragraph {
     font-size: clamp(13px, 3.8vw, 16px);
+    /* 모바일에서는 데이터 내부 개행(\n)을 강제하지 않고 문장 흐름대로 줄바꿈 */
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
 /* 모바일 구간: CEO 서명 행 폭/간격 보정 */
@@ -352,6 +357,15 @@
     margin-top: clamp(0.85rem, 2vh, 1.3rem);
     font-size: clamp(13px, 3.7vw, 16px);
     line-height: 1.5;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
+
+  /* 모바일에서는 로고 아래 소개 문구의 수동 줄바꿈을 해제해 자연스럽게 흐르게 한다 */
+  .company-intro-description br {
+    display: none;
   }
 
   /* 모바일 구간: 비전/미션과 브랜드 구간 간격 축소 */
@@ -389,5 +403,3 @@
     width: min(100%, 540px);
   }
 }
-
-

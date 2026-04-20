@@ -87,9 +87,9 @@ export const metadata: Metadata = {
 const cateringFlowNodes: CateringFlowNode[] = [
   { text: "고객의 특성 분석", type: "dark", className: "catering_flow_node_left_top" },
   { text: "고객의 Needs 파악", type: "dark", className: "catering_flow_node_left_mid" },
-  { text: "기존 운영메뉴 분석", type: "dark", className: "catering_flow_node_left_bottom" },
+  { text: "기존 운영메뉴의 분석", type: "dark", className: "catering_flow_node_left_bottom" },
   { text: "본사 메뉴팀의 메뉴 구성 검증", type: "dark", className: "catering_flow_node_center_top" },
-  { text: "사업장 메뉴구성", type: "dark", className: "catering_flow_node_center_mid" },
+  { text: "사업장 메뉴 구성", type: "dark", className: "catering_flow_node_center_mid" },
   { text: "운영 결과 분석", type: "dark", className: "catering_flow_node_right_mid" },
   { text: "고객 입맛 식단 구성", type: "dark", className: "catering_flow_node_right_end" },
   { text: "현장중심의 메뉴 구성", type: "outline", className: "catering_flow_node_top_right", tooltip: "연령, 성별, 근무 형태 등 각 사업장의 특성을 반영한 맞춤형 메뉴를 제공합니다. \n 3개월 단위 메뉴 분석을 통해 지속적으로 메뉴를 개선하며, 전문 영양사의 일일 모니터링으로 고객의 니즈를 빠르게 반영합니다." },
@@ -260,26 +260,46 @@ export default async function CateringServicePage() {
                 aria-hidden="true"
                 focusable="false"
               >
-                <path d="M13.4 13.5 V67.5" className="catering_flow_path" />
-                <path d="M13.4 40.5 H44.2" className="catering_flow_path catering_flow_needs_line_default" />
-                <path d="M13.4 40.5 H44.3" className="catering_flow_path catering_flow_needs_line_small" />
-                <path d="M44.4 25.5 V56.8" className="catering_flow_path" />
-                <path d="M44.4 53.5 H68.2" className="catering_flow_path" />
-                <path d="M68.2 53.5 H88.2" className="catering_flow_path" />
-                {/* 기본 화면: 화살표 */}
-                <g className="catering_flow_arrow_default">
-                  <path d="M44.4 61.2 V77.8" className="catering_flow_path" />
-                  <path d="M44.4 77.8 H88.2 V58.1" className="catering_flow_path" />
-                  <path d="M42.8 63.4 L44.4 60.8 L46 63.4" className="catering_flow_svg_arrowhead" />
-                </g>
-
-                {/* 작은 화면: 화살표 */}
-                <g className="catering_flow_arrow_small">
-                  <path d="M44.4 64.6 V80.4" className="catering_flow_path" />
-                  <path d="M44.4 80.4 H88.2 V60.7" className="catering_flow_path" />
-                  <g transform="translate(0 3.4)">
+                {/* 데스크톱/태블릿 흐름선 세트 */}
+                <g className="catering_flow_lines_default">
+                  <path d="M13.4 13.5 V67.5" className="catering_flow_path" />
+                  <path d="M13.4 40.5 H44.2" className="catering_flow_path catering_flow_needs_line_default" />
+                  <path d="M13.4 40.5 H44.3" className="catering_flow_path catering_flow_needs_line_small" />
+                  <path d="M44.4 25.5 V56.8" className="catering_flow_path" />
+                  <path d="M44.4 53.5 H68.2" className="catering_flow_path" />
+                  <path d="M68.2 53.5 H88.2" className="catering_flow_path" />
+                  {/* 기본 화면: 화살표 */}
+                  <g className="catering_flow_arrow_default">
+                    <path d="M44.4 61.2 V77.8" className="catering_flow_path" />
+                    <path d="M44.4 77.8 H88.2 V58.1" className="catering_flow_path" />
                     <path d="M42.8 63.4 L44.4 60.8 L46 63.4" className="catering_flow_svg_arrowhead" />
                   </g>
+
+                  {/* 작은 화면: 화살표 */}
+                  <g className="catering_flow_arrow_small">
+                    <path d="M44.4 64.6 V80.4" className="catering_flow_path" />
+                    <path d="M44.4 80.4 H88.2 V60.7" className="catering_flow_path" />
+                    <g transform="translate(0 3.4)">
+                      <path d="M42.8 63.4 L44.4 60.8 L46 63.4" className="catering_flow_svg_arrowhead" />
+                    </g>
+                  </g>
+                </g>
+
+                {/* 모바일 흐름선 세트 */}
+                <g className="catering_flow_lines_mobile">
+                  {/* 상단 3개 분석 노드를 본사/사업장 사이 연결선에 합류 */}
+                  <path d="M17 29 V52" className="catering_flow_path" />
+                  <path d="M50 29 V52" className="catering_flow_path" />
+                  <path d="M83 29 V52" className="catering_flow_path" />
+                  <path d="M17 52 H83" className="catering_flow_path" />
+                  <path d="M50 48 V56" className="catering_flow_path" />
+
+                  {/* 사업장 메뉴 구성 이후 하단 결과 노드로 순차 연결 */}
+                  <path d="M50 65 V86" className="catering_flow_path" />
+
+                  {/* 고객 입맛 식단 구성에서 사업장 메뉴 구성으로 피드백 루프 */}
+                  <path d="M50 95 H88 V60 H50" className="catering_flow_path" />
+                  <path d="M52.2 58.6 L49.8 60 L52.2 61.4" className="catering_flow_svg_arrowhead" />
                 </g>
               </svg>
             </div>

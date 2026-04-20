@@ -38,3 +38,7 @@ yarn-error.log*
 next-env.d.ts
 
 AGENTS.md
+.tmp-shots/
+.tmp-dev.log
+.tmp-edge-business-area/
+CLAUDE.md

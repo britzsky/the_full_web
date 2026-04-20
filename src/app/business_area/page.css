@@ -31,8 +31,17 @@
   display: none;
 }
 
+/* 사업영역 첫 섹션 헤더 표시 제어 */
+.business-header-desktop-only {
+  display: block;
+}
+
+.business-header-tablet-only {
+  display: none;
+}
+
 /* 헤더 포함 첫 화면 상단 여유 */
-/* .business-screen-with-header {
+.business-screen-with-header {
   padding-top: calc(156px + 0.1rem);
 } */
 .business-screen-with-header {
@@ -111,22 +120,25 @@
 }
 
 /* 모바일 1번 화면 카드 목록 */
-.business-mobile-value-grid {
-  display: grid;
-  gap: 0.75rem;
-}
+  .business-mobile-value-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0.75rem;
+  }
 
 /* 모바일 1번 화면 카드 높이 보정 */
 .business-mobile-value-card {
-  min-height: 156px;
+  min-height: 142px;
   gap: 0.8rem;
   border-radius: 1.35rem;
   padding: 0.88rem 0.9rem 0.92rem;
 }
 
-/* 모바일 운영강점 제목은 한 줄 안에서 읽히게 유지한다 */
+/* 모바일 운영강점 제목은 2열 카드 폭에 맞춰 줄바꿈을 허용한다 */
 .business-mobile-value-title {
-  white-space: nowrap;
+  white-space: normal;
+  word-break: keep-all;
   font-size: clamp(14px, 3.9vw, 16px);
   line-height: 1.15;
   letter-spacing: -0.03em;
@@ -154,6 +166,60 @@
 /* 모바일 급식서비스 섹션 정렬 */
 .business-mobile-catering-inner {
   gap: 1.35rem;
+}
+
+/* 모바일 급식서비스 전체 높이 사용 */
+.business-mobile-catering-screen-body {
+  align-items: stretch;
+}
+
+/* 모바일 급식서비스 3단 스트립 */
+.business-mobile-catering-strips {
+  display: grid;
+  width: 100vw;
+  height: 100%;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+/* 모바일 급식서비스 각 행 */
+.business-mobile-catering-strip {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 모바일 급식서비스 텍스트 오버레이 */
+.business-mobile-catering-copy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 0 0.7rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* 모바일 급식서비스 제목 */
+.business-mobile-catering-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.08;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+}
+
+/* 모바일 급식서비스 설명 */
+.business-mobile-catering-description {
+  margin: 0;
+  width: min(100%, 40ch);
+  color: #ffffff;
+  white-space: pre-line;
+  font-size: 12.5px;
+  line-height: 1.58;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
 }
 
 /* 모바일 2번 화면 단일 패널 카드 */
@@ -235,17 +301,67 @@
 
 /* 모바일 이벤트 전용 레이아웃 */
 .business-mobile-event-inner {
+  justify-items: center;
   gap: 1rem;
+}
+
+/* 모바일 이벤트 상단 2개 항목 */
+.business-mobile-event-top {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+/* 모바일 이벤트 하단 1개 항목 */
+.business-mobile-event-bottom {
+  display: grid;
+  width: 100%;
+  justify-items: center;
+}
+
+/* 모바일 이벤트 문구 묶음 */
+.business-mobile-event-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+/* 모바일 이벤트 하단 문구 폭 */
+.business-mobile-event-copy-bottom {
+  width: min(100%, 180px);
+}
+
+/* 모바일 이벤트 제목은 원형 배지 대신 텍스트로 정리한다 */
+.business-mobile-event-heading {
+  margin: 0;
+  color: #111111;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.15;
 }
 
 /* 모바일 이벤트 이미지 */
 .business-mobile-event-visual {
   position: relative;
-  width: min(100%, 332px);
-  aspect-ratio: 4 / 5;
+  width: min(100%, 224px);
+  aspect-ratio: 3 / 4;
   margin: 0 auto;
-  overflow: hidden;
-  border-radius: 999px;
+  overflow: visible;
+}
+
+/* 모바일 이벤트 고리 위치 */
+.business-mobile-event-ring {
+  inset: -58%;
+  width: 216%;
+  height: 216%;
+  transform: translateX(1%) translateY(-1%) rotate(-52deg);
+}
+
+/* 모바일 이벤트 고리 선 두께를 조금 더 강조한다 */
+.business-mobile-event-ring ellipse {
+  stroke-width: 1.5;
 }
 
 /* 모바일 이벤트 카드 목록 */
@@ -273,7 +389,7 @@
 
 /* 모바일 이벤트 카드 설명 */
 .business-mobile-event-description {
-  margin: 0.4rem 0 0;
+  margin: 0;
   color: #222222;
   white-space: pre-line;
   font-size: 12.5px;
@@ -312,9 +428,23 @@
   line-height: 1.56;
 }
 
+/* 모바일 식자재 구매기준 섹션 높이 정렬 */
+.business-mobile-criteria-screen-body {
+  align-items: center;
+}
+
 /* 모바일 식자재 구매기준 본문 영역 */
 .business-mobile-criteria-inner {
-  gap: 1rem;
+  gap: 0.78rem;
+  align-content: center;
+  justify-items: center;
+}
+
+/* 모바일 식자재 구매기준 하단 안전 기준 묶음 */
+.business-mobile-criteria-compliance {
+  width: 100%;
+  display: grid;
+  justify-items: center;
 }
 
 /* 모바일 식자재 구매기준 박스 */
@@ -327,27 +457,37 @@
 
 /* 모바일 식자재 구매기준 설명 */
 .business-mobile-criteria-copy {
-  margin: 0.65rem 0 0;
+  margin: 0.58rem 0 0;
   color: #111111;
   font-size: 12.5px;
-  line-height: 1.6;
+  line-height: 1.52;
   text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 /* 모바일 식자재 안전 기준 목록 */
 .business-mobile-compliance-list {
   display: grid;
-  gap: 0.7rem;
+  width: 100%;
+  gap: 0.56rem;
+  justify-items: center;
 }
 
 /* 모바일 식자재 안전 기준 항목 */
 .business-mobile-compliance-item {
+  width: min(100%, 352px);
   border-radius: 9999px;
   background-color: #dbd8d3;
-  padding: 0.75rem 0.95rem;
+  padding: 0.62rem 0.9rem;
   color: #111111;
   font-size: 12.5px;
-  line-height: 1.4;
+  line-height: 1.42;
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 /* 1번 화면 카드 그리드 */
@@ -363,6 +503,9 @@
   min-height: clamp(154px, 20.3vh, 208px);
   width: 100%;
   margin-inline: 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   border-radius: 1.2rem;
   background-color: var(--business-overview-card-bg-1);
   color: var(--business-value-card-text);
@@ -382,6 +525,12 @@
 .business-value-card:focus-visible {
   transform: translateY(-8px) scale(1.04);
   box-shadow: 0 18px 34px rgba(63, 48, 38, 0.18);
+}
+
+/* 카드 본문 레이어 기준 */
+.business-value-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* 1번 화면 카드별 배경색(1~6 고정 카드 순서 대응) */
@@ -711,7 +860,7 @@
   align-items: center;
   min-height: 168px;
   border: 3px solid #3f3026;
-  border-radius: 2rem;
+  border-radius: 1.2rem;
   background-color: #ffffff;
   padding: 1.8rem 1.25rem 1.25rem;
   box-shadow: 0 22px 40px rgba(63, 48, 38, 0.16);
@@ -854,6 +1003,19 @@
 
 /* 태블릿 */
 @media (max-width: 1024px) {
+  /* 첫 섹션은 헤더 여백 영향으로 시각 중심이 내려가 보여 약간 위로 보정 */
+  .business-screen-with-header .business-screen-body {
+    transform: translateY(clamp(-1.15rem, -2.2vh, -0.75rem));
+  }
+
+  .business-header-desktop-only {
+    display: none;
+  }
+
+  .business-header-tablet-only {
+    display: block;
+  }
+
 /* 사업영역 화면: 사업영역 화면 영역 - .business-value-grid */
   .business-value-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -862,6 +1024,15 @@
 /* 사업영역 화면: 사업영역 화면 영역 - .business-panel-grid */
   .business-panel-grid {
     grid-template-columns: 1fr;
+  }
+
+  .business-panel-copy {
+    padding: 0 clamp(1rem, 4vw, 1.7rem);
+  }
+
+  .business-panel-description {
+    width: min(96%, 43ch);
+    max-width: 43ch;
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-panel-card */
@@ -929,6 +1100,11 @@
 
 /* 모바일 */
 @media (max-width: 768px) {
+  /* 모바일에서는 태블릿보다 조금 더 위로 올려 중앙 정렬 체감을 맞춘다 */
+  .business-screen-with-header .business-screen-body {
+    transform: translateY(clamp(-1.6rem, -3.1vh, -1.05rem));
+  }
+
   .business-desktop-only {
     display: none !important;
   }
@@ -939,7 +1115,7 @@
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-screen-with-header */
   .business-screen-with-header {
-    padding-top: calc(126px + 0.1rem);
+    padding-top: calc(126px + 2.2rem);
   }
 
   .business-mobile-inner {
@@ -949,16 +1125,37 @@
   }
 
   .business-mobile-value-card {
-    min-height: 148px;
+    min-height: 132px;
+    display: grid;
+    grid-template-rows: minmax(calc(1.22em * 2), auto) minmax(0, 1fr);
+    align-content: start;
     gap: 0.72rem;
     padding: 0.82rem 0.82rem 0.88rem;
+    justify-content: flex-start;
   }
 
   .business-mobile-value-title {
+    margin: 0;
+    width: 100%;
+    min-height: calc(1.22em * 2);
+    display: block;
+    text-align: left;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
     font-size: clamp(13px, 3.7vw, 15px);
+    line-height: 1.22;
   }
 
   .business-mobile-value-card .business-value-copy {
+    width: 100%;
+    margin: 0;
+    text-align: left;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
     font-size: 11px;
     line-height: 1.45;
   }
@@ -969,6 +1166,21 @@
 
   .business-mobile-catering-inner {
     gap: 1.2rem;
+  }
+
+  .business-mobile-catering-copy {
+    gap: 0.62rem;
+    padding: 0 0.68rem;
+  }
+
+  .business-mobile-catering-title {
+    font-size: 23px;
+  }
+
+  .business-mobile-catering-description {
+    width: min(100%, 41ch);
+    font-size: 11.5px;
+    line-height: 1.5;
   }
 
   .business-mobile-panel-orbit {
@@ -989,7 +1201,15 @@
   }
 
   .business-mobile-event-visual {
-    width: min(100%, 300px);
+    width: min(100%, 208px);
+  }
+
+  .business-mobile-event-top {
+    gap: 0.6rem;
+  }
+
+  .business-mobile-event-heading {
+    font-size: 14px;
   }
 
   .business-mobile-event-list {
@@ -1002,6 +1222,12 @@
 
   .business-mobile-event-title {
     font-size: 14px;
+  }
+
+  .business-mobile-event-copy .business-mobile-event-description {
+    margin: 0;
+    font-size: 10.8px;
+    line-height: 1.45;
   }
 
   .business-mobile-event-description,
@@ -1031,8 +1257,8 @@
   .business-value-card {
     min-height: 158px;
     border-radius: 1.2rem;
-    justify-content: center;
-    gap: 1.35rem;
+    justify-content: flex-start;
+    gap: 0.72rem;
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-panel-copy */
@@ -1073,6 +1299,18 @@
     width: 132%;
     height: 132%;
     transform: translateX(2%) translateY(2%) rotate(-56deg);
+  }
+
+  /* 모바일 이벤트 섹션 고리만 별도 확장/상향/굵기 보정 */
+  .business-mobile-event-ring {
+    inset: -39%;
+    width: 178%;
+    height: 178%;
+    transform: translateX(1%) translateY(1%) rotate(-52deg);
+  }
+
+  .business-mobile-event-ring ellipse {
+    stroke-width: 1;
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
