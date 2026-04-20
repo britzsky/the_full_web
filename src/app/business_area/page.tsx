@@ -4,6 +4,7 @@ import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHead
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import EmphasisCopy from "@/app/components/Common/EmphasisCopy";
+import BusinessPanelReveal from "./BusinessPanelReveal";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
@@ -178,6 +179,17 @@ export default async function BusinessPage() {
         />
         {/* 1번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
+          {/* 사업 영역 첫 화면 배경 이미지 영역 */}
+          <div className="business-overview-background">
+            <Image
+              src="/images/business_area/business_area_5.png"
+              alt="사업 영역 소개 배경 이미지"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover business-overview-background-image"
+            />
+          </div>
           {/* 1번 화면 콘텐츠 폭 컨테이너 */}
           <div className="business-screen-inner">
             {/* 6개 카드 그리드 */}
@@ -230,6 +242,7 @@ export default async function BusinessPage() {
 
       {/* 2번 화면: 사업군별 3분할 이미지 카드 */}
       <section id="business-catering" className="business-screen business-screen-catering business-desktop-only snap-start">
+        <BusinessPanelReveal sectionId="business-catering" />
         {/* 2번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
           {/* 2번 화면 풀폭 콘텐츠 래퍼 */}
@@ -332,7 +345,24 @@ export default async function BusinessPage() {
                   aria-hidden="true"
                   focusable="false"
                 >
-                  <ellipse cx="400" cy="400" rx="390" ry="128" />
+                  <defs>
+                    <path
+                      id="business-event-ring-text-path"
+                      d="M 790 400 a 390 128 0 1 0 -780 0 a 390 128 0 1 0 780 0"
+                    />
+                  </defs>
+                  <text className="business-event-ring-text">
+                    <textPath href="#business-event-ring-text-path" startOffset="0%">
+                      더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움
+                      <animate
+                        attributeName="startOffset"
+                        from="100%"
+                        to="0%"
+                        dur="18s"
+                        repeatCount="indefinite"
+                      />
+                    </textPath>
+                  </text>
                 </svg>
               </div>
 

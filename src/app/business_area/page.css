@@ -32,20 +32,56 @@
 }
 
 /* 헤더 포함 첫 화면 상단 여유 */
-.business-screen-with-header {
+/* .business-screen-with-header {
   padding-top: calc(156px + 0.1rem);
+} */
+.business-screen-with-header {
+  padding-top: calc(154px + 0.1rem);
 }
 
 /* 본문 세로 중앙 정렬 */
 .business-screen-body {
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   min-height: 0;
+  background-color:rgb(255, 255, 255);
+}
+
+/* 사업 영역 첫 화면 배경 이미지 영역 */
+.business-overview-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 사업 영역 첫 화면 배경 이미지 투명도 */
+.business-overview-background-image {
+  opacity: 0.30;
+}
+
+.business-overview-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgb(194, 255, 217, 0.10);
+}
+
+/* 임시 */
+.main-section-title-wrap {
+  background-color: rgb(255, 255, 255);
+}
+/* 임시 */
+.business-page .site-header-light {
+  background-color: rgb(255, 255, 255);
 }
 
 /* 본문 폭 기준 */
 .business-screen-inner {
+  position: relative;
+  z-index: 1;
   margin: 0 auto;
   width: 100%;
   max-width: 1320px;
@@ -336,6 +372,16 @@
   flex-direction: column;
   justify-content: center;
   gap: clamp(1.52rem, 2.95vh, 2.2rem);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  transform: translateY(0) scale(1);
+  transform-origin: center;
+}
+
+/* 사업 영역 첫 화면 카드에 마우스를 올렸을 때 살짝 떠오르는 효과 */
+.business-value-card:hover,
+.business-value-card:focus-visible {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 18px 34px rgba(63, 48, 38, 0.18);
 }
 
 /* 1번 화면 카드별 배경색(1~6 고정 카드 순서 대응) */
@@ -441,6 +487,30 @@
   position: relative;
   min-height: 100%;
   height: 100%;
+  opacity: 0;
+  transform: translateX(96px);
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.7s ease;
+  will-change: transform, opacity;
+}
+
+/* 급식 서비스 섹션에 진입하면 카드가 오른쪽에서 순서대로 붙도록 처리 */
+#business-catering.is-visible .business-panel-card {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+#business-catering.is-visible .business-panel-card:nth-child(1) {
+  transition-delay: 0.08s;
+}
+
+#business-catering.is-visible .business-panel-card:nth-child(2) {
+  transition-delay: 0.22s;
+}
+
+#business-catering.is-visible .business-panel-card:nth-child(3) {
+  transition-delay: 0.36s;
 }
 
 /* 2번 화면 배경 오버레이 */
@@ -528,20 +598,25 @@
 /* 3번 화면 고리 */
 .business-event-ring {
   position: absolute;
-  inset: -42%;
-  width: 172%;
-  height: 172%;
+  left: 50%;
+  top: 50%;
+  width: 238%;
+  height: 74%;
   z-index: 4;
   pointer-events: none;
-  transform: translateX(2%) translateY(3%) rotate(-52deg);
+  transform: translate(-50%, -50%);
+  transform-origin: center;
 }
 
 /* 3번 화면 고리 선 */
-.business-event-ring ellipse {
-  fill: none;
-  stroke: #3f3026;
-  stroke-width: 0.7;
+.business-event-ring-text {
+  fill: #3f3026;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
+
+/* 이벤트 원형 라인이 사선 축으로 기울어지며 도는 듯한 애니메이션 */
 
 /* 3번 화면 텍스트 박스 */
 .business-event-copy {
@@ -1064,15 +1139,16 @@
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
   .business-event-ring {
-    inset: -43%;
+    left: 50%;
+    top: 50%;
     width: 184%;
     height: 184%;
-    transform: translateX(1%) translateY(2%) rotate(-52deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring ellipse */
-  .business-event-ring ellipse {
-    stroke-width: 0.85;
+  .business-event-ring-text {
+    font-size: 22px;
   }
 
 /* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
@@ -1080,3 +1156,21 @@
     bottom: -2.9rem;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .business-event-image-frame {
+    animation: none;
+  }
+
+  .business-event-ring {
+    animation: none;
+  }
+
+  .business-panel-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 이벤트 이미지를 45도 기울어진 상태로 계속 회전시키는 애니메이션 */
