@@ -14,7 +14,7 @@ const nextConfig = {
       // Tailwind v4 opacity modifier(bg-black/55 등)가 생성하는 rgb(X Y Z / alpha) 구문을
       // cssnano-simple이 파싱하지 못해 빌드가 실패하므로 CSS minimizer를 비활성화합니다.
       config.optimization.minimizer = config.optimization.minimizer.filter(
-        (m) => m.constructor?.name !== "CssMinimizerPlugin"
+        (m) => m.__next_css_remove !== true
       );
     }
 
