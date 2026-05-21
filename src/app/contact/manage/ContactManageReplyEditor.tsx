@@ -520,7 +520,8 @@ export default function ContactManageReplyEditor({
 
     setIsPreviewLoading(true);
     try {
-      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/preview`, {
+      // nginx /api/contact/ 규칙이 Spring Boot로 라우팅되므로 /contact-api/ 경로 사용
+      const response = await fetch(`/contact-api/manage/${inquiryId}/reply/preview`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -624,7 +625,8 @@ export default function ContactManageReplyEditor({
 
     setIsSendingEmail(true);
     try {
-      const response = await fetch(`/api/contact/manage/${inquiryId}/reply/send`, {
+      // nginx /api/contact/ 규칙이 Spring Boot로 라우팅되므로 /contact-api/ 경로 사용
+      const response = await fetch(`/contact-api/manage/${inquiryId}/reply/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
