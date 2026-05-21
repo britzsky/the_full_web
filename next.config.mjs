@@ -13,8 +13,11 @@ const nextConfig = {
     } else {
       // Tailwind v4 opacity modifier(bg-black/55 등)가 생성하는 rgb(X Y Z / alpha) 구문을
       // cssnano-simple이 파싱하지 못해 빌드가 실패하므로 CSS minimizer를 비활성화합니다.
+      // Next.js가 CSS minimizer를 함수 래퍼로 등록하므로 toString()으로 식별합니다.
       config.optimization.minimizer = config.optimization.minimizer.filter(
-        (m) => m.__next_css_remove !== true
+        (m) =>
+          m.__next_css_remove !== true &&
+          !(typeof m === "function" && m.toString().includes("CssMinimizerPlugin"))
       );
     }
 
