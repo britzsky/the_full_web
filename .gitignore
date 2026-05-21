@@ -16,6 +16,7 @@
 
 # 빌드 시 자동 생성 (prebuild 스크립트)
 /public/ckeditor5.css
+/public/ckeditor5.css.map
 
 # production
 /build
