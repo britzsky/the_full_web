@@ -9,7 +9,7 @@ import SectionTitle from "../../Common/SectionTitle";
 import EmphasisCopy from "../../Common/EmphasisCopy";
 import { fetchInstagramFeed } from "../../../lib/instagramClient";
 import { appendContactManageMenu } from "../../Common/headerMenuUtils";
-import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/route";
+import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/types";
 
 // 타입 선언 영역
 // 메인 히어로의 제목/설명/배경이미지 한 세트를 표현

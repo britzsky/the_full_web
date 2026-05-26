@@ -1,19 +1,10 @@
 import { NextResponse } from "next/server";
+import type { NaverBlogPost } from "./types";
 
-// 네이버 블로그 아이디 — RSS URL, 홈 URL 모두 여기서 파생
+// 네이버 블로그 아이디 — RSS URL 여기서 파생
 const BLOG_ID = "thefull1999";
-export const NAVER_BLOG_HOME = `https://blog.naver.com/${BLOG_ID}`;
 // 페이지당 게시글 수
 const PAGE_SIZE = 10;
-
-// 네이버 블로그 API 응답 게시글 타입
-export type NaverBlogPost = {
-  title: string;
-  link: string;
-  paragraphs: string[];
-  pubDate: string;
-  thumbnail: string | null;
-};
 
 // XML 태그에서 CDATA 또는 일반 텍스트 내용을 추출
 function extractCdata(block: string, tag: string): string {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/route";
+import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/types";
 
 // RSS pubDate 문자열을 화면 표시용 YYYY.MM.DD 형식으로 변환
 function formatBlogDate(pubDate: string): string {
