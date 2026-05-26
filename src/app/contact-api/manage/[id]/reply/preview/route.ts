@@ -67,11 +67,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
   const resolvedUserId = await resolveReplyUserId(request, body.userId);
   const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
+  console.log("[preview-debug] userId:", resolvedUserId, "/ hasPassword:", !!resolvedSmtpPassword);
 
   try {
     const smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
       userId: resolvedUserId,
     });
+    console.log("[preview-debug] smtpConfig:", JSON.stringify(smtpRuntimeConfig));
     const preview = buildContactReplyEmailPreview(
       {
         toEmail: inquiry.email,
