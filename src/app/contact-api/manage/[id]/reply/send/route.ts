@@ -70,7 +70,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   }
 
   const resolvedUserId = await resolveReplyUserId(request, body.userId);
-  const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
+  const { password: resolvedSmtpPassword } = await resolveErpMailAuthPassword(resolvedUserId);
 
   try {
     const smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
