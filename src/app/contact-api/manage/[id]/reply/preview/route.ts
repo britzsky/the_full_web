@@ -67,13 +67,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
   const resolvedUserId = await resolveReplyUserId(request, body.userId);
   const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
-  console.log("[preview-debug] userId:", resolvedUserId, "/ hasPassword:", !!resolvedSmtpPassword);
 
+  let smtpRuntimeConfig: Awaited<ReturnType<typeof resolveContactReplyMailRuntimeConfig>> | null = null;
   try {
-    const smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
+    smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
       userId: resolvedUserId,
     });
-    console.log("[preview-debug] smtpConfig:", JSON.stringify(smtpRuntimeConfig));
     const preview = buildContactReplyEmailPreview(
       {
         toEmail: inquiry.email,
@@ -101,6 +100,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "이메일 미리보기 설정 중 오류가 발생했습니다.",
+        _debug: {
+          resolvedUserId,
+          hasSmtpPassword: !!resolvedSmtpPassword,
+          smtpConfig: smtpRuntimeConfig,
+        },
       },
       { status: 500 }
     );
