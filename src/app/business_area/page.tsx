@@ -1,15 +1,20 @@
+// Next.js 이미지·메타데이터
 import Image from "next/image";
 import type { Metadata } from "next";
+// 공통 컴포넌트
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import EmphasisCopy from "@/app/components/Common/EmphasisCopy";
+// 사업영역 전용 컴포넌트
 import BusinessPanelReveal from "./BusinessPanelReveal";
+import EventRing from "./EventRing";
+// 유틸·권한
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import "./page.css";
 
-// 사업영역 1번 화면 카드 데이터
+// 1번 화면 핵심 강점 카드 데이터
 const businessValueCards = [
   {
     title: "운영 부담 없는 안정적인 급식 관리",
@@ -43,10 +48,10 @@ const businessValueCards = [
   },
 ];
 
-// 모바일에서도 태블릿과 동일하게 6개 카드를 3행 2열로 한 화면에 노출한다.
+// 모바일 1번 화면 카드 그룹 — 6개를 한 화면에 3행 2열로 노출
 const businessValueMobileGroups = [businessValueCards];
 
-// 사업영역 2번 화면(이미지 3분할) 데이터
+// 2번 화면 급식서비스 패널 데이터
 const cateringPanels = [
   {
     title: "산업체",
@@ -68,15 +73,15 @@ const cateringPanels = [
   },
 ];
 
-// 사업영역 3번 화면(이벤트) 데이터
+// 3번 화면 이벤트 안내 데이터
 const eventGroups = [
   {
     title: "학교",
-    description: "창립기념일 이벤트, 어린이날 이벤트,\n스승의날 이벤트",
+    description: "창립기념일 이벤트,\n어린이날 이벤트,\n스승의날 이벤트",
   },
   {
     title: "산업체",
-    description: "창립기념일 이벤트, 새해 이벤트,\n크리스마스 이벤트",
+    description: "창립기념일 이벤트,\n새해 이벤트,\n크리스마스 이벤트",
   },
   {
     title: "요양원",
@@ -84,8 +89,7 @@ const eventGroups = [
   },
 ];
 
-// 사업영역 4번 화면(식자재유통) 데이터
-// 식자재유통 상단 3개 항목 데이터
+// 4번 화면 식자재유통 상단 pill 데이터 (호버 툴팁 포함)
 const distributionTopBadges = [
   {
     label: "업무협약",
@@ -100,54 +104,69 @@ const distributionTopBadges = [
     tooltip: "대기업 물류사와의 복수 거래 체계를 통해 최상의 식자재를 안정적으로 확보하고, 가격 경쟁력을 지속적으로 강화하고 있습니다.\n\n다양한 기업과의 협력을 바탕으로 고품질 식자재를 보다 합리적인 가격에 선점하며, 분기별 상품 가격 리뷰를 통해 항상 최적의 품질과 가격을 제시합니다."
   },
 ];
-// 식자재유통 하단 1~2번 데이터
+
+// 4번 화면 안전 기준 칩 데이터 (1~2번)
 const distributionBottomBadgesTop = [
   "1. 전 분야 HACCP 시스템 준용, ISO 품질 인증, 식품 안전 관련 무사고 2000일",
   "2. 식자재 구매부터 검수, 출하, 배송 전 분야에 HACCP 시스템 적용",
 ];
-// 식자재유통 하단 3~5번 데이터
+
+// 4번 화면 안전 기준 칩 데이터 (3~5번)
 const distributionBottomBadgesBottom = [
   "3. 위해 요소를 분석하여 중요 관리 포인트를 기준으로 통제",
   "4. ISO 품질 관리 시행",
   "5. 각종 위생 설비 구축",
 ];
 
-// 모바일 식자재유통 하단 안전 기준은 식자재 구매기준 아래에서 1~5번을 한 번에 노출한다.
+// 모바일 5번 화면 안전 기준 통합 목록 (1~5번 한 화면 노출)
 const distributionComplianceMobileItems = [...distributionBottomBadgesTop, ...distributionBottomBadgesBottom];
-// 사업영역 페이지 공통 헤더 메뉴 데이터
+
+// 헤더 좌측 메뉴
 const businessHeaderLeftItems: SiteHeaderMenuItem[] = [
   { label: "회사소개", href: "/company_profile" },
   { label: "사업영역", href: "#business-overview" },
   { label: "급식서비스", href: "/catering_service" },
 ];
 
-// 사업영역 페이지 공통 헤더 우측 메뉴 데이터
+// 헤더 우측 메뉴 기본값 (고객문의 관리 메뉴는 권한에 따라 추가)
 const businessHeaderRightBaseItems: SiteHeaderMenuItem[] = [
   { label: "홍보", href: "/social" },
   { label: "채용", href: "/recruit" },
   { label: "고객문의", href: "/contact", isCta: true },
 ];
 
-// 사업영역 화면: 페이지 메타데이터
+// 페이지 메타데이터
 export const metadata: Metadata = {
-  // 사업영역 페이지 메타데이터
   title: "(주)더채움 | 사업영역",
 };
 
-// 사업영역 화면: BusinessPage 함수 로직
 export default async function BusinessPage() {
+  // 고객문의 관리 권한 확인 및 헤더 메뉴 구성
   const canManageContact = await getContactManageAccess();
   const businessHeaderRightItems = appendContactManageMenu(businessHeaderRightBaseItems, canManageContact);
 
   return (
     <main
       id="business-scroll"
-      className="business-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-white text-[#111111]"
+      className="business-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#FAFAF8] text-[#111111]"
     >
+      {/* 해시 앵커 */}
       <div id="business-overview" className="business-screen-anchor" aria-hidden="true" />
-      {/* 1번 화면: 핵심 강점 6개 카드 */}
+
+      {/* ─── 1번 화면: 핵심 강점 카드 (데스크톱·태블릿) ─── */}
       <section className="business-screen business-screen-with-header business-desktop-only snap-start relative">
-        {/* 공통 헤더(데스크톱 전용) */}
+        {/* 배경 이미지 — 섹션 전체(헤더 포함) 덮음 */}
+        <div className="business-overview-background">
+          <Image
+            src="/images/business_area/business_area_5.png"
+            alt="사업 영역 소개 배경 이미지"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover business-overview-background-image"
+          />
+        </div>
+        {/* 데스크톱 헤더 */}
         <div className="business-header-desktop-only">
           <SiteHeader
             leftItems={businessHeaderLeftItems}
@@ -155,7 +174,7 @@ export default async function BusinessPage() {
             lightBackground
           />
         </div>
-        {/* 공통 헤더(태블릿 전용) */}
+        {/* 태블릿 헤더 */}
         <div className="business-header-tablet-only">
           <SiteHeader
             leftItems={businessHeaderLeftItems}
@@ -163,22 +182,9 @@ export default async function BusinessPage() {
             lightBackground
           />
         </div>
-        {/* 1번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
-          {/* 사업 영역 첫 화면 배경 이미지 영역 */}
-          <div className="business-overview-background">
-            <Image
-              src="/images/business_area/business_area_5.png"
-              alt="사업 영역 소개 배경 이미지"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover business-overview-background-image"
-            />
-          </div>
-          {/* 1번 화면 콘텐츠 폭 컨테이너 */}
+          {/* 카드 그리드 */}
           <div className="business-screen-inner">
-            {/* 6개 카드 그리드 */}
             <div className="business-value-grid">
               {businessValueCards.map((card, index) => (
                 <article key={card.title} className="business-value-card">
@@ -193,14 +199,23 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 1번 화면: 핵심 강점 6개 카드를 3행 2열로 배치 */}
+      {/* ─── 모바일 1번 화면: 핵심 강점 카드 (3행 2열) ─── */}
       {businessValueMobileGroups.map((group, index) => (
         <section
           key={`business-mobile-group-${index + 1}`}
-          className={`business-screen business-mobile-only snap-start ${
+          className={`business-screen business-mobile-only snap-start relative ${
             index === 0 ? "business-screen-with-header" : ""
           }`}
         >
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+            <Image
+              src="/images/main/main_last_1.png"
+              alt=""
+              fill
+              sizes="100vw"
+              className="page-bg-image"
+            />
+          </div>
           {index === 0 && (
             <SiteHeader
               leftItems={businessHeaderLeftItems}
@@ -208,7 +223,6 @@ export default async function BusinessPage() {
               lightBackground
             />
           )}
-
           <div className="business-screen-body">
             <div className="business-mobile-inner business-mobile-overview-inner">
               <div className="business-mobile-value-grid">
@@ -226,14 +240,11 @@ export default async function BusinessPage() {
         </section>
       ))}
 
-      {/* 2번 화면: 사업군별 3분할 이미지 카드 */}
+      {/* ─── 2번 화면: 급식서비스 3분할 이미지 (데스크톱·태블릿) ─── */}
       <section id="business-catering" className="business-screen business-screen-catering business-desktop-only snap-start">
         <BusinessPanelReveal sectionId="business-catering" />
-        {/* 2번 화면 본문 정렬 래퍼 */}
         <div className="business-screen-body">
-          {/* 2번 화면 풀폭 콘텐츠 래퍼 */}
           <div className="business-panel-fullbleed">
-            {/* 3분할 이미지 그리드 */}
             <div className="business-panel-grid">
               {cateringPanels.map((panel) => (
                 <article key={panel.title} className="business-panel-card">
@@ -257,8 +268,9 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 2번 화면: 데스크톱 3분할을 가로 3단으로 재배치 */}
-      <section className="business-screen business-mobile-only snap-start">
+      {/* ─── 모바일 2번 화면: 급식서비스 세로 3단 스트립 ─── */}
+      <section id="business-mobile-catering" className="business-screen business-mobile-only snap-start">
+        <BusinessPanelReveal sectionId="business-mobile-catering" />
         <div className="business-screen-body business-mobile-catering-screen-body">
           <div className="business-mobile-catering-strips">
             {cateringPanels.map((panel) => (
@@ -282,25 +294,36 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 3번 화면: 이벤트 안내 + 토성 고리 */}
-      <section id="business-event" className="business-screen business-desktop-only snap-start">
-        <SectionTitle>이벤트</SectionTitle>
-        {/* 3번 화면 본문 정렬 래퍼 */}
+      {/* ─── 3번 화면: 이벤트 안내 + 토성 고리 (데스크톱·태블릿) ─── */}
+      <section id="business-event" className="business-screen business-desktop-only snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
+        <BusinessPanelReveal sectionId="business-event" />
+        <SectionTitle englishLabel="Event Planning" wrapClassName="relative z-[1]">이벤트</SectionTitle>
         <div className="business-screen-body">
-          {/* 이벤트 본문 컨테이너 */}
           <div className="business-screen-inner business-event-inner">
-            {/* 이미지/고리/문구 좌표 기준판 */}
+            {/* 이미지·고리·문구 절대 좌표 기준판 */}
             <div className="business-event-orbit">
+              {/* 좌상단 문구 — 학교 */}
               <article className="business-event-copy business-event-copy-11">
                 <h3 className="business-event-title">{eventGroups[0].title}</h3>
                 <p className="business-event-description">{eventGroups[0].description}</p>
               </article>
 
+              {/* 우상단 문구 — 산업체 */}
               <article className="business-event-copy business-event-copy-1">
                 <h3 className="business-event-title">{eventGroups[1].title}</h3>
                 <p className="business-event-description">{eventGroups[1].description}</p>
               </article>
 
+              {/* 중앙 원형 이미지 + 토성 고리 */}
               <div className="business-event-visual">
                 <div className="business-event-image-frame">
                   <Image
@@ -312,33 +335,10 @@ export default async function BusinessPage() {
                     className="object-cover business-event-image"
                   />
                 </div>
-                <svg
-                  className="business-event-ring"
-                  viewBox="0 0 800 800"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <defs>
-                    <path
-                      id="business-event-ring-text-path"
-                      d="M 790 400 a 390 128 0 1 0 -780 0 a 390 128 0 1 0 780 0"
-                    />
-                  </defs>
-                  <text className="business-event-ring-text">
-                    <textPath href="#business-event-ring-text-path" startOffset="0%">
-                      더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움 더채움
-                      <animate
-                        attributeName="startOffset"
-                        from="100%"
-                        to="0%"
-                        dur="18s"
-                        repeatCount="indefinite"
-                      />
-                    </textPath>
-                  </text>
-                </svg>
+                <EventRing />
               </div>
 
+              {/* 하단 문구 — 요양원 */}
               <article className="business-event-copy business-event-copy-6">
                 <h3 className="business-event-title">{eventGroups[2].title}</h3>
                 <p className="business-event-description">{eventGroups[2].description}</p>
@@ -348,11 +348,22 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 3번 화면: 원형 배지와 토성 고리 중심으로 재배치 */}
-      <section className="business-screen business-mobile-only snap-start">
-        <SectionTitle>이벤트</SectionTitle>
+      {/* ─── 모바일 3번 화면: 이벤트 안내 + 토성 고리 ─── */}
+      <section id="business-mobile-event" className="business-screen business-mobile-only snap-start relative">
+        <BusinessPanelReveal sectionId="business-mobile-event" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
+        <SectionTitle englishLabel="Event Planning" wrapClassName="relative z-[1]">이벤트</SectionTitle>
         <div className="business-screen-body">
           <div className="business-mobile-inner business-mobile-event-inner">
+            {/* 상단 문구 2개 — 학교·산업체 */}
             <div className="business-mobile-event-top">
               {eventGroups.slice(0, 2).map((group) => (
                 <article key={group.title} className="business-mobile-event-copy">
@@ -362,6 +373,7 @@ export default async function BusinessPage() {
               ))}
             </div>
 
+            {/* 중앙 원형 이미지 + 토성 고리 */}
             <div className="business-mobile-event-visual">
               <div className="business-event-image-frame">
                 <Image
@@ -373,16 +385,38 @@ export default async function BusinessPage() {
                   className="object-cover business-event-image"
                 />
               </div>
+              {/* 토성 고리 + 스파클 별 궤도 */}
               <svg
                 className="business-event-ring business-mobile-event-ring"
                 viewBox="0 0 800 800"
+                overflow="visible"
                 aria-hidden="true"
                 focusable="false"
               >
-                <ellipse cx="400" cy="400" rx="390" ry="128" />
+                <defs>
+                  {/* 별 궤도 경로 — 베지어 타원 근사 */}
+                  <path
+                    id="event-orbit-path-mobile"
+                    d="M 790 400 C 790 329.3 615.4 272 400 272 C 184.6 272 10 329.3 10 400 C 10 470.7 184.6 528 400 528 C 615.4 528 790 470.7 790 400 Z"
+                  />
+                </defs>
+                {/* 고리 선 */}
+                <ellipse cx="400" cy="400" rx="390" ry="128" fill="none" stroke="#3f3026" strokeWidth="1.5" />
+                {/* 궤도 이동 스파클 별 */}
+                <g>
+                  <path
+                    className="business-event-sparkle"
+                    fill="#3f3026"
+                    d="M0,-14 C3,-3 3,-3 14,0 C3,3 3,3 0,14 C-3,3 -3,3 -14,0 C-3,-3 -3,-3 0,-14 Z"
+                  />
+                  <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+                    <mpath href="#event-orbit-path-mobile" />
+                  </animateMotion>
+                </g>
               </svg>
             </div>
 
+            {/* 하단 문구 — 요양원 */}
             <div className="business-mobile-event-bottom">
               <article className="business-mobile-event-copy business-mobile-event-copy-bottom">
                 <h3 className="business-mobile-event-heading">{eventGroups[2].title}</h3>
@@ -393,17 +427,28 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 4번 화면: 식자재유통 기준/강점 카드 */}
-      <section id="business-distribution" className="business-screen business-desktop-only snap-start">
-        <SectionTitle>식자재유통</SectionTitle>
-        {/* 4번 화면 본문 정렬 래퍼 */}
+      {/* ─── 4번 화면: 식자재유통 (데스크톱·태블릿) ─── */}
+      <section id="business-distribution" className="business-screen business-desktop-only snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
+        <BusinessPanelReveal sectionId="business-distribution" />
+        <SectionTitle englishLabel="Food Distribution" wrapClassName="relative z-[1]">식자재유통</SectionTitle>
         <div className="business-screen-body">
-          {/* 식자재유통 콘텐츠 컨테이너 */}
           <div className="business-screen-inner business-distribution-inner">
+            {/* 상단 pill 3개 — 호버 시 툴팁 표시 */}
             <div className="business-distribution-top">
-              {distributionTopBadges.map((item) => (
-                <div key={item.label} className="business-distribution-pill business-hover-anchor" tabIndex={0}>
-                  <span>{item.label}</span>
+              {distributionTopBadges.map((item, index) => (
+                <div key={item.label} className="business-dist-pill-wrap">
+                  <div className={`business-distribution-pill business-hover-anchor business-dist-anim business-dist-anim-d${index + 1}`} tabIndex={0}>
+                    <span>{item.label}</span>
+                  </div>
                   <div className="business-hover-tooltip" role="tooltip">
                     <p className="business-hover-tooltip-text">{item.tooltip}</p>
                   </div>
@@ -411,7 +456,8 @@ export default async function BusinessPage() {
               ))}
             </div>
 
-            <div className="business-distribution-center">
+            {/* 중앙 식자재 구매기준 박스 */}
+            <div className="business-distribution-center business-dist-anim business-dist-anim-d4">
               <h3 className="business-distribution-center-title">식자재 구매기준</h3>
               <div className="business-distribution-center-box">
                 <p>
@@ -428,12 +474,13 @@ export default async function BusinessPage() {
               </div>
             </div>
 
+            {/* 하단 안전 기준 칩 목록 (1~5번) — 칩별 순서 등장 */}
             <div className="business-distribution-bottom">
               <div className="business-distribution-bottom-top">
                 {distributionBottomBadgesTop.map((item, index) => (
                   <div
                     key={item}
-                    className={`business-distribution-chip business-distribution-chip-top business-distribution-chip-top-${index + 1}`}
+                    className={`business-distribution-chip business-distribution-chip-top business-distribution-chip-top-${index + 1} business-dist-anim business-dist-chip-d${index + 1}`}
                   >
                     {item}
                   </div>
@@ -443,7 +490,7 @@ export default async function BusinessPage() {
                 {distributionBottomBadgesBottom.map((item, index) => (
                   <div
                     key={item}
-                    className={`business-distribution-chip business-distribution-chip-bottom business-distribution-chip-bottom-${index + 1}`}
+                    className={`business-distribution-chip business-distribution-chip-bottom business-distribution-chip-bottom-${index + 1} business-dist-anim business-dist-chip-d${index + 3}`}
                   >
                     {item}
                   </div>
@@ -454,9 +501,19 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 4번 화면: 식자재유통 핵심 정보 */}
-      <section className="business-screen business-mobile-only snap-start">
-        <SectionTitle>식자재유통</SectionTitle>
+      {/* ─── 모바일 4번 화면: 식자재유통 핵심 정보 카드 ─── */}
+      <section id="business-mobile-distribution" className="business-screen business-mobile-only snap-start relative">
+        <BusinessPanelReveal sectionId="business-mobile-distribution" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
+        <SectionTitle englishLabel="Food Distribution" wrapClassName="relative z-[1]">식자재유통</SectionTitle>
         <div className="business-screen-body">
           <div className="business-mobile-inner">
             <div className="business-mobile-info-grid">
@@ -471,10 +528,21 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 모바일 5번 화면: 식자재 구매기준 */}
-      <section className="business-screen business-mobile-only snap-start">
+      {/* ─── 모바일 5번 화면: 식자재 구매기준 + 안전 기준 목록 ─── */}
+      <section id="business-mobile-criteria" className="business-screen business-mobile-only snap-start relative">
+        <BusinessPanelReveal sectionId="business-mobile-criteria" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
         <div className="business-screen-body business-mobile-criteria-screen-body">
           <div className="business-mobile-inner business-mobile-criteria-inner">
+            {/* 구매기준 본문 */}
             <div className="business-mobile-criteria-box">
               <h3 className="business-distribution-center-title">식자재 구매기준</h3>
               <p className="business-mobile-criteria-copy">
@@ -491,6 +559,7 @@ export default async function BusinessPage() {
                 동일한 기준의 안전하고 신선한 식자재를 안정적으로 공급합니다.
               </p>
             </div>
+            {/* 안전 기준 칩 목록 */}
             <div className="business-mobile-criteria-compliance">
               <div className="business-mobile-compliance-list">
                 {distributionComplianceMobileItems.map((item) => (
@@ -504,7 +573,7 @@ export default async function BusinessPage() {
         </div>
       </section>
 
-      {/* 사업영역 페이지 공통 상단 이동 버튼 */}
+      {/* 상단 이동 버튼 */}
       <ScrollToTopButton targetId="business-scroll" />
     </main>
   );

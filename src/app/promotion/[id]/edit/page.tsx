@@ -74,7 +74,7 @@ export default async function PromotionEditPage({ params }: PromotionEditPagePro
   return (
     <main
       id="promotion_edit_scroll"
-      className="promotion-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="promotion-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       <section className="promotion-header-shell relative">
         <SiteHeader

@@ -1,20 +1,19 @@
 /* 문의관리 페이지 스크롤/배경 기본 설정 */
 .contact-manage-page {
   scrollbar-gutter: stable;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 문의관리 상단 헤더 영역 높이 */
 .contact-manage-header-shell {
-  min-height: 156px;
-  background-color: #ffffff;
+  min-height: var(--site-header-height);
+  background-color: #FAFAF8;
 }
 
 /* 문의관리 목록/상세 섹션 공통 여백 */
 .contact-manage-section,
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-detail-section */
 .contact-manage-detail-section {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: clamp(2.1rem, 4.6vh, 3rem) 0 clamp(3.5rem, 7vh, 5rem);
 }
 
@@ -62,7 +61,7 @@
   min-height: 46px;
   border: 1px solid rgba(39, 29, 19, 0.25);
   border-radius: 9999px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
   line-height: 1;
@@ -71,6 +70,19 @@
 /* 문의관리 목록 검색 구분 선택 박스 */
 .contact-manage-search-select {
   width: 164px;
+}
+
+/* 문의관리 목록 검색 구분 선택 박스 내부 텍스트 왼쪽 정렬 */
+.contact-manage-search-select .common-search-select-trigger-label {
+  justify-content: flex-start;
+  text-align: left;
+  padding-left: 2.25rem;
+}
+
+/* 문의관리 목록 검색 구분 드롭다운 옵션 왼쪽 정렬 */
+.contact-manage-search-select .common-search-select-option {
+  text-align: left;
+  padding-left: 2.25rem;
 }
 
 /* 문의관리 목록 검색어 입력 박스 */
@@ -109,7 +121,7 @@
 
 /* 중간/작은 데스크톱에서는 확장을 끄고 화면 안에서 모두 보이게 처리 */
 @media (max-width: 1536px) {
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table-wrap */
+  /* 1536px 이하에서 테이블 블리드 확장 해제 */
   .contact-manage-table-wrap {
     --manage-table-bleed: 0rem;
   }
@@ -156,51 +168,50 @@
   vertical-align: middle;
 }
 
-/* 문의관리 테이블 컬럼 너비 지정 */
+/* 문의관리 테이블 번호 컬럼 너비 */
 .contact-manage-table th:nth-child(1),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(1) */
 .contact-manage-table td:nth-child(1) {
   width: 6%;
 }
 
+/* 문의관리 테이블 제목 컬럼 너비 */
 .contact-manage-table th:nth-child(2),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(2) */
 .contact-manage-table td:nth-child(2) {
   width: 30%;
 }
 
+/* 문의관리 테이블 업장명 컬럼 너비 */
 .contact-manage-table th:nth-child(3),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(3) */
 .contact-manage-table td:nth-child(3) {
   width: 13%;
 }
 
+/* 문의관리 테이블 담당자 컬럼 너비 */
 .contact-manage-table th:nth-child(4),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(4) */
 .contact-manage-table td:nth-child(4) {
   width: 9%;
 }
 
+/* 문의관리 테이블 연락처 컬럼 너비 */
 .contact-manage-table th:nth-child(5),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(5) */
 .contact-manage-table td:nth-child(5) {
   width: 12%;
 }
 
+/* 문의관리 테이블 이메일 컬럼 너비 */
 .contact-manage-table th:nth-child(6),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(6) */
 .contact-manage-table td:nth-child(6) {
   width: 15%;
 }
 
+/* 문의관리 테이블 등록일 컬럼 너비 */
 .contact-manage-table th:nth-child(7),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(7) */
 .contact-manage-table td:nth-child(7) {
   width: 7%;
 }
 
+/* 문의관리 테이블 답변여부 컬럼 너비 */
 .contact-manage-table th:nth-child(8),
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table td:nth-child(8) */
 .contact-manage-table td:nth-child(8) {
   width: 8%;
 }
@@ -334,7 +345,7 @@
   min-height: 40px;
   border: 1px solid rgba(39, 29, 19, 0.2);
   border-radius: 9999px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: 14px;
   font-weight: 700;
@@ -472,7 +483,7 @@
   min-height: 42px;
   padding: 0.58rem 1.1rem;
   border: 1px solid rgba(39, 29, 19, 0.28);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
   font-weight: 700;
@@ -600,7 +611,7 @@
   width: min(100%, 360px);
   min-height: 42px;
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: 0.5rem 0.75rem;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
@@ -612,7 +623,7 @@
   min-height: 42px;
   margin: 0;
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: 0.5rem 0.75rem;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
@@ -636,7 +647,7 @@
   min-height: clamp(140px, 20vh, 220px);
   resize: vertical;
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: 0.62rem 0.75rem;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
@@ -674,7 +685,7 @@
 .contact-manage-reply-ckeditor-loading {
   min-height: clamp(140px, 20vh, 220px);
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #7b7b7b;
   font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
@@ -686,14 +697,14 @@
 /* 문의관리 상세 답변 CKEditor 툴바 스타일 */
 .contact-manage-reply-ckeditor-shell .ck.ck-toolbar {
   border-color: rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   font-family: var(--font-family-base);
 }
 
 /* 문의관리 상세 답변 CKEditor 본문 편집영역 스타일 */
 .contact-manage-reply-ckeditor-shell .ck-editor__editable_inline {
   min-height: clamp(140px, 20vh, 220px);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
@@ -744,7 +755,7 @@
 
 /* 문의관리 상세 답변 아웃라인 버튼(문의삭제) */
 .contact-manage-reply-button-outline {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   margin-right: auto;
 }
@@ -758,14 +769,14 @@
 
 /* 문의관리 상세 답변 미리보기 버튼 스타일 */
 .contact-manage-reply-button-preview {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   border-color: rgba(39, 29, 19, 0.44);
   color: #111111;
 }
 
 /* 문의관리 상세 좌우 보기 토글 버튼 스타일 */
 .contact-manage-reply-button-toggle {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   border-color: rgba(39, 29, 19, 0.34);
   color: #111111;
 }
@@ -793,7 +804,7 @@
 .contact-manage-preview-modal {
   width: min(100%, 1260px);
   height: min(100%, 88svh);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   border: 1px solid rgba(39, 29, 19, 0.18);
   border-radius: 18px;
   box-shadow: 0 20px 44px rgba(39, 29, 19, 0.26);
@@ -832,7 +843,7 @@
   min-height: 36px;
   min-width: 74px;
   border: 1px solid rgba(39, 29, 19, 0.26);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: 14px;
   font-weight: 700;
@@ -888,7 +899,7 @@
 .contact-manage-preview-envelope-card {
   align-self: start;
   border: 1px solid rgba(39, 29, 19, 0.14);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   border-radius: 12px;
   padding: 0.85rem 0.9rem;
 }
@@ -969,17 +980,17 @@
     justify-content: flex-start;
   }
 
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table-wrap */
+  /* 문의관리 목록 테이블 블리드 확장 해제 */
   .contact-manage-table-wrap {
     --manage-table-bleed: 0rem;
   }
 
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-table */
+  /* 문의관리 목록 테이블 최소 너비 초기화 */
   .contact-manage-table {
     min-width: 0;
   }
 
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-detail-row */
+  /* 문의관리 상세 라벨/값 그리드 라벨 폭 축소 */
   .contact-manage-detail-row {
     grid-template-columns: 140px minmax(0, 1fr);
   }
@@ -1002,8 +1013,8 @@
 
 /* 모바일 구간 헤더 높이 보정 */
 @media (max-width: 768px) {
-/* 문의관리 화면: 문의관리 화면 영역 - .contact-manage-header-shell */
+  /* 모바일 헤더 높이를 모바일 전용 변수로 전환 */
   .contact-manage-header-shell {
-    min-height: 126px;
+    min-height: var(--site-header-height-mobile);
   }
 }

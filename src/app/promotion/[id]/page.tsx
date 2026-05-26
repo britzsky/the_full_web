@@ -71,7 +71,7 @@ export default async function PromotionDetailPage({ params }: PromotionDetailPag
     // 홍보 상세 화면: 페이지 스크롤 루트
     <main
       id="promotion_detail_scroll"
-      className="promotion-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="promotion-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       {/* 홍보 상세 상단은 배경이미지 없이 공통 헤더만 노출 */}
       <section className="promotion-header-shell relative">

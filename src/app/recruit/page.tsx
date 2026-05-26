@@ -117,7 +117,7 @@ export default async function RecruitPage() {
   return (
     <main
       id="recruit-scroll"
-      className="recruit-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-white text-[#111111]"
+      className="recruit-page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#FAFAF8] text-[#111111]"
     >
       {/* 1번 화면: 더채움 인재상 */}
       <section id="recruit-talent" className="recruit-screen recruit-screen-with-header snap-start relative">
@@ -158,7 +158,7 @@ export default async function RecruitPage() {
 
       {/* 2번 화면: 채용절차 */}
       <section id="recruit-process" className="recruit-screen snap-start">
-        <SectionTitle>채용절차</SectionTitle>
+        <SectionTitle englishLabel="Hiring Process">채용절차</SectionTitle>
 
         {/* 2번 화면 본문 정렬 래퍼 */}
         <div className="recruit-screen-body">

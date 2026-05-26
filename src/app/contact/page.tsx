@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SectionTitle from "@/app/components/Common/SectionTitle";
 import ContactInquiryForm from "./ContactInquiryForm";
 import { ContactQualitySectionAnimated, ContactFormSectionAnimated } from "./ContactAnimatedSections";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
@@ -65,7 +66,7 @@ export default async function ContactPage() {
     <main
       id="contact_scroll"
       // 고객문의 화면: 다른 탭과 동일한 헤더 메뉴 좌표 기준(고정 높이 + 내부 스크롤) 유지
-      className="contact-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="contact-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       <section className="contact-hero relative">
         <Image
@@ -90,8 +91,8 @@ export default async function ContactPage() {
       </section>
 
       <ContactQualitySectionAnimated>
+        <SectionTitle englishLabel="Quality Standards">식자재 품질관리 기준</SectionTitle>
         <div className="contact-content-wrap">
-          <h2 className="contact-section-title">식자재 품질관리 기준</h2>
           <div className="contact-quality-table-wrap">
             <div className="contact-quality-table">
               <div className="contact-quality-cell contact-quality-cell-head">구매기준</div>
@@ -108,10 +109,10 @@ export default async function ContactPage() {
       </ContactQualitySectionAnimated>
 
       <ContactFormSectionAnimated>
+        <SectionTitle englishLabel="Customer Inquiry">고객문의</SectionTitle>
         <div className="contact-content-wrap">
-          <h2 className="contact-section-title contact-form-title">고객문의</h2>
           <p className="contact-form-notice">
-            고객님이 보내주신 문의에 대한 답변은 등록시 기재하신 이메일로 발송됩니다.
+            <span style={{ color: "#ED7736" }}>고객만족</span>을 넘어 <span style={{ color: "#19A8F4" }}>고객감동</span>으로<br className="contact-form-notice-break" /><span style={{ color: "#7EB14B" }}>가득찬 밥상</span>을 약속드립니다.
           </p>
           <hr className="contact-form-divider" />
           <ContactInquiryForm />

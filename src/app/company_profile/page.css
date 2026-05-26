@@ -2,7 +2,22 @@
 
 /* 회사소개 페이지 공통 변수/배경 */
 .company-page {
-  background-color: #ffffff;
+  --company-bg-offset: clamp(1.8rem, 3vh, 2.4rem);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+    url("/images/company_profile/company_profile_bg_1.png");
+  background-position:
+    center var(--company-bg-offset),
+    center var(--company-bg-offset);
+  background-size:
+    100% auto,
+    100% auto;
+  background-attachment:
+    local,
+    local;
+  background-repeat:
+    no-repeat,
+    no-repeat;
   scrollbar-gutter: stable;
   padding-bottom: calc(clamp(3.2rem, 5.2vh, 4.2rem) + env(safe-area-inset-bottom));
 }
@@ -10,19 +25,24 @@
 /* 회사소개 페이지 헤더 톤 */
 .company-page .site-header-light {
   border-bottom: none;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
+  background-color: transparent;
+  backdrop-filter: none;
 }
 
 /* 회사소개 각 화면 공통 레이아웃 */
 .company-screen {
   padding: clamp(2.2rem, 4.5vh, 3.8rem) 0;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 /* 첫 화면은 헤더 높이만큼 본문 시작 위치 확보 */
 .company-screen-with-header {
-  padding-top: calc(156px + clamp(3.2rem, 5.8vh, 4.1rem));
+  padding-top: calc(var(--site-header-height) + clamp(3.2rem, 5.8vh, 4.1rem));
+  background: linear-gradient(#fcf9f8, #fcf9f8) top / 100% var(--company-bg-offset) no-repeat;
+}
+
+#company-greeting {
+  min-height: 100svh;
 }
 
 /* 회사소개 본문 수직 중앙 배치 */
@@ -84,9 +104,10 @@
   will-change: opacity, transform;
 }
 
-/* 회사소개 화면: 로고는 미세 축소 상태에서 자연스럽게 진입 */
+/* 회사소개 화면: 로고 카드는 미세 축소 상태에서 자연스럽게 진입 */
 .company-motion-ready [data-company-motion="zoom"] {
   transform: scale(0.96);
+  transition-delay: 0.08s;
 }
 
 /* 회사소개 화면: 영역별 스태거 타이밍 */
@@ -132,7 +153,7 @@
 /* 1번 화면: 대표 인사 이미지/문구 2열 레이아웃 */
 .company-greeting-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
   align-items: center;
   justify-content: center;
   gap: clamp(1.2rem, 2.4vw, 3.4rem);
@@ -166,9 +187,15 @@
   margin: 0;
   color: #333333;
   white-space: pre-line;
-  font-size: clamp(14px, 0.95vw, 17px);
+  font-size: clamp(15px, 0.95vw, 18px);
   line-height: 1.65;
   letter-spacing: -0.01em;
+}
+
+/* 1번 화면: 타이핑되는 첫 문장 — 1사이즈 크게 + 굵게 */
+.company-greeting-paragraph--typing {
+  font-size: clamp(17px, 1.1vw, 20px);
+  font-weight: 700;
 }
 
 /* 1번 화면: CEO 텍스트 + 서명 이미지 정렬 */
@@ -218,7 +245,7 @@
 
 /* 2번 화면과 3번 화면 사이 간격 */
 #company-brand {
-  margin-top: clamp(1.2rem, 2.8vh, 2.2rem);
+  margin-top: clamp(-1.5rem, -2.5vh, -0.5rem);
 }
 
 /* 2번 화면 비전/미션 2열 배치 */
@@ -263,7 +290,7 @@
   width: min(100%, 470px);
   color: #3f3f3f;
   white-space: pre-line;
-  font-size: clamp(14px, 0.95vw, 17px);
+  font-size: clamp(15px, 0.95vw, 18px);
   line-height: 1.6;
   letter-spacing: -0.01em;
 }
@@ -271,17 +298,210 @@
 /* 3번 화면: 로고/브랜드 컬러 영역 */
 .company-brand-inner {
   transform: none;
-  gap: clamp(2.6rem, 4.8vh, 3.8rem);
+  gap: clamp(1.2rem, 2.4vh, 1.8rem);
+  width: min(100% - 2rem, 1120px);
+}
+
+.company-brand-card {
+  --company-brand-line-width: 2px;
+  width: 100%;
+  padding: clamp(0.2rem, 0.5vh, 0.5rem) clamp(1.4rem, 3vw, 2.4rem) clamp(3rem, 5.5vh, 4.2rem);
+  border: 1px solid rgba(191, 184, 166, 0.48);
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.62);
+}
+
+/* 3번 화면: 로고 좌우 아이콘 장식 영역 */
+.company-logo-decor-wrap {
+  position: relative;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  min-height: clamp(148px, 15vw, 188px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3번 화면: 로고 주변 아이콘 묶음 */
+.company-logo-decor-list {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: clamp(255px, 26vw, 325px);
+  height: 80%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 3번 화면: 로고 왼쪽 장식 묶음 */
+.company-logo-decor-list-left {
+  left: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+/* 3번 화면: 로고 오른쪽 장식 묶음 */
+.company-logo-decor-list-right {
+  right: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+/* 3번 화면: 아이콘과 점선 연결선 */
+.company-logo-decor-item {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 1.3vw, 1.2rem);
+  transform: translateY(-50%);
+}
+
+/* 3번 화면: 상단 장식 아이템 위치 */
+.company-logo-decor-item:nth-child(1) {
+  top: 26%;
+}
+
+/* 3번 화면: 하단 장식 아이템 위치 */
+.company-logo-decor-item:nth-child(2) {
+  top: 74%;
+}
+
+/* 3번 화면: 왼쪽 장식 아이템 정렬 */
+.company-logo-decor-list-left .company-logo-decor-item {
+  left: 0;
+  flex-direction: row-reverse;
+}
+
+/* 3번 화면: 오른쪽 장식 아이템 정렬 */
+.company-logo-decor-list-right .company-logo-decor-item {
+  right: 0;
+}
+
+/* 3번 화면: 로고 장식 점선 */
+.company-logo-decor-line {
+  display: block;
+  flex: 1;
+  margin-inline: 0;
+  border-top: var(--company-brand-line-width) dotted rgba(118, 123, 112, 0.48);
+}
+
+/* 3번 화면: 오른쪽 장식 점선 여백 */
+.company-logo-decor-list-right .company-logo-decor-line {
+  margin-inline: 0;
+}
+
+/* 3번 화면: 로고 장식 아이콘 원형 영역 */
+.company-logo-decor-circle {
+  display: inline-flex;
+  width: clamp(70px, 6.4vw, 86px);
+  height: clamp(70px, 6.4vw, 86px);
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: #59853c;
+}
+
+/* 3번 화면: 로고 장식 아이콘 이미지 */
+.company-logo-decor-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 3번 화면: 잎사귀 아이콘 크기 보정 */
+.company-logo-decor-icon-leaf {
+  transform: scale(1.13);
+}
+
+/* 3번 화면: 로고 좌우 괄호형 곡선 장식 */
+.company-logo-arc-wrap {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: clamp(66px, 6.2vw, 82px);
+  height: 82%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 3번 화면: 로고 왼쪽 곡선 장식 */
+.company-logo-arc-wrap-left {
+  left: calc(clamp(1.6rem, 3vw, 2.6rem) + clamp(203px, 21.1vw, 260px));
+}
+
+/* 3번 화면: 로고 오른쪽 곡선 장식 */
+.company-logo-arc-wrap-right {
+  right: calc(clamp(1.6rem, 3vw, 2.6rem) + clamp(203px, 21.1vw, 260px));
+}
+
+/* 3번 화면: 로고 곡선 장식 SVG */
+.company-logo-arc-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* 3번 화면: 로고 곡선 장식 선 */
+.company-logo-arc-path {
+  fill: none;
+  stroke: rgba(118, 123, 112, 0.4);
+  stroke-width: var(--company-brand-line-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 3번 화면: 로고 곡선 장식 안쪽 선 */
+.company-logo-arc-path-inner {
+  stroke: rgba(118, 123, 112, 0.34);
+}
+
+/* 3번 화면: 로고 곡선 장식 점 */
+.company-logo-arc-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background-color: #8f9687;
+  transform: translate(-50%, -50%);
+}
+
+/* 3번 화면: 상단 곡선 장식 점 색상 */
+.company-logo-arc-dot-top {
+  background-color: #59853c;
+}
+
+/* 3번 화면: 하단 곡선 장식 점 색상 */
+.company-logo-arc-dot-bottom {
+  background-color: #df8929;
+}
+
+/* 3번 화면: 왼쪽 곡선 장식 점 가로 위치 */
+.company-logo-arc-wrap-left .company-logo-arc-dot {
+  left: 74%;
+}
+
+/* 3번 화면: 오른쪽 곡선 장식 점 가로 위치 */
+.company-logo-arc-wrap-right .company-logo-arc-dot {
+  left: 26%;
+}
+
+/* 3번 화면: 상단 곡선 장식 점 세로 위치 */
+.company-logo-arc-dot-top {
+  top: 26%;
+}
+
+/* 3번 화면: 하단 곡선 장식 점 세로 위치 */
+.company-logo-arc-dot-bottom {
+  top: 74%;
 }
 
 /* 3번 화면 로고 이미지 프레임 */
 .company-logo-frame {
   position: relative;
-  width: min(100%, 380px);
-  margin: 0 auto;
+  width: min(100%, 310px);
   aspect-ratio: 64 / 33;
-  background-color: #ffffff;
+  background-color: transparent;
   overflow: hidden;
+  z-index: 2;
 }
 
 /* 3번 화면 로고 이미지 표시 */
@@ -293,14 +513,20 @@
 
 /* 3번 화면 회사 소개 문구 */
 .company-intro-description {
-  margin: clamp(1.1rem, 2.4vh, 1.9rem) auto 0;
+  margin: clamp(0.7rem, 1.5vh, 1.1rem) auto 0;
   width: min(100%, 1120px);
   color: #444444;
   text-align: center;
   white-space: pre-line;
-  font-size: clamp(14px, 0.95vw, 17px);
+  font-size: clamp(15px, 0.95vw, 18px);
   line-height: 1.58;
   letter-spacing: -0.01em;
+}
+
+/* 3번 화면 브랜드 소개 강조 문구 */
+.company-intro-highlight {
+  color: #4f7f35;
+  font-weight: 700;
 }
 
 /* 3번 화면 핵심가치 3열 배치 */
@@ -309,7 +535,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1.6rem, 3.2vw, 3rem);
   align-items: start;
-  margin-top: clamp(1.2rem, 2.8vh, 2.2rem);
+  margin-top: clamp(2.4rem, 5vh, 4rem);
 }
 
 /* 3번 화면 각 핵심가치 카드 */
@@ -339,9 +565,55 @@
 .company-value-copy {
   margin: 0;
   color: #444444;
-  font-size: clamp(14px, 0.95vw, 17px);
+  font-size: clamp(15px, 0.95vw, 18px);
   line-height: 1.5;
   letter-spacing: -0.01em;
+}
+
+/* 1번 화면: 타이핑 커서 */
+.greeting-typing-cursor {
+  display: inline-block;
+  margin-left: 1px;
+  color: #2f2f2f;
+  font-weight: 400;
+  transition: opacity 0.08s;
+}
+
+/* 1번 화면: 나머지 문단/서명 슬라이드업 기본 상태 */
+.greeting-slide-up {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.52s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.greeting-slide-up--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* 1번 화면: 서명 이미지 페이드인 */
+.greeting-sign-in {
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+
+.greeting-sign-in--visible {
+  opacity: 1;
+}
+
+/* 접근성: 모션 축소 환경 */
+@media (prefers-reduced-motion: reduce) {
+  .greeting-slide-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .greeting-sign-in {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 /* 태블릿/작은 데스크톱: 회사소개 본문 스케일 보정 */
@@ -377,15 +649,21 @@
 
   /* 태블릿 구간: 비전/미션과 브랜드 구간 간격 축소 */
   #company-brand {
-    margin-top: clamp(0.9rem, 2.2vh, 1.6rem);
+    margin-top: clamp(-1.2rem, -2vh, -0.4rem);
   }
 }
 
 /* 모바일 구간: 핵심가치도 1열로 단순화 */
 @media (max-width: 768px) {
+/* 모바일 구간: 페이지 배경 이미지 숨김 */
+  .company-page {
+    background-image: none;
+  }
+
 /* 모바일 구간: 첫 화면 헤더 오프셋 축소 */
   .company-screen-with-header {
-    padding-top: calc(126px + 2.2rem);
+    padding-top: calc(var(--site-header-height-mobile) + 2.2rem);
+    background-size: 100% var(--company-bg-offset);
   }
 
 /* 모바일 구간: 대표 인사 영역 1열 전환 */
@@ -411,12 +689,17 @@
 
 /* 모바일 구간: 대표 인사 문단 글자 크기 축소 */
   .company-greeting-paragraph {
-    font-size: clamp(13px, 3.8vw, 16px);
+    font-size: clamp(14px, 3.8vw, 17px);
     /* 모바일에서는 데이터 내부 개행(\n)을 강제하지 않고 문장 흐름대로 줄바꿈 */
     white-space: normal;
     word-break: keep-all;
     overflow-wrap: break-word;
     text-wrap: pretty;
+  }
+
+  /* 모바일 구간: 타이핑 첫 문장 크기 */
+  .company-greeting-paragraph--typing {
+    font-size: clamp(16px, 4.3vw, 19px);
   }
 
 /* 모바일 구간: CEO 서명 행 폭/간격 보정 */
@@ -436,35 +719,60 @@
     gap: 1.5rem;
   }
 
+/* 모바일 구간: 브랜드 소개 카드 하단 여백 축소 */
+  .company-brand-card {
+    padding-bottom: clamp(1.4rem, 3vh, 2rem);
+  }
+
 /* 모바일 구간: 브랜드 소개 문구 가독성 보정 */
   .company-intro-description {
     margin-top: clamp(0.85rem, 2vh, 1.3rem);
-    font-size: clamp(13px, 3.7vw, 16px);
+    font-size: clamp(14px, 3.7vw, 17px);
     line-height: 1.5;
+    text-align: left;
     white-space: normal;
     word-break: keep-all;
     overflow-wrap: break-word;
     text-wrap: pretty;
   }
 
-  /* 모바일에서는 로고 아래 소개 문구의 수동 줄바꿈을 해제해 자연스럽게 흐르게 한다 */
+  /* 모바일 구간: 브랜드 소개 문장 단위 줄바꿈 */
+  .company-intro-description > span {
+    display: block;
+  }
+
+  /* 모바일 구간: 브랜드 소개 문단 간격 */
+  .company-intro-description > span:not(:last-child) {
+    margin-bottom: 1.5em;
+  }
+
+  /* 모바일 구간: 브랜드 소개 수동 줄바꿈 숨김 */
   .company-intro-description br {
+    display: none;
+  }
+
+  /* 모바일 구간: 로고 좌우 장식은 본문 폭을 확보하기 위해 숨김 */
+  .company-logo-decor-wrap {
+    min-height: auto;
+  }
+
+  .company-logo-decor-list {
     display: none;
   }
 
   /* 모바일 구간: 비전/미션과 브랜드 구간 간격 축소 */
   #company-brand {
-    margin-top: clamp(0.8rem, 1.8vh, 1.3rem);
+    margin-top: clamp(-1rem, -1.8vh, -0.3rem);
   }
 
 /* 모바일 구간: 핵심가치 문구 가독성 보정 */
   .company-value-copy {
-    font-size: clamp(13px, 3.7vw, 16px);
+    font-size: clamp(14px, 3.7vw, 17px);
   }
 
 /* 모바일 구간: 비전/미션 문구 가독성 보정 */
   .company-vm-copy {
-    font-size: clamp(13px, 3.7vw, 16px);
+    font-size: clamp(14px, 3.7vw, 17px);
   }
 
   /* 모바일 구간: 비전/미션 아이콘 크기 축소 */

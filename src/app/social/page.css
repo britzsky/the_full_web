@@ -2,16 +2,9 @@
 .social-page {
   position: relative;
   scrollbar-gutter: stable;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
-/* 소셜 페이지 헤더·본문을 묶는 배경 이미지 래퍼 */
-.social-bg-wrapper {
-  background-image: linear-gradient(rgba(255,255,255,0.90), rgba(255,255,255,0.90)), url("/images/social/social_background2.png");
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-}
 
 /* 소셜 페이지 헤더 영역 사이트 헤더 스타일 재정의 */
 .social-page .site-header-light {
@@ -22,28 +15,27 @@
 
 /* 소셜 페이지 헤더 영역 최소 높이 및 배경 투명 처리 */
 .social-header-shell {
-  min-height: 156px;
+  min-height: var(--site-header-height);
   background-color: transparent;
 }
 
 /* 소셜 페이지 갤러리 본문 섹션 배경 투명 처리 */
 .social-list-section {
   background-color: transparent;
-  min-height: calc(100svh - 156px);
-  padding: clamp(1.85rem, 4.1vh, 2.5rem) 0 clamp(3.5rem, 7vh, 5rem);
+  min-height: calc(100svh - var(--site-header-height));
+  padding: clamp(0.4rem, 1.5vh, 0.85rem) 0 clamp(3.5rem, 7vh, 5rem);
 }
 
 /* 소셜 페이지 갤러리 본문 최대 너비 및 좌우 여백 컨테이너 */
 .social-content-wrap {
-  width: min(100%, 1320px);
+  width: min(100%, 1480px);
   margin: 0 auto;
-  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-inline: clamp(1rem, 4vw, 3rem);
 }
 
 /* 소셜 페이지 갤러리 카드 목록 래퍼 */
 .social-gallery-shell {
   width: 100%;
-  margin: 0 auto;
 }
 
 /* 소셜 페이지 갤러리 섹션 타이틀 행 */
@@ -51,10 +43,237 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: var(--section-title-pad-left-mobile);
-  padding-right: 0.75rem;
-  margin-bottom: clamp(1.2rem, 2.3vh, 1.7rem);
+  position: relative;
+  padding-left: clamp(1rem, 4vw, 2rem);
+  padding-right: clamp(1rem, 4vw, 2rem);
+  margin-bottom: clamp(1rem, 2vh, 1.4rem);
+}
+
+/* SNS 탭 행: 화면 전체 너비 기준 가운데 정렬 */
+.social-sns-tabs-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(2rem, 4vh, 2.8rem);
+}
+
+/* 네이버 블로그 게시글 목록 컨테이너 */
+.naver-blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+/* 네이버 블로그 행: 썸네일·내용 가로 배치 */
+.naver-blog-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1.5rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid #e8e3dc;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s;
+}
+
+/* 네이버 블로그 첫 번째 행 상단 구분선 */
+.naver-blog-row:first-child {
+  border-top: 1px solid #e8e3dc;
+}
+
+/* 네이버 블로그 행 호버 배경 */
+.naver-blog-row:hover {
+  background-color: #faf8f5;
+}
+
+/* 네이버 블로그 썸네일 래퍼: 고정 크기 좌측 고정 */
+.naver-blog-thumb-wrap {
+  flex-shrink: 0;
+  width: 320px;
+  height: 240px;
+  overflow: hidden;
+  background-color: #ede9e3;
+}
+
+/* 네이버 블로그 썸네일 스켈레톤 */
+.naver-blog-thumb-wrap--skeleton {
+  background-color: #ece9e4;
+  animation: naver-blog-pulse 1.4s ease-in-out infinite;
+}
+
+/* 네이버 블로그 썸네일 이미지 */
+.naver-blog-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* 네이버 블로그 행 호버 시 썸네일 확대 */
+.naver-blog-row:hover .naver-blog-thumb {
+  transform: scale(1.04);
+}
+
+/* 네이버 블로그 썸네일 대체 영역: 이미지 없을 때 표시 */
+.naver-blog-thumb-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c5bdb3;
+}
+
+/* 네이버 블로그 썸네일 대체 아이콘 크기 */
+.naver-blog-thumb-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* 네이버 블로그 내용 영역: 이미지 높이와 동일하게 고정, 자세히 보기 절대 위치 기준점 */
+.naver-blog-content {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 0.1rem;
+  padding-bottom: 2rem;
+}
+
+/* 네이버 블로그 본문 단락 래퍼: 남은 공간 채우며 넘치는 내용 잘림 */
+.naver-blog-desc-wrap {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* 네이버 블로그 날짜 */
+.naver-blog-date {
+  font-size: 0.85rem;
+  color: #a09890;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  margin-bottom: 0.7rem;
+}
+
+/* 네이버 블로그 제목 */
+.naver-blog-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.45;
+  margin: 0 0 1rem;
+  text-underline-offset: 3px;
+}
+
+/* 네이버 블로그 본문 단락 */
+.naver-blog-desc {
+  font-size: 1rem;
+  color: #6b6460;
+  line-height: 1.65;
+  margin: 0 0 0.15rem;
+}
+
+.naver-blog-desc:last-child {
+  margin-bottom: 0;
+}
+
+/* 네이버 블로그 자세히 보기 문구: 내용 영역 하단에 절대 위치 고정 */
+.naver-blog-more {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 0.85rem;
+  color: #a09890;
+  letter-spacing: 0.04em;
+}
+
+/* 네이버 블로그 스켈레톤 행: 로딩 중 포인터 비활성 */
+.naver-blog-row--skeleton {
+  pointer-events: none;
+}
+
+/* 네이버 블로그 스켈레톤 제목 막대 */
+.naver-blog-skeleton-title {
+  height: 1rem;
+  width: 70%;
+  background-color: #ece9e4;
+  border-radius: 2px;
+  animation: naver-blog-pulse 1.4s ease-in-out infinite;
+}
+
+/* 네이버 블로그 스켈레톤 날짜 막대 */
+.naver-blog-skeleton-date {
+  height: 0.72rem;
+  width: 30%;
+  background-color: #ece9e4;
+  border-radius: 2px;
+  animation: naver-blog-pulse 1.4s ease-in-out infinite;
+}
+
+/* 네이버 블로그 스켈레톤 본문 막대 */
+.naver-blog-skeleton-desc {
+  height: 0.83rem;
+  width: 90%;
+  background-color: #ece9e4;
+  border-radius: 2px;
+  animation: naver-blog-pulse 1.4s ease-in-out infinite;
+}
+
+/* 네이버 블로그 스켈레톤 펄스 애니메이션 */
+@keyframes naver-blog-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 모바일 구간 (600px 이하): 네이버 블로그 썸네일·텍스트 축소 */
+@media (max-width: 600px) {
+  .naver-blog-row {
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.2rem 0;
+  }
+
+  .naver-blog-thumb-wrap {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .naver-blog-content {
+    height: auto;
+    min-height: 0;
+    padding-bottom: 1.7rem;
+  }
+
+  .naver-blog-desc-wrap {
+    max-height: 5.8rem;
+  }
+
+  .naver-blog-title {
+    font-size: 0.95rem;
+  }
+
+  .naver-blog-desc {
+    font-size: 0.86rem;
+  }
+}
+
+/* 네이버 블로그 빈 상태 안내 */
+.social-naver-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20rem;
+  color: #aaa;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
 }
 
 /* 소셜 페이지 섹션 타이틀 텍스트 */
@@ -67,40 +286,39 @@
   transform: translateY(-0.38rem);
 }
 
-/* 소셜 페이지 인스타그램 카드 6장 그리드 */
-.social-card-grid {
-  width: 100%;
-  justify-content: center;
-  column-gap: clamp(0.55rem, 0.9vw, 0.95rem);
-  row-gap: clamp(0.7rem, 1.5vh, 0.95rem);
+/* 소셜 페이지: SectionTitle 컴포넌트 래퍼 위치 재정의 */
+.social-list-header .main-section-title-wrap {
+  margin: 0;
+  padding: 0;
 }
 
-/* 소셜 페이지 개별 갤러리 카드 최대 너비 */
-.social-gallery-card {
-  max-width: clamp(146px, 15vw, 198px) !important;
+/* 소셜 페이지 인스타그램 카드 4열 그리드 */
+.social-card-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, clamp(260px, 17vw, 330px)));
+  justify-content: center;
+  gap: clamp(1.75rem, 3vw, 3rem);
+  margin: 0 auto;
 }
+
+.social-gallery-card {
+  aspect-ratio: 1 / 1;
+  max-width: none !important;
+  width: 100% !important;
+}
+
 
 /* 대형 데스크톱·중형 데스크톱 구간 (1024px~1440px) */
 @media (max-width: 1440px) and (min-width: 1024px) {
   /* 소셜 페이지 갤러리 본문 섹션 상단 여백 축소 */
   .social-list-section {
-    padding-top: clamp(0.7rem, 1.5vh, 1rem);
+    padding-top: clamp(0.2rem, 0.4vh, 0.35rem);
   }
 
-  /* 소셜 페이지 타이틀 행 하단 여백 축소 */
+  /* 소셜 페이지 타이틀 행 하단 여백 보정 */
   .social-list-header {
-    margin-bottom: clamp(0.55rem, 1vh, 0.8rem);
-  }
-
-  /* 소셜 페이지 카드 그리드 열·행 간격 축소 */
-  .social-card-grid {
-    column-gap: clamp(0.4rem, 0.6vw, 0.62rem);
-    row-gap: clamp(0.45rem, 0.95vh, 0.7rem);
-  }
-
-  /* 소셜 페이지 개별 카드 최대 너비 축소 */
-  .social-gallery-card {
-    max-width: clamp(126px, 12.6vw, 164px) !important;
+    margin-bottom: clamp(1.2rem, 2.5vh, 1.7rem);
   }
 }
 
@@ -110,6 +328,7 @@
   .social-list-header {
     padding-left: var(--section-title-pad-left-desktop);
     padding-right: 1.5rem;
+    gap: clamp(1rem, 2vh, 1.5rem);
   }
 }
 
@@ -117,13 +336,8 @@
 @media (max-width: 1023px) {
   /* 소셜 페이지 갤러리 본문 섹션 상단 여백 태블릿 보정 */
   .social-list-section {
-    min-height: calc(100svh - 156px);
+    min-height: calc(100svh - var(--site-header-height));
     padding-top: clamp(1.45rem, 3.2vh, 1.8rem);
-  }
-
-  /* 소셜 페이지 개별 카드 최대 너비 태블릿 보정 */
-  .social-gallery-card {
-    max-width: clamp(142px, 29vw, 182px) !important;
   }
 }
 
@@ -131,29 +345,41 @@
 @media (max-width: 768px) {
   /* 소셜 페이지 헤더 영역 최소 높이 모바일 축소 */
   .social-header-shell {
-    min-height: 126px;
+    min-height: var(--site-header-height-mobile);
   }
 
   /* 소셜 페이지 갤러리 본문 섹션 높이·여백 모바일 보정 */
   .social-list-section {
-    min-height: calc(100svh - 126px);
-    padding-top: clamp(1.2rem, 3.2vh, 1.5rem);
+    min-height: calc(100svh - var(--site-header-height-mobile));
+    padding-top: clamp(0.25rem, 0.8vh, 0.5rem);
     padding-bottom: clamp(2.2rem, 6vh, 3rem);
   }
 
-  /* 소셜 페이지 타이틀 행 하단 여백 모바일 고정 */
+  /* 소셜 페이지 타이틀 행 하단 여백 모바일 보정 */
   .social-list-header {
-    margin-bottom: 0.85rem;
+    margin-bottom: 1.85rem;
   }
 
-  /* 소셜 페이지 카드 그리드 열·행 간격 모바일 고정 */
+  /* 모바일 SNS 탭 폰트/아이콘 크기 축소 */
+  .social-sns-tab {
+    font-size: 0.7rem;
+    gap: 0.25rem;
+  }
+
+  .social-sns-tab-logo {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* 소셜 페이지 카드 그리드 간격 모바일 고정 */
   .social-card-grid {
-    column-gap: 0.5rem;
-    row-gap: 0.6rem;
+    grid-template-columns: repeat(2, minmax(0, clamp(160px, 42vw, 300px)));
+    gap: 1rem;
   }
+}
 
-  /* 소셜 페이지 개별 카드 최대 너비 모바일 보정 */
-  .social-gallery-card {
-    max-width: clamp(132px, 42vw, 166px) !important;
+@media (max-width: 480px) {
+  .social-card-grid {
+    grid-template-columns: 1fr;
   }
 }

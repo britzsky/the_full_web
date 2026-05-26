@@ -28,7 +28,13 @@ type InstagramGraphMediaItem = {
 };
 
 // 인스타그램 API: 데이터 조회 로직
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const requestedLimit = Number(searchParams.get("limit"));
+  const mediaLimit = Number.isFinite(requestedLimit)
+    ? Math.max(1, Math.min(Math.trunc(requestedLimit), 24))
+    : 8;
+  const afterCursor = searchParams.get("after")?.trim() ?? "";
 // 인스타그램 API: accessToken 정의
   const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
   if (!accessToken) {
@@ -75,7 +81,8 @@ export async function GET() {
   const mediaUrl =
     `https://graph.instagram.com/${meData.id}/media` +
     "?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,children{id,media_type,media_url,thumbnail_url}" +
-    "&limit=8" +
+    `&limit=${mediaLimit}` +
+    (afterCursor ? `&after=${encodeURIComponent(afterCursor)}` : "") +
     `&access_token=${accessToken}`;
 
 // 인스타그램 API: mediaResponse 정의
@@ -90,7 +97,10 @@ export async function GET() {
   }
 
 // 인스타그램 API: mediaData 정의
-  const mediaData = (await mediaResponse.json()) as { data?: InstagramGraphMediaItem[] };
+  const mediaData = (await mediaResponse.json()) as {
+    data?: InstagramGraphMediaItem[];
+    paging?: unknown;
+  };
 
   // 캐러셀 게시물의 자식 미디어를 프론트 모달에서 그대로 사용할 수 있게 정규화
   const normalizedMedia = (Array.isArray(mediaData.data) ? mediaData.data : []).map((item) => ({
@@ -111,5 +121,5 @@ export async function GET() {
       })),
   }));
 
-  return NextResponse.json({ user: meData, data: normalizedMedia });
+  return NextResponse.json({ user: meData, data: normalizedMedia, paging: mediaData.paging });
 }

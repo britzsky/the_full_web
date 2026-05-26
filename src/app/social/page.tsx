@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
-import SocialMediaClient from "./SocialMediaClient";
+import SocialTabsClient from "./SocialTabsClient";
 import "./page.css";
 
 // 소셜 페이지 메타데이터
@@ -33,7 +34,7 @@ export default async function SocialPage() {
   return (
     <main
       id="social_scroll"
-      className="social-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="social-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       <div className="social-bg-wrapper">
         <section className="social-header-shell relative">
@@ -45,15 +46,9 @@ export default async function SocialPage() {
         </section>
 
         <section id="social_list" className="social-list-section">
-        <div className="social-list-header">
-          <h2 className="social-section-title">Social</h2>
-        </div>
-
-        <div className="social-content-wrap">
-          <div className="social-gallery-shell">
-            <SocialMediaClient />
-          </div>
-        </div>
+          <Suspense>
+            <SocialTabsClient />
+          </Suspense>
         </section>
       </div>
 

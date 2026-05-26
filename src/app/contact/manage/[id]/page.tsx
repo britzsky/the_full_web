@@ -74,7 +74,7 @@ export default async function ContactManageDetailPage({ params }: ContactManageD
   return (
     <main
       id="contact_manage_detail_scroll"
-      className="contact-manage-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="contact-manage-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       {/* 문의관리 상세 페이지 공통 헤더 영역 */}
       <section className="contact-manage-header-shell relative">

@@ -1,5 +1,5 @@
 import "server-only";
-import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
+import { isCkEditorContentMeaningful, toPlainTextFromCkEditor } from "@/app/contact/editorTextUtils";
 
 // 고객문의 등록 API로 전달하는 입력 모델
 type ContactInquiryInput = {
@@ -376,7 +376,7 @@ const toRecord = (row?: ContactApiInquiry): ContactInquiryRecord | null => {
     mealType: normalizeText(row.mealType),
     businessType: normalizeText(row.businessType),
     switchingReason: normalizeText(row.switchingReason),
-    inquiryContent: normalizeText(row.inquiryContent),
+    inquiryContent: toPlainTextFromCkEditor(normalizeText(row.inquiryContent)),
     source: normalizeText(row.source),
     erpSyncTarget: normalizeText(row.erpSyncTarget),
     updatedAt: normalizeText(row.updatedAt),
@@ -420,7 +420,7 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
     businessType: normalizeText(input.businessType),
     switchingReason: normalizeText(input.switchingReason),
     title: normalizeText(input.title),
-    inquiryContent: normalizeText(input.inquiryContent),
+    inquiryContent: toPlainTextFromCkEditor(normalizeText(input.inquiryContent)),
     submittedAt: toKstDateTimeString(input.submittedAt),
     source: normalizeText(input.source) || "contact-page",
     erpSyncTarget: normalizeText(input.erpSyncTarget) || "ERP_INQUIRY_V1",

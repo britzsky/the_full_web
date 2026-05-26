@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 // 공통 404 화면: 함수 로직
 export default function NotFoundPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-10 text-center">
-      <div className="w-full max-w-[560px] rounded-2xl border border-[#e7e2da] bg-white p-8 md:p-12">
+    <main className="flex min-h-screen items-center justify-center bg-[#FAFAF8] px-6 py-10 text-center">
+      <div className="w-full max-w-[560px] rounded-2xl border border-[#e7e2da] bg-[#FAFAF8] p-8 md:p-12">
         <div className="relative mx-auto h-[58px] w-[210px] md:h-[72px] md:w-[260px]">
           <TheFullLogo
             variant="default"

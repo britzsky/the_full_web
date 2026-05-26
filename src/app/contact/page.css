@@ -3,7 +3,7 @@
 .contact-page {
   scrollbar-gutter: stable;
   overflow-anchor: none;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero */
@@ -56,12 +56,27 @@
 /* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-line */
 .contact-hero-line {
   display: block;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: contact-hero-rise-in 1.02s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards;
 }
 
 /* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-hero-line-sub */
 .contact-hero-line-sub {
   margin-top: clamp(0.78rem, 1.7vh, 1.15rem);
-  transform: translateY(6px);
+  animation-delay: 0.34s;
+}
+
+/* 고객문의 화면: 히어로 문구 하단 진입 애니메이션 */
+@keyframes contact-hero-rise-in {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-content-wrap */
@@ -73,7 +88,7 @@
 
 /* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-section */
 .contact-quality-section {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: clamp(3.2rem, 7.2vh, 5.2rem) 0 clamp(2.2rem, 4.4vh, 3rem);
 }
 
@@ -81,6 +96,12 @@
 .contact-quality-section .contact-content-wrap {
   width: min(100%, 1180px);
   padding-inline: clamp(0.85rem, 2.8vw, 1.55rem);
+}
+
+/* 고객문의 화면: SectionTitle 아래 본문과의 간격 */
+.contact-quality-section .main-section-title-wrap,
+.contact-form-section .main-section-title-wrap {
+  margin-bottom: clamp(1.8rem, 3.3vh, 2.4rem);
 }
 
 /* 고객문의 화면: 고객문의 화면 스타일 영역 - .contact-section-title */
@@ -91,6 +112,7 @@
   font-weight: 700;
   line-height: 1.2;
 }
+
 
 /* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-table-wrap */
 .contact-quality-table-wrap {
@@ -106,7 +128,7 @@
   min-width: 720px;
   grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
   gap: 4px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 고객문의 화면: 식자재 품질관리 표 - .contact-quality-row-group */
@@ -163,7 +185,7 @@
 
 /* 고객문의 화면: 고객문의 입력 폼 - .contact-form-section */
 .contact-form-section {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: clamp(2.8rem, 6vh, 4rem) 0 clamp(3.6rem, 8vh, 5.6rem);
 }
 
@@ -180,7 +202,7 @@
   width: min(100%, 900px);
   margin: clamp(1rem, 2.2vh, 1.4rem) auto 0;
   color: #111111;
-  font-size: clamp(16px, 1.08vw, 18px);
+  font-size: clamp(20px, 1.42vw, 22px);
   font-weight: 600;
   line-height: 1.42;
 }
@@ -298,6 +320,20 @@
   line-height: 1.15;
 }
 
+.contact-form-label-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.42rem;
+  font-size: 1em;
+  line-height: 1;
+  color: #2a2a2a;
+  flex-shrink: 0;
+}
+
+.contact-form-label-icon svg {
+  display: block;
+}
+
 .contact-form-field,
 /* 고객문의 화면: 고객문의 입력 폼 - .contact-form-textarea */
 .contact-form-textarea {
@@ -305,7 +341,7 @@
   width: 100%;
   border: 1px solid rgba(39, 29, 19, 0.44);
   border-radius: 4px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-family: var(--font-family-base);
   font-size: var(--contact-label-size);
@@ -424,6 +460,22 @@ select.contact-form-field {
   transform: translateY(0);
 }
 
+/* 고객문의 화면: 식자재 품질관리 섹션 지연/완속 진입 애니메이션 */
+.contact-quality-section.contact-section-animate {
+  transform: translateY(44px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
+}
+
+/* 고객문의 화면: 입력폼 섹션 지연/완속 진입 애니메이션 */
+.contact-form-section.contact-section-animate {
+  transform: translateY(44px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
+}
+
 /* 고객문의 화면: 문의 내용 CKEditor 편집 영역 최소 높이 */
 .contact-form-block .ck-editor__editable {
   min-height: clamp(250px, 24vh, 350px);
@@ -483,7 +535,7 @@ select.contact-form-field {
   }
 
   .contact-form-notice {
-    font-size: clamp(15px, 2.2vw, 17px);
+    font-size: clamp(19px, 2.8vw, 21px);
   }
 
 /* 고객문의 화면: 고객문의 입력 폼 - .contact-form-row */
@@ -520,5 +572,127 @@ select.contact-form-field {
     font-size: 18px;
     min-width: 120px;
     min-height: 40px;
+  }
+}
+
+/* 고객문의 화면: 모바일 반응형 조정 */
+@media (max-width: 768px) {
+  /* 모바일 고객문의 화면: 내부 스크롤만 사용하고 바깥 배경 노출을 막음 */
+  .contact-page {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: 100vw;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: #FAFAF8;
+  }
+
+  /* 모바일 고객문의 화면: 좌우로 튀는 요소가 페이지 폭을 밀지 않도록 고정 */
+  .contact-hero,
+  .contact-quality-section,
+  .contact-form-section,
+  .contact-content-wrap,
+  .contact-inquiry-form {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* 모바일 품질관리 기준: 표 형태 대신 카드 목록으로 표시 */
+  .contact-quality-table-wrap {
+    overflow-x: hidden;
+  }
+
+  .contact-quality-table {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    background-color: transparent;
+  }
+
+  .contact-quality-cell-head {
+    display: none;
+  }
+
+  .contact-quality-row-group {
+    box-sizing: border-box;
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid rgba(39, 29, 19, 0.14);
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    box-shadow: 0 10px 24px rgba(39, 29, 19, 0.08);
+  }
+
+  .contact-quality-cell {
+    min-height: 0;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .contact-quality-cell-side {
+    width: fit-content;
+    min-height: 30px;
+    padding: 0.35rem 0.72rem;
+    border-radius: 9999px;
+    background-color: var(--main-body-bar-color);
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .contact-quality-cell:not(.contact-quality-cell-head):not(.contact-quality-cell-side) {
+    display: block;
+    color: #111111;
+    font-size: 15px;
+    line-height: 1.6;
+    text-align: left;
+    word-break: keep-all;
+  }
+
+  .contact-form-notice {
+    text-align: center;
+  }
+
+  /* 모바일 이메일 입력: 아이디/도메인/선택 박스를 한 묶음으로 정리 */
+  .contact-form-email-composite {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 0.58rem;
+    border: 1px solid rgba(39, 29, 19, 0.12);
+    border-radius: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.72);
+  }
+
+  .contact-form-email-composite .contact-form-divider-symbol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--contact-field-height);
+    color: var(--main-body-bar-color);
+  }
+
+  .contact-form-email-composite .contact-form-field:not(.contact-form-email-domain-select) {
+    min-width: 0;
+    border-color: rgba(39, 29, 19, 0.3);
+    background-color: #FAFAF8;
+  }
+
+  .contact-form-email-domain-select {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+    background-color: #FAFAF8;
+    background-position: calc(100% - 1rem) center;
   }
 }

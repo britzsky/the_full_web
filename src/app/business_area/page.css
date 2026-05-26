@@ -2,7 +2,7 @@
 
 /* 페이지 배경/스크롤 */
 .business-page {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   scrollbar-gutter: stable;
 }
 
@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 해시 이동용 앵커 */
@@ -36,16 +36,14 @@
   display: block;
 }
 
+/* 태블릿 전용 헤더 기본 숨김 */
 .business-header-tablet-only {
   display: none;
 }
 
 /* 헤더 포함 첫 화면 상단 여유 */
 .business-screen-with-header {
-  padding-top: calc(156px + 0.1rem);
-} */
-.business-screen-with-header {
-  padding-top: calc(154px + 0.1rem);
+  padding-top: calc(var(--site-header-height) + 0.1rem);
 }
 
 /* 본문 세로 중앙 정렬 */
@@ -55,7 +53,6 @@
   display: flex;
   align-items: center;
   min-height: 0;
-  background-color:rgb(255, 255, 255);
 }
 
 /* 사업 영역 첫 화면 배경 이미지 영역 */
@@ -71,6 +68,7 @@
   opacity: 0.30;
 }
 
+/* 첫 화면 배경 이미지 위 연초록 오버레이 */
 .business-overview-background::after {
   content: "";
   position: absolute;
@@ -78,13 +76,20 @@
   background-color: rgb(194, 255, 217, 0.10);
 }
 
-/* 임시 */
 .main-section-title-wrap {
-  background-color: rgb(255, 255, 255);
+  background-color: #FAFAF8;
 }
-/* 임시 */
+
+/* 배경 이미지가 있는 섹션에서는 섹션 타이틀 배경을 투명으로 */
+#business-event .main-section-title-wrap,
+#business-distribution .main-section-title-wrap,
+.business-mobile-only .main-section-title-wrap {
+  background-color: transparent;
+}
+
 .business-page .site-header-light {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(250, 250, 248, 0.1);
+  backdrop-filter: blur(3px);
 }
 
 /* 본문 폭 기준 */
@@ -205,7 +210,7 @@
 .business-mobile-catering-title {
   margin: 0;
   color: #ffffff;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.08;
   text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
@@ -217,7 +222,7 @@
   width: min(100%, 40ch);
   color: #ffffff;
   white-space: pre-line;
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.58;
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
 }
@@ -459,7 +464,7 @@
 .business-mobile-criteria-copy {
   margin: 0.58rem 0 0;
   color: #111111;
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.52;
   text-align: center;
   word-break: keep-all;
@@ -520,7 +525,7 @@
   transform-origin: center;
 }
 
-/* 사업 영역 첫 화면 카드에 마우스를 올렸을 때 살짝 떠오르는 효과 */
+/* 카드 호버/포커스 시 위로 떠오르는 효과 */
 .business-value-card:hover,
 .business-value-card:focus-visible {
   transform: translateY(-8px) scale(1.04);
@@ -583,7 +588,7 @@
   line-height: inherit;
 }
 
-/* 2번 화면 풀블리드 섹션 */
+/* 급식서비스 화면 풀블리드 섹션 */
 #business-catering.business-screen.business-screen-catering {
   position: relative;
   left: 50%;
@@ -595,10 +600,9 @@
   padding: 0 !important;
 }
 
-/* 2번 화면 본문 래퍼/그리드 풀폭 */
+/* 급식서비스 화면 본문 래퍼·그리드 풀폭 */
 #business-catering .business-screen-body,
 #business-catering .business-panel-fullbleed,
-/* 사업영역 화면: 급식서비스 화면 영역 - #business-catering .business-panel-grid */
 #business-catering .business-panel-grid {
   width: 100%;
   max-width: none;
@@ -606,14 +610,14 @@
   padding-right: 0;
 }
 
-/* 2번 화면 본문 스트레치 */
+/* 급식서비스 화면 본문 스트레치 */
 .business-screen-catering .business-screen-body {
   align-items: stretch;
   padding-top: 0;
   min-height: 100%;
 }
 
-/* 2번 화면 전체폭 콘텐츠 */
+/* 급식서비스 화면 전체폭 콘텐츠 래퍼 */
 .business-panel-fullbleed {
   flex: 1;
   width: 100vw;
@@ -621,7 +625,7 @@
   min-height: 100%;
 }
 
-/* 2번 화면 3열 이미지 */
+/* 급식서비스 화면 3열 이미지 그리드 */
 .business-panel-grid {
   overflow: hidden;
   display: grid;
@@ -631,7 +635,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* 2번 화면 패널 카드 */
+/* 급식서비스 화면 패널 카드 */
 .business-panel-card {
   position: relative;
   min-height: 100%;
@@ -644,32 +648,35 @@
   will-change: transform, opacity;
 }
 
-/* 급식 서비스 섹션에 진입하면 카드가 오른쪽에서 순서대로 붙도록 처리 */
+/* 급식서비스 화면 진입 시 카드 오른쪽에서 순서대로 등장 */
 #business-catering.is-visible .business-panel-card {
   opacity: 1;
   transform: translateX(0);
 }
 
+/* 급식서비스 화면 1번 카드 딜레이 */
 #business-catering.is-visible .business-panel-card:nth-child(1) {
   transition-delay: 0.08s;
 }
 
+/* 급식서비스 화면 2번 카드 딜레이 */
 #business-catering.is-visible .business-panel-card:nth-child(2) {
-  transition-delay: 0.22s;
+  transition-delay: 0.32s;
 }
 
+/* 급식서비스 화면 3번 카드 딜레이 */
 #business-catering.is-visible .business-panel-card:nth-child(3) {
-  transition-delay: 0.36s;
+  transition-delay: 0.56s;
 }
 
-/* 2번 화면 배경 오버레이 */
+/* 급식서비스 화면 배경 오버레이 */
 .business-panel-dim {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.42);
 }
 
-/* 2번 화면 텍스트 영역 */
+/* 급식서비스 화면 텍스트 오버레이 영역 */
 .business-panel-copy {
   position: absolute;
   inset: 0;
@@ -683,28 +690,27 @@
   color: #ffffff;
 }
 
-/* 2번 화면 제목 */
+/* 급식서비스 화면 카드 제목 */
 .business-panel-title {
   margin: 0;
-  font-size: clamp(15.5px, 1.08vw, 19px);
+  font-size: clamp(18.5px, 1.32vw, 22px);
   font-weight: 700;
   line-height: 1.1;
 }
 
-/* 2번 화면 설명 */
+/* 급식서비스 화면 카드 설명 */
 .business-panel-description {
   margin: 0;
   width: min(92%, 36ch);
   max-width: 36ch;
   white-space: pre-line;
-  font-size: clamp(13.4px, 0.93vw, 16px);
+  font-size: clamp(16.4px, 1.17vw, 19px);
   line-height: 1.68;
   letter-spacing: -0.01em;
 }
 
-/* 이미지 필터 초기화 */
+/* 급식서비스·이벤트 화면: 이미지 필터 초기화 */
 .business-catering-image,
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-image */
 .business-event-image {
   filter: none;
 }
@@ -749,23 +755,20 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 238%;
-  height: 74%;
+  width: 440%;
+  height: 136%;
   z-index: 4;
   pointer-events: none;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(-45deg);
   transform-origin: center;
 }
 
-/* 3번 화면 고리 선 */
-.business-event-ring-text {
+/* 3번 화면 스파클 별 */
+.business-event-sparkle {
   fill: #3f3026;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
 }
 
-/* 이벤트 원형 라인이 사선 축으로 기울어지며 도는 듯한 애니메이션 */
+
 
 /* 3번 화면 텍스트 박스 */
 .business-event-copy {
@@ -777,13 +780,13 @@
 
 /* 3번 화면 학교 위치 */
 .business-event-copy-11 {
-  left: 10%;
+  left: 6%;
   top: 8.2%;
 }
 
 /* 3번 화면 산업체 위치 */
 .business-event-copy-1 {
-  right: 7%;
+  right: 2%;
   top: 8%;
 }
 
@@ -808,7 +811,7 @@
   margin: 0.72rem 0 0;
   white-space: pre-line;
   color: #171717;
-  font-size: clamp(13.2px, 0.95vw, 16px);
+  font-size: clamp(14.2px, 1.05vw, 17px);
   line-height: 1.62;
   letter-spacing: -0.01em;
 }
@@ -835,12 +838,18 @@
   width: min(100%, 280px);
   border-radius: 1rem;
   border: 1.5px solid #3f3026;
+  background-color: #ffffff;
   padding: 0.85rem 0.95rem;
   text-align: center;
   font-size: clamp(14px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.3;
   overflow: visible;
+}
+
+/* 식자재유통 상단 pill + tooltip 묶음 — tooltip은 pill 형제로 분리해 부모 opacity 영향 차단 */
+.business-dist-pill-wrap {
+  position: relative;
 }
 
 /* 식자재유통 상단 항목 호버 안내 박스 기준점 */
@@ -884,11 +893,13 @@
 }
 
 /* 식자재유통 상단 항목 호버/포커스 시 안내 박스 표시 */
-.business-hover-anchor:is(:hover, :focus-visible, :focus-within) .business-hover-tooltip {
+.business-hover-anchor:is(:hover, :focus-visible, :focus-within) .business-hover-tooltip,
+.business-dist-pill-wrap:has(.business-hover-anchor:is(:hover, :focus-visible, :focus-within)) .business-hover-tooltip {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
 }
+
 
 /* 식자재유통 상단 항목 안내 문구 */
 .business-hover-tooltip-text {
@@ -912,7 +923,7 @@
 .business-distribution-center-title {
   margin: 0;
   color: #111111;
-  font-size: clamp(14px, 1.05vw, 18px);
+  font-size: clamp(18px, 1.45vw, 22px);
   font-weight: 800;
   line-height: 1.2;
 }
@@ -922,6 +933,7 @@
   width: min(100%, 980px);
   border-radius: 1rem;
   border: 1.5px solid #3f3026;
+  background-color: #ffffff;
   padding: clamp(2.15rem, 4.25vh, 3.15rem) clamp(0.95rem, 1.5vw, 1.65rem);
   text-align: center;
 }
@@ -929,7 +941,7 @@
 /* 4번 화면 중앙 설명 */
 .business-distribution-center-box p {
   margin: 0;
-  font-size: clamp(12.8px, 0.9vw, 15.5px);
+  font-size: clamp(13.8px, 1vw, 16.5px);
   line-height: 1.72;
   letter-spacing: -0.01em;
 }
@@ -948,7 +960,7 @@
   width: 100%;
   grid-template-columns: repeat(2, max-content);
   gap: var(--distribution-chip-gap);
-  justify-content: start;
+  justify-content: space-between;
 }
 
 /* 4번 화면 하단 하단행 */
@@ -957,7 +969,7 @@
   width: 100%;
   grid-template-columns: repeat(3, max-content);
   gap: var(--distribution-chip-gap);
-  justify-content: start;
+  justify-content: space-between;
 }
 
 /* 4번 화면 하단 공통 칩 */
@@ -971,7 +983,7 @@
   min-height: 2.4rem;
   border-radius: 9999px;
   background-color: #dbd8d3;
-  padding: 0.56rem 1.15rem;
+  padding: 0.56rem 2.2rem;
   text-align: left;
   font-size: clamp(12.4px, 0.9vw, 15px);
   line-height: 1.25;
@@ -982,19 +994,17 @@
   justify-self: start;
 }
 
-/* 4번 화면 칩 자동 배치 */
+/* 식자재유통 화면: 개별 칩 그리드 자동 배치 */
 .business-distribution-chip-top-1,
 .business-distribution-chip-top-2,
 .business-distribution-chip-bottom-1,
 .business-distribution-chip-bottom-2,
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip-bottom-3 */
 .business-distribution-chip-bottom-3 {
   grid-column: auto;
 }
 
-/* 4번 화면 칩 폭 규칙 */
+/* 식자재유통 화면: 상단·하단 칩 행 너비 고정 */
 .business-distribution-chip-top,
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip-bottom */
 .business-distribution-chip-bottom {
   width: max-content;
   min-width: max-content;
@@ -1008,91 +1018,95 @@
     transform: translateY(clamp(-1.15rem, -2.2vh, -0.75rem));
   }
 
+/* 전체 화면 태블릿: 데스크톱 전용 헤더 숨김 */
   .business-header-desktop-only {
     display: none;
   }
 
+/* 전체 화면 태블릿: 태블릿 전용 헤더 표시 */
   .business-header-tablet-only {
     display: block;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-value-grid */
+/* 운영강점 화면 태블릿: 카드 그리드 2열 */
   .business-value-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-grid */
+/* 급식서비스 화면 태블릿: 패널 그리드 단열 전환 */
   .business-panel-grid {
     grid-template-columns: 1fr;
   }
 
+/* 급식서비스 화면 태블릿: 패널 카피 좌우 패딩 축소 */
   .business-panel-copy {
     padding: 0 clamp(1rem, 4vw, 1.7rem);
   }
 
+/* 급식서비스 화면 태블릿: 패널 설명 최대 너비 축소 */
   .business-panel-description {
     width: min(96%, 43ch);
     max-width: 43ch;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-card */
+/* 급식서비스 화면 태블릿: 패널 카드 높이 전체 채움 */
   .business-panel-card {
     min-height: 100%;
     height: 100%;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+/* 이벤트 화면 태블릿: 궤도 최소 높이 및 위치 보정 */
   .business-event-orbit {
     min-height: clamp(560px, 78vh, 820px);
     transform: translateY(-1vh);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+/* 이벤트 화면 태블릿: 중앙 시각 이미지 위치·크기 보정 */
   .business-event-visual {
     top: 42.6%;
     width: clamp(270px, 40vw, 362px);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+/* 이벤트 화면 태블릿: 회전 고리 크기·각도 보정 */
   .business-event-ring {
-    inset: -31%;
-    width: 160%;
-    height: 160%;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
     transform: translateX(4%) translateY(2%) rotate(-54deg);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy */
+/* 이벤트 화면 태블릿: 카피 박스 최대 너비 축소 */
   .business-event-copy {
     width: min(100%, 290px);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-11 */
+/* 이벤트 화면 태블릿: 왼쪽 상단 카피 위치 보정 */
   .business-event-copy-11 {
     left: 6%;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-1 */
+/* 이벤트 화면 태블릿: 오른쪽 상단 카피 위치 보정 */
   .business-event-copy-1 {
-    right: 8%;
+    right: 3%;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+/* 이벤트 화면 태블릿: 하단 카피 위치 보정 */
   .business-event-copy-6 {
     bottom: -3.1rem;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-top */
+/* 식자재유통 화면 태블릿: 상단 뱃지 그리드 단열 전환 */
   .business-distribution-top {
     grid-template-columns: 1fr;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-inner */
+/* 식자재유통 화면 태블릿: 내부 요소 세로 위치 보정 */
   .business-distribution-inner {
     transform: translateY(-1.4vh);
   }
 
   .business-distribution-bottom-top,
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-bottom-bottom */
+/* 식자재유통 화면 태블릿: 하단 칩 그리드 2열 */
   .business-distribution-bottom-bottom {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1105,25 +1119,29 @@
     transform: translateY(clamp(-1.6rem, -3.1vh, -1.05rem));
   }
 
+/* 전체 화면 모바일: 데스크톱 전용 요소 숨김 */
   .business-desktop-only {
     display: none !important;
   }
 
+/* 전체 화면 모바일: 모바일 전용 요소 표시 */
   .business-mobile-only {
     display: flex !important;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-screen-with-header */
+/* 전체 화면 모바일: 헤더 높이 기준 상단 패딩 재설정 */
   .business-screen-with-header {
-    padding-top: calc(126px + 2.2rem);
+    padding-top: calc(var(--site-header-height-mobile) + 2.2rem);
   }
 
+/* 운영강점 화면 모바일: 내부 컨테이너 너비·간격·패딩 */
   .business-mobile-inner {
     width: min(100%, 360px);
     gap: 0.75rem;
     padding: 0 0.85rem 0.9rem;
   }
 
+/* 운영강점 화면 모바일: 카드 그리드 행 구조·패딩 */
   .business-mobile-value-card {
     min-height: 132px;
     display: grid;
@@ -1134,6 +1152,7 @@
     justify-content: flex-start;
   }
 
+/* 운영강점 화면 모바일: 카드 타이틀 줄바꿈·크기 */
   .business-mobile-value-title {
     margin: 0;
     width: 100%;
@@ -1148,6 +1167,7 @@
     line-height: 1.22;
   }
 
+/* 운영강점 화면 모바일: 카드 본문 텍스트 크기·줄간격 */
   .business-mobile-value-card .business-value-copy {
     width: 100%;
     margin: 0;
@@ -1160,100 +1180,125 @@
     line-height: 1.45;
   }
 
+/* 운영강점 화면 모바일: 카드 본문 강조 텍스트 크기 */
   .business-mobile-value-card .business-value-copy strong {
     font-size: 12px;
   }
 
+/* 급식서비스 화면 모바일: 내부 요소 세로 간격 */
   .business-mobile-catering-inner {
     gap: 1.2rem;
   }
 
+/* 급식서비스 화면 모바일: 카피 영역 간격·패딩 */
   .business-mobile-catering-copy {
     gap: 0.62rem;
     padding: 0 0.68rem;
   }
 
+/* 급식서비스 화면 모바일: 타이틀 크기 */
   .business-mobile-catering-title {
-    font-size: 23px;
+    font-size: 26px;
   }
 
+/* 급식서비스 화면 모바일: 설명 텍스트 너비·크기·줄간격 */
   .business-mobile-catering-description {
     width: min(100%, 41ch);
-    font-size: 11.5px;
+    font-size: 14.5px;
     line-height: 1.5;
   }
 
+/* 급식서비스 화면 모바일: 패널 궤도 최대 너비 */
   .business-mobile-panel-orbit {
     width: min(100%, 274px);
   }
 
+/* 급식서비스 화면 모바일: 패널 본문 세로 간격 */
   .business-mobile-panel-body {
     gap: 0.68rem;
   }
 
+/* 급식서비스 화면 모바일: 패널 타이틀 크기 */
   .business-mobile-panel-title {
     font-size: 26px;
   }
 
+/* 급식서비스 화면 모바일: 패널 설명 크기·줄간격 */
   .business-mobile-panel-description {
     font-size: 12px;
     line-height: 1.55;
   }
 
+/* 이벤트 화면 모바일: 시각 이미지 최대 너비 */
   .business-mobile-event-visual {
     width: min(100%, 208px);
   }
 
+/* 이벤트 화면 모바일: 상단 영역 세로 간격 및 하단 여백 */
   .business-mobile-event-top {
     gap: 0.6rem;
+    margin-bottom: 0.55rem;
   }
 
+/* 이벤트 화면 모바일: 소제목 크기 */
   .business-mobile-event-heading {
-    font-size: 14px;
+    font-size: 16px;
   }
 
+/* 이벤트 화면 모바일: 요양원 영역 상단 여백 */
+  .business-mobile-event-bottom {
+    margin-top: 0.55rem;
+  }
+
+/* 이벤트 화면 모바일: 카드 목록 세로 간격 */
   .business-mobile-event-list {
     gap: 0.5rem;
   }
 
+/* 이벤트 화면 모바일: 개별 카드 내부 패딩 */
   .business-mobile-event-card {
     padding: 0.72rem 0.8rem;
   }
 
+/* 이벤트 화면 모바일: 카드 타이틀 크기 */
   .business-mobile-event-title {
     font-size: 14px;
   }
 
+/* 이벤트 화면 모바일: 카드 설명 여백·크기·줄간격 */
   .business-mobile-event-copy .business-mobile-event-description {
     margin: 0;
-    font-size: 10.8px;
+    font-size: 12.5px;
     line-height: 1.45;
   }
 
+/* 이벤트·식자재유통 화면 모바일: 공통 설명 텍스트 크기 */
   .business-mobile-event-description,
   .business-mobile-info-card-copy,
   .business-mobile-criteria-copy,
   .business-mobile-compliance-item {
-    font-size: 11.5px;
+    font-size: 12.5px;
   }
 
+/* 식자재유통 화면 모바일: 정보 그리드·목록 세로 간격 */
   .business-mobile-info-grid,
   .business-mobile-compliance-list {
     gap: 0.62rem;
   }
 
+/* 식자재유통 화면 모바일: 정보 카드·기준 박스 패딩·둥글기 */
   .business-mobile-info-card,
   .business-mobile-criteria-box {
     padding: 0.88rem 0.82rem 0.92rem;
     border-radius: 1.15rem;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-value-grid */
+/* 운영강점 화면 모바일: 카드 그리드 단열 전환 */
   .business-value-grid {
     grid-template-columns: 1fr;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-value-card */
+/* 운영강점 화면 모바일: 카드 최소 높이·정렬 보정 */
   .business-value-card {
     min-height: 158px;
     border-radius: 1.2rem;
@@ -1261,12 +1306,12 @@
     gap: 0.72rem;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-panel-copy */
+/* 급식서비스 화면 모바일: 패널 카피 좌우 패딩 축소 */
   .business-panel-copy {
     padding: 0 1rem;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+/* 이벤트 화면 모바일: 궤도 레이아웃 그리드로 전환 */
   .business-event-orbit {
     display: grid;
     justify-items: center;
@@ -1275,7 +1320,7 @@
     transform: none;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+/* 이벤트 화면 모바일: 중앙 시각 이미지 정적 위치 전환 */
   .business-event-visual {
     position: relative;
     left: auto;
@@ -1286,18 +1331,18 @@
     margin-bottom: 1.9rem;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy */
+/* 이벤트 화면 모바일: 카피 박스 정적 배치 */
   .business-event-copy {
     position: static;
     width: 100%;
     transform: none;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+/* 이벤트 화면 모바일: 회전 고리 크기·각도 보정 */
   .business-event-ring {
-    inset: -16%;
-    width: 132%;
-    height: 132%;
+    inset: -40%;
+    width: 180%;
+    height: 180%;
     transform: translateX(2%) translateY(2%) rotate(-56deg);
   }
 
@@ -1309,27 +1354,29 @@
     transform: translateX(1%) translateY(1%) rotate(-52deg);
   }
 
+/* 이벤트 화면 모바일: 고리 선 두께 축소 */
   .business-mobile-event-ring ellipse {
     stroke-width: 1;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+/* 이벤트 화면 모바일: 하단 카피 상단 여백 보정 */
   .business-event-copy-6 {
     margin-top: 2rem;
   }
 
   .business-distribution-top,
   .business-distribution-bottom-top,
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-bottom-bottom */
+/* 식자재유통 화면 모바일: 전체 그리드 단열 전환 */
   .business-distribution-bottom-bottom {
     grid-template-columns: 1fr;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-pill */
+/* 식자재유통 화면 모바일: 필 너비 전체 채움 */
   .business-distribution-pill {
     width: 100%;
   }
 
+/* 식자재유통 화면 모바일: 툴팁 전체 너비 배치 */
   .business-hover-tooltip {
     left: 0;
     right: 0;
@@ -1337,18 +1384,19 @@
     transform: translate(0, 12px);
   }
 
+/* 식자재유통 화면 모바일: 툴팁 호버 시 제자리 이동 */
   .business-hover-anchor:is(:hover, :focus-visible, :focus-within) .business-hover-tooltip {
     transform: translate(0, 0);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-chip */
+/* 식자재유통 화면 모바일: 칩 너비 전체 채움 */
   .business-distribution-chip {
     width: 100%;
     min-width: 0;
     max-width: 100%;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-distribution-inner */
+/* 식자재유통 화면 모바일: 내부 세로 오프셋 초기화 */
   .business-distribution-inner {
     transform: translateY(0);
   }
@@ -1356,7 +1404,7 @@
 
 /* 초소형 모바일 */
 @media (max-width: 480px) {
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+/* 이벤트 화면 초소형: 시각 이미지 최대 너비 축소 */
   .business-event-visual {
     width: min(95vw, 340px);
   }
@@ -1364,43 +1412,115 @@
 
 /* 작은 데스크톱 */
 @media (max-height: 900px) and (min-width: 769px) {
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-orbit */
+/* 이벤트 화면 낮은 뷰포트: 궤도 최소 높이 축소 */
   .business-event-orbit {
     min-height: clamp(500px, 65vh, 670px);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-visual */
+/* 이벤트 화면 낮은 뷰포트: 시각 이미지 위치·크기 보정 */
   .business-event-visual {
     top: 42.4%;
     width: clamp(340px, 44vh, 460px);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring */
+/* 이벤트 화면 낮은 뷰포트: 회전 고리 중앙 기준 재배치 */
   .business-event-ring {
     left: 50%;
     top: 50%;
-    width: 184%;
-    height: 184%;
-    transform: translate(-50%, -50%) rotate(0deg);
+    width: 390%;
+    height: 120%;
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-ring ellipse */
+/* 이벤트 화면 낮은 뷰포트: 링 텍스트 크기 축소 */
   .business-event-ring-text {
     font-size: 22px;
   }
 
-/* 사업영역 화면: 사업영역 화면 영역 - .business-event-copy-6 */
+/* 이벤트 화면 낮은 뷰포트: 하단 카피 위치 보정 */
   .business-event-copy-6 {
     bottom: -2.9rem;
   }
 }
 
+/* ─── 모바일 2번 화면: 급식서비스 스트립 순차 진입 ─── */
+.business-mobile-catering-strip {
+  opacity: 0;
+  transform: translateY(48px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+#business-mobile-catering.is-visible .business-mobile-catering-strip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#business-mobile-catering.is-visible .business-mobile-catering-strip:nth-child(1) { transition-delay: 0.05s; }
+#business-mobile-catering.is-visible .business-mobile-catering-strip:nth-child(2) { transition-delay: 0.22s; }
+#business-mobile-catering.is-visible .business-mobile-catering-strip:nth-child(3) { transition-delay: 0.39s; }
+
+/* ─── 모바일 3번 화면: 이벤트 상단·중앙·하단 순차 진입 ─── */
+#business-mobile-event .business-mobile-event-top,
+#business-mobile-event .business-mobile-event-visual,
+#business-mobile-event .business-mobile-event-bottom {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+#business-mobile-event.is-visible .business-mobile-event-top    { opacity: 1; transform: translateY(0); transition-delay: 0.08s; }
+#business-mobile-event.is-visible .business-mobile-event-visual { opacity: 1; transform: translateY(0); transition-delay: 0.28s; }
+#business-mobile-event.is-visible .business-mobile-event-bottom { opacity: 1; transform: translateY(0); transition-delay: 0.48s; }
+
+/* ─── 모바일 4번 화면: 식자재유통 정보 카드 순차 진입 ─── */
+#business-mobile-distribution .business-mobile-info-card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+#business-mobile-distribution.is-visible .business-mobile-info-card:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.08s; }
+#business-mobile-distribution.is-visible .business-mobile-info-card:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.24s; }
+#business-mobile-distribution.is-visible .business-mobile-info-card:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.40s; }
+
+/* ─── 모바일 5번 화면: 구매기준 박스 + 안전기준 항목 순차 진입 ─── */
+#business-mobile-criteria .business-mobile-criteria-box {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+#business-mobile-criteria.is-visible .business-mobile-criteria-box { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
+
+#business-mobile-criteria .business-mobile-compliance-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+#business-mobile-criteria.is-visible .business-mobile-compliance-item:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+#business-mobile-criteria.is-visible .business-mobile-compliance-item:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.30s; }
+#business-mobile-criteria.is-visible .business-mobile-compliance-item:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
+#business-mobile-criteria.is-visible .business-mobile-compliance-item:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.54s; }
+#business-mobile-criteria.is-visible .business-mobile-compliance-item:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 0.66s; }
+
 @media (prefers-reduced-motion: reduce) {
   .business-event-image-frame {
-    animation: none;
-  }
-
-  .business-event-ring {
     animation: none;
   }
 
@@ -1409,6 +1529,114 @@
     transform: none;
     transition: none;
   }
+
+  /* 모션 감소 설정 시 식자재유통 애니메이션 즉시 노출 */
+  .business-dist-anim {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* 모션 감소 설정 시 모바일 섹션 애니메이션 즉시 노출 */
+  .business-mobile-catering-strip,
+  #business-mobile-event .business-mobile-event-top,
+  #business-mobile-event .business-mobile-event-visual,
+  #business-mobile-event .business-mobile-event-bottom,
+  #business-mobile-distribution .business-mobile-info-card,
+  #business-mobile-criteria .business-mobile-criteria-box,
+  #business-mobile-criteria .business-mobile-compliance-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
-/* 이벤트 이미지를 45도 기울어진 상태로 계속 회전시키는 애니메이션 */
+/* 식자재유통 섹션 애니메이션: 초기 상태(숨김) */
+.business-dist-anim {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 섹션 진입 시 순서대로 나타남 */
+#business-distribution.is-visible .business-dist-anim {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 상단 pill 3개 */
+#business-distribution.is-visible .business-dist-anim-d1 { transition-delay: 0.05s; }
+#business-distribution.is-visible .business-dist-anim-d2 { transition-delay: 0.20s; }
+#business-distribution.is-visible .business-dist-anim-d3 { transition-delay: 0.35s; }
+
+/* 중앙 구매기준 박스 */
+#business-distribution.is-visible .business-dist-anim-d4 { transition-delay: 0.50s; }
+
+/* 하단 안전 기준 칩 5개 */
+#business-distribution.is-visible .business-dist-chip-d1 { transition-delay: 0.65s; }
+#business-distribution.is-visible .business-dist-chip-d2 { transition-delay: 0.80s; }
+#business-distribution.is-visible .business-dist-chip-d3 { transition-delay: 0.95s; }
+#business-distribution.is-visible .business-dist-chip-d4 { transition-delay: 1.10s; }
+#business-distribution.is-visible .business-dist-chip-d5 { transition-delay: 1.25s; }
+
+/* 이벤트 섹션 애니메이션: 초기 상태 */
+.business-event-copy-11 {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.business-event-copy-1 {
+  opacity: 0;
+  transform: translateX(60px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.business-event-copy-6 {
+  opacity: 0;
+  transform: translateX(-50%) translateY(40px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 이벤트 섹션 진입 시 순서대로 등장 */
+#business-event.is-visible .business-event-copy-11 {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.08s;
+}
+
+#business-event.is-visible .business-event-copy-1 {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.35s;
+}
+
+#business-event.is-visible .business-event-copy-6 {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0.62s;
+}
+
+/* 모션 감소 설정 시 이벤트 애니메이션 즉시 노출 */
+@media (prefers-reduced-motion: reduce) {
+  .business-event-copy-11,
+  .business-event-copy-1 {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    transition: none !important;
+  }
+
+  .business-event-copy-6 {
+    opacity: 1 !important;
+    transform: translateX(-50%) translateY(0) !important;
+    transition: none !important;
+  }
+}

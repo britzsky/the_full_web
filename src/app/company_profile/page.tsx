@@ -5,18 +5,18 @@ import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import CompanyProfileMotion from "./CompanyProfileMotion";
+import GreetingSection from "./GreetingSection";
 import "./page.css";
 
 // 1번 화면 대표 인사 이미지 경로
-const companyGreetingImage = "/images/company_profile/ceo.jpg";
+const companyGreetingImage = "/images/company_profile/ceo.png";
 const companyGreetingSignImage = "/images/company_profile/ceo_sign1.png";
-// 회사명은 줄바꿈 시 '(주)'와 본문이 분리되지 않도록 단어 결합자를 사용한다.
 const companyName = "(주)\u2060더채움";
 
 // 1번 화면(대표 인사) 데이터
 const companyGreetingParagraphs = [
   `안녕하십니까, ${companyName} 대표이사 최희영입니다.\n저희 ${companyName}은 고객 한 분 한 분의 건강과 행복을 위해 정직과 신뢰를 바탕으로 \n항상 최선을 다해왔습니다.`,
-  "엄선된 식재료와 정성 어린 조리, 철저한 위생 관리로 맛과 안전을 모두 담은 식사를 준비하며, 늘 고객의 목소리에 귀 기울이고 함께 성장하는 파트너가 되겠습니다.",
+  "엄선된 식재료와 정성 어린 조리, 철저한 위생 관리로 맛과 안전을 모두 담은 식사를 \n 준비하며, 늘 고객의 목소리에 귀 기울이고 함께 성장하는 파트너가 되겠습니다.",
   "여러분의 일상에 작은 감동을 더하는 한 끼, \n그 마음을 담아 오늘도 최선을 다하겠습니다.",
 ];
 
@@ -41,6 +41,7 @@ const companyBrandDescriptionLines = [
   "정직한 운영과 안정적인 시스템으로 언제나 믿고 맡길 수 있는 식음 서비스 기업의 방향성을 상징합니다.",
 ];
 
+
 // 3번 화면 핵심가치 컬러/문구 데이터
 const companyCoreValues = [
   {
@@ -59,6 +60,7 @@ const companyCoreValues = [
     color: "#df8929",
   },
 ];
+
 // 회사소개 페이지 공통 헤더 메뉴
 const companyHeaderLeftItems: SiteHeaderMenuItem[] = [
   { label: "회사소개", href: "#company-greeting" },
@@ -75,7 +77,6 @@ const companyHeaderRightBaseItems: SiteHeaderMenuItem[] = [
 
 // 회사소개 화면: 페이지 메타데이터
 export const metadata: Metadata = {
-  // 회사소개 페이지 메타데이터
   title: "(주)더채움 | 회사소개",
 };
 
@@ -87,11 +88,11 @@ export default async function CompanyPage() {
   return (
     <main
       id="company-scroll"
-      className="company-page h-[100svh] overflow-x-hidden overflow-y-auto bg-white text-[#111111]"
+      className="company-page h-[100svh] overflow-x-hidden overflow-y-auto bg-[#FAFAF8] text-[#111111]"
     >
       <CompanyProfileMotion />
 
-      {/* 1번 화면: 대표 인사 */}
+      {/* 1번+2번 화면: 대표 인사 + 비전/미션 (타이핑 완료 후 비전/미션 등장) */}
       <section id="company-greeting" className="company-screen company-screen-with-header relative">
         <SiteHeader
           leftItems={companyHeaderLeftItems}
@@ -99,78 +100,19 @@ export default async function CompanyPage() {
           lightBackground
         />
 
-        {/* 1번 화면 본문 정렬 래퍼 */}
         <div className="company-screen-body">
-          {/* 1번 화면 콘텐츠 폭 컨테이너 */}
           <div className="company-screen-inner company-greeting-inner">
-            {/* 대표 이미지/인사말 2열 레이아웃 */}
-            <div className="company-greeting-grid">
-              <div className="company-greeting-image-frame company-enter-up">
-                <Image
-                  src={companyGreetingImage}
-                  alt="대표 인사 이미지"
-                  fill
-                  quality={100}
-                  sizes="(max-width: 1024px) 86vw, 420px"
-                  className="company-greeting-image"
-                />
-              </div>
-
-              <div className="company-greeting-copy company-enter-up company-enter-delay-1">
-                {companyGreetingParagraphs.map((paragraph) => (
-                  <p key={paragraph} className="company-greeting-paragraph">
-                    {paragraph}
-                  </p>
-                ))}
-
-                <div className="company-greeting-signature">
-                  <span className="company-greeting-signature-label">CEO</span>
-                  <Image
-                    src={companyGreetingSignImage}
-                    alt="CEO 서명"
-                    width={180}
-                    height={64}
-                    quality={100}
-                    draggable={false}
-                    className="company-greeting-signature-image"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2번 화면: 비전/미션 */}
-      <section id="company-vision-mission" className="company-screen">
-        {/* 2번 화면 본문 정렬 래퍼 */}
-        <div className="company-screen-body">
-          {/* 비전/미션 콘텐츠 컨테이너 */}
-          <div className="company-screen-inner company-vm-inner">
-            {/* 비전/미션 2열 그리드 */}
-            <div className="company-vm-grid">
-              {companyVisionMission.map((item, index) => (
-                <article
-                  key={item.title}
-                  className={`company-vm-item company-enter-up ${
-                    index === 0 ? "company-enter-delay-vm-1" : "company-enter-delay-vm-2"
-                  }`}
-                >
-                  <div className="company-vm-icon-frame">
-                    <Image
-                      src={item.image}
-                      alt={`${item.title} 아이콘`}
-                      fill
-                      quality={100}
-                      sizes="96px"
-                      className="company-vm-icon"
-                    />
-                  </div>
-                  <h2 className="company-vm-title">{item.title}</h2>
-                  <p className="company-vm-copy">{item.description}</p>
-                </article>
-              ))}
-            </div>
+            <GreetingSection
+              greetingImage={companyGreetingImage}
+              greetingLine={companyGreetingParagraphs[0].split("\n")[0]}
+              ceoLabel="CEO"
+              signImageSrc={companyGreetingSignImage}
+              paragraphs={[
+                companyGreetingParagraphs[0].split("\n").slice(1).join("\n"),
+                ...companyGreetingParagraphs.slice(1),
+              ].filter(Boolean)}
+              visionMission={companyVisionMission}
+            />
           </div>
         </div>
       </section>
@@ -181,26 +123,53 @@ export default async function CompanyPage() {
         <div className="company-screen-body">
           {/* 로고/브랜드컬러 콘텐츠 컨테이너 */}
           <div className="company-screen-inner company-brand-inner">
-            <div className="company-logo-frame" data-company-motion="zoom">
-              <Image
-                src="/images/company_profile/thefull_logo.jpg"
-                alt="더채움 로고 이미지"
-                fill
-                quality={100}
-                sizes="(max-width: 1024px) 94vw, 640px"
-                className="company-logo-image"
-              />
+            {/* 브랜드 로고 카드 영역 */}
+            <div className="company-brand-card" data-company-motion="zoom">
+              {/* 브랜드 로고 이미지 영역 */}
+              <div className="company-logo-decor-wrap">
+                <div className="company-logo-frame">
+                  <Image
+                    src="/images/logo/thefull_logo.svg"
+                    alt="더채움 로고 이미지"
+                    fill
+                    quality={100}
+                    sizes="(max-width: 1024px) 94vw, 640px"
+                    className="company-logo-image"
+                  />
+                </div>
+              </div>
+
+              {/* 브랜드 소개 문구 영역 */}
+              <p className="company-intro-description">
+                {companyBrandDescriptionLines.map((line) => {
+                  // 브랜드 소개 문구의 핵심 강조 구간
+                  const highlightText = "정직한 운영과 안정적인 시스템";
+                  const highlightIndex = line.indexOf(highlightText);
+
+                  // 일반 브랜드 소개 문장
+                  if (highlightIndex < 0) {
+                    return (
+                      <span key={line}>
+                        {line}
+                        <br />
+                      </span>
+                    );
+                  }
+
+                  // 핵심 문구 강조 브랜드 소개 문장
+                  return (
+                    <span key={line}>
+                      {line.slice(0, highlightIndex)}
+                      <strong className="company-intro-highlight">{highlightText}</strong>
+                      {line.slice(highlightIndex + highlightText.length)}
+                      <br />
+                    </span>
+                  );
+                })}
+              </p>
             </div>
 
-            <p className="company-intro-description" data-company-motion="up-delay-1">
-              {companyBrandDescriptionLines.map((line) => (
-                <span key={line}>
-                  {line}
-                  <br />
-                </span>
-              ))}
-            </p>
-
+            {/* 브랜드 핵심가치 목록 영역 */}
             <div className="company-values-grid">
               {companyCoreValues.map((item, index) => (
                 <article

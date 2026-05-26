@@ -17,7 +17,8 @@ const getErpApiBaseUrl = () => {
   const webhookUrl = normalizeText(process.env.ERP_INQUIRY_WEBHOOK_URL);
   if (webhookUrl) {
     try {
-      return new URL(webhookUrl).origin.replace(/\/+$/, "");
+      const { port } = new URL(webhookUrl);
+      return `http://localhost${port ? `:${port}` : ""}`;
     } catch {
       return webhookUrl.replace(/\/+$/, "");
     }

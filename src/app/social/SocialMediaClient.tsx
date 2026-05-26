@@ -151,10 +151,16 @@ const formatMediaDate = (value?: string) => {
   return `${year}-${month}-${day}`;
 };
 
+const SOCIAL_PAGE_SIZE = 12;
+
 // 소셜 페이지: 메인 화면과 동일한 카드/모달 구성을 렌더링
 export default function SocialMediaClient() {
   const [socialMediaItems, setSocialMediaItems] = useState<InstagramMediaItem[]>([]);
   const [isSocialLoading, setIsSocialLoading] = useState(true);
+  const [isSocialMoreLoading, setIsSocialMoreLoading] = useState(false);
+  const [socialNextCursor, setSocialNextCursor] = useState<string | null>(null);
+  const [socialRequestedLimit, setSocialRequestedLimit] = useState(SOCIAL_PAGE_SIZE);
+  const [visibleSocialCount, setVisibleSocialCount] = useState(SOCIAL_PAGE_SIZE);
   const [instagramUser, setInstagramUser] = useState("thefull");
   const [instagramProfileImage, setInstagramProfileImage] = useState("");
   const [activeSocialMedia, setActiveSocialMedia] = useState<InstagramMediaItem | null>(null);
@@ -173,36 +179,47 @@ export default function SocialMediaClient() {
     (instagramUser || "thefull").trim()
   )}/`;
 
-  // 최신 인스타그램 게시물을 메인 화면과 동일한 정렬 기준으로 6개만 노출
+  // 최신 인스타그램 게시물을 소셜 화면 카드 정렬 기준으로 정리
+  // 소셜 화면의 인스타그램 게시글을 지정한 개수만큼 조회하는 함수
+  const loadSocialCards = useCallback(async (options?: { after?: string; limit?: number }) => {
+    const requestedLimit = options?.limit ?? SOCIAL_PAGE_SIZE;
+    const payload = await fetchInstagramFeed<InstagramMediaItem>({
+      limit: requestedLimit,
+      after: options?.after,
+    });
+    const sourceItems = (payload.data ?? [])
+      .filter((item) => getSocialMediaSlides(item).length > 0)
+      .map((item, index) => ({ item, index }))
+      .sort((a, b) => {
+        const timeA = a.item.timestamp ? new Date(a.item.timestamp).getTime() : Number.NaN;
+        const timeB = b.item.timestamp ? new Date(b.item.timestamp).getTime() : Number.NaN;
+
+        if (!Number.isNaN(timeA) && !Number.isNaN(timeB)) {
+          return timeB - timeA;
+        }
+        if (!Number.isNaN(timeA)) {
+          return -1;
+        }
+        if (!Number.isNaN(timeB)) {
+          return 1;
+        }
+        return a.index - b.index;
+      })
+      .map(({ item }) => item);
+
+    return {
+      items: sourceItems,
+      nextCursor: payload.paging?.cursors?.after ?? null,
+      user: payload.user,
+    };
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
 
-    const loadSocialCards = async () => {
+    const loadInitialSocialCards = async () => {
       try {
-        const payload = await fetchInstagramFeed<InstagramMediaItem>();
-        const sourceItems = (payload.data ?? [])
-          .filter((item) => getSocialMediaSlides(item).length > 0)
-          .slice(0, 12);
-
-        const mappedCards = sourceItems
-          .map((item, index) => ({ item, index }))
-          .sort((a, b) => {
-            const timeA = a.item.timestamp ? new Date(a.item.timestamp).getTime() : Number.NaN;
-            const timeB = b.item.timestamp ? new Date(b.item.timestamp).getTime() : Number.NaN;
-
-            if (!Number.isNaN(timeA) && !Number.isNaN(timeB)) {
-              return timeB - timeA;
-            }
-            if (!Number.isNaN(timeA)) {
-              return -1;
-            }
-            if (!Number.isNaN(timeB)) {
-              return 1;
-            }
-            return a.index - b.index;
-          })
-          .map(({ item }) => item)
-          .slice(0, 6);
+        const payload = await loadSocialCards();
 
         if (!isMounted) {
           return;
@@ -212,13 +229,14 @@ export default function SocialMediaClient() {
           setInstagramUser(payload.user.username);
         }
         setInstagramProfileImage(payload.user?.profile_picture_url ?? "");
+        setSocialNextCursor(payload.nextCursor);
 
-        if (mappedCards.length === 0) {
+        if (payload.items.length === 0) {
           setSocialMediaItems(fallbackSocialMedia);
           return;
         }
 
-        setSocialMediaItems(mappedCards);
+        setSocialMediaItems(payload.items);
       } catch {
         if (isMounted) {
           setSocialMediaItems(fallbackSocialMedia);
@@ -230,12 +248,62 @@ export default function SocialMediaClient() {
       }
     };
 
-    loadSocialCards();
+    loadInitialSocialCards();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [loadSocialCards]);
+
+  // 더보기 버튼 클릭 시 다음 인스타그램 게시글 4개를 추가 조회하는 함수
+  const handleLoadMoreSocialMedia = useCallback(async () => {
+    if (isSocialMoreLoading) {
+      return;
+    }
+
+    if (visibleSocialCount < socialMediaItems.length) {
+      setVisibleSocialCount((previousCount) => previousCount + SOCIAL_PAGE_SIZE);
+      return;
+    }
+
+    setIsSocialMoreLoading(true);
+
+    try {
+      const nextRequestedLimit = socialRequestedLimit + SOCIAL_PAGE_SIZE;
+      const payload = await loadSocialCards(
+        socialNextCursor
+          ? { after: socialNextCursor }
+          : { limit: nextRequestedLimit }
+      );
+
+      if (payload.user?.username) {
+        setInstagramUser(payload.user.username);
+      }
+      setInstagramProfileImage(payload.user?.profile_picture_url ?? "");
+      setSocialNextCursor(payload.nextCursor);
+      setSocialMediaItems((previousItems) => {
+        const previousIds = new Set(previousItems.map((item) => item.id));
+        const nextItems = payload.items.filter((item) => !previousIds.has(item.id));
+        if (!socialNextCursor) {
+          return payload.items.length >= previousItems.length ? payload.items : previousItems;
+        }
+        return [...previousItems, ...nextItems];
+      });
+      setSocialRequestedLimit(nextRequestedLimit);
+      setVisibleSocialCount((previousCount) => previousCount + SOCIAL_PAGE_SIZE);
+    } catch {
+      setVisibleSocialCount((previousCount) => previousCount + SOCIAL_PAGE_SIZE);
+    } finally {
+      setIsSocialMoreLoading(false);
+    }
+  }, [
+    isSocialMoreLoading,
+    loadSocialCards,
+    socialMediaItems.length,
+    socialNextCursor,
+    socialRequestedLimit,
+    visibleSocialCount,
+  ]);
 
   // 카드 클릭 시 선택한 게시물의 첫 번째 미디어부터 상세 모달을 연다
   const handleOpenSocialMedia = useCallback((item: InstagramMediaItem) => {
@@ -327,16 +395,19 @@ export default function SocialMediaClient() {
   return (
     <>
       {/* 소셜 카드 그리드 영역 */}
-      <div className="social-card-grid main-social-grid grid grid-cols-2 place-items-center md:grid-cols-3">
-        {isSocialLoading &&
-          Array.from({ length: 6 }).map((_, index) => (
-            <div key={`social-skeleton-${index}`} className="main-social-card social-gallery-card block w-full">
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#ece9e4]" />
-            </div>
-          ))}
+      <div className="relative">
+        <div className="social-card-grid">
+          {isSocialLoading &&
+            Array.from({ length: 12 }).map((_, index) => (
+              <div key={`social-skeleton-${index}`} className="social-gallery-card block w-full">
+                <div className="relative aspect-square w-full overflow-hidden bg-[#ece9e4]">
+                  <div className="social-skeleton-shimmer" />
+                </div>
+              </div>
+            ))}
 
         {!isSocialLoading &&
-          socialMediaItems.map((item, index) => {
+          socialMediaItems.slice(0, visibleSocialCount).map((item, index) => {
             const previewMedia = getSocialPreviewMedia(item);
             const slideCount = getSocialMediaSlides(item).length;
             const isVideo = previewMedia?.media_type === "VIDEO";
@@ -351,10 +422,10 @@ export default function SocialMediaClient() {
                 key={item.id}
                 type="button"
                 onClick={() => handleOpenSocialMedia(item)}
-                className="main-social-card social-gallery-card group relative block w-full"
+                className="social-gallery-card group relative block w-full"
                 aria-label={`${overlayText || `Instagram ${index + 1}`} 열기`}
               >
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
+                <div className="relative aspect-square w-full overflow-hidden bg-black">
                   {isVideo ? (
                     <video
                       src={previewMedia.media_url}
@@ -395,7 +466,39 @@ export default function SocialMediaClient() {
               </button>
             );
           })}
+        </div>
       </div>
+
+      {/* 더보기 버튼 */}
+      {!isSocialLoading && socialMediaItems.length > 0 && (
+        <div className="mt-12 flex flex-col items-center gap-4">
+          <button
+            type="button"
+            onClick={handleLoadMoreSocialMedia}
+            disabled={isSocialMoreLoading}
+            className="group relative overflow-hidden border border-[#111111] px-14 py-4 text-xs font-semibold tracking-[0.35em] text-[#111111] transition-colors duration-300 hover:text-white disabled:cursor-wait disabled:opacity-60"
+          >
+            <span className="absolute inset-0 -translate-y-full bg-[#111111] transition-transform duration-300 group-hover:translate-y-0" />
+            <span className="relative flex items-center gap-3">
+              더보기
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* 소셜 상세 팝업 */}
       {activeSocialMedia && (
@@ -404,11 +507,11 @@ export default function SocialMediaClient() {
           onClick={handleCloseSocialMedia}
         >
           <div
-            className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto bg-[#f7f2e5] shadow-[0_40px_90px_rgba(0,0,0,0.4)] md:grid md:max-h-[80vh] md:grid-cols-[1fr_1fr] md:overflow-hidden"
+            className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto bg-[#f7f2e5] shadow-[0_40px_90px_rgba(0,0,0,0.4)] md:grid md:h-[80vh] md:max-h-[80vh] md:grid-cols-[1fr_1fr] md:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
             <div
-              className="relative aspect-[3/4] w-full overflow-hidden bg-black md:max-h-[80vh]"
+              className="relative aspect-[3/4] w-full overflow-hidden bg-black md:aspect-auto md:h-full"
               onTouchStart={handleSocialMediaTouchStart}
               onTouchEnd={handleSocialMediaTouchEnd}
               onTouchCancel={handleSocialMediaTouchCancel}
@@ -482,7 +585,7 @@ export default function SocialMediaClient() {
               )}
             </div>
 
-            <div className="flex max-h-none flex-col gap-6 overflow-auto p-6 text-[#6b7a8f] md:max-h-[80vh]">
+            <div className="flex max-h-none flex-col gap-6 overflow-auto p-6 text-[#6b7a8f] md:h-full">
               <div className="flex items-center justify-between border-b border-[#cbbca8]/60 pb-3 text-xs">
                 <a
                   href={instagramProfileHref}

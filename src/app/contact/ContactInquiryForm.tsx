@@ -2,9 +2,10 @@
 
 import dynamic from "next/dynamic";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Icon } from "@iconify/react";
 import ActionFeedbackModal from "@/app/components/Common/ActionFeedbackModal";
 import { toPublicWebApiUrl } from "@/app/lib/publicWebApi";
-import { isCkEditorContentMeaningful } from "./editorTextUtils";
+import { isCkEditorContentMeaningful, toPlainTextFromCkEditor } from "./editorTextUtils";
 
 const ContactInquiryCkEditor = dynamic(() => import("@/app/promotion/PromotionCkEditor"), {
   ssr: false,
@@ -64,6 +65,44 @@ const EMAIL_DOMAIN_OPTIONS = [
 
 const PHONE_NUMBER_PATTERN = /^\d{3}-\d{4}-\d{4}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type ContactLabelIconKey =
+  | "businessName"
+  | "managerName"
+  | "phonePrefix"
+  | "emailLocalPart"
+  | "currentMealPrice"
+  | "desiredMealPrice"
+  | "dailyMealCount"
+  | "mealType"
+  | "businessType"
+  | "switchingReason"
+  | "title"
+  | "inquiryContent";
+
+const CONTACT_LABEL_ICONS: Record<ContactLabelIconKey, string> = {
+  businessName: "mdi:office-building-outline",
+  managerName: "mdi:account-outline",
+  phonePrefix: "mdi:phone-outline",
+  emailLocalPart: "mdi:email-outline",
+  currentMealPrice: "mdi:cash-multiple",
+  desiredMealPrice: "mdi:target",
+  dailyMealCount: "mdi:silverware-fork-knife",
+  mealType: "mdi:food-outline",
+  businessType: "mdi:domain",
+  switchingReason: "mdi:clipboard-text-outline",
+  title: "mdi:format-title",
+  inquiryContent: "mdi:text-box-outline",
+};
+
+const renderContactLabelText = (iconKey: ContactLabelIconKey, labelText: string) => (
+  <>
+    <span className="contact-form-label-icon" aria-hidden="true">
+      <Icon icon={CONTACT_LABEL_ICONS[iconKey]} width="18" height="18" />
+    </span>
+    {labelText}
+  </>
+);
 
 const toKstDateTimeString = () => {
   const now = new Date();
@@ -195,7 +234,7 @@ export default function ContactInquiryForm() {
           businessType: formValues.businessType,
           switchingReason: formValues.switchingReason,
           title: formValues.title,
-          inquiryContent: formValues.inquiryContent,
+          inquiryContent: toPlainTextFromCkEditor(formValues.inquiryContent),
           submittedAt: toKstDateTimeString(),
           source: "contact-page",
           // ERP 알림 연동 시 이 식별자를 기준으로 후속 분기 가능
@@ -252,7 +291,8 @@ export default function ContactInquiryForm() {
       <div className="contact-form-grid">
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="businessName">
-            업장명<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("businessName", "업장명")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="businessName"
@@ -266,7 +306,8 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="managerName">
-            담당자 성함<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("managerName", "담당자 성함")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="managerName"
@@ -280,7 +321,8 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="phonePrefix">
-            연락처<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("phonePrefix", "연락처")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <div className="contact-form-phone-composite">
             <select
@@ -324,7 +366,8 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="emailLocalPart">
-            이메일<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("emailLocalPart", "이메일")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <div className="contact-form-email-composite">
             <input
@@ -364,7 +407,8 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="currentMealPrice">
-            현재 식단가
+            {renderContactLabelText("currentMealPrice", "현재 식단가")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="currentMealPrice"
@@ -372,12 +416,14 @@ export default function ContactInquiryForm() {
             value={formValues.currentMealPrice}
             onChange={handleValueChange}
             className="contact-form-field"
+            required
           />
         </div>
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="desiredMealPrice">
-            희망 식단가
+            {renderContactLabelText("desiredMealPrice", "희망 식단가")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="desiredMealPrice"
@@ -385,12 +431,14 @@ export default function ContactInquiryForm() {
             value={formValues.desiredMealPrice}
             onChange={handleValueChange}
             className="contact-form-field"
+            required
           />
         </div>
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="dailyMealCount">
-            일 식수
+            {renderContactLabelText("dailyMealCount", "일 식수")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <input
             id="dailyMealCount"
@@ -398,12 +446,14 @@ export default function ContactInquiryForm() {
             value={formValues.dailyMealCount}
             onChange={handleValueChange}
             className="contact-form-field"
+            required
           />
         </div>
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="mealType">
-            식사 구분<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("mealType", "식사 구분")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <select
             id="mealType"
@@ -424,7 +474,8 @@ export default function ContactInquiryForm() {
 
         <div className="contact-form-row">
           <label className="contact-form-label" htmlFor="businessType">
-            업장 구분<span className="contact-form-required" aria-hidden="true">*</span>
+            {renderContactLabelText("businessType", "업장 구분")}
+            <span className="contact-form-required" aria-hidden="true">*</span>
           </label>
           <select
             id="businessType"
@@ -447,7 +498,7 @@ export default function ContactInquiryForm() {
       {/* 업체 변경 이유 단일 입력 블록 */}
       <div className="contact-form-block contact-form-block-switching">
         <label className="contact-form-label" htmlFor="switchingReason">
-          현 위탁사 불만 혹은 위탁사를 바꾸는 이유
+          {renderContactLabelText("switchingReason", "현 위탁사 불만 혹은 위탁사를 바꾸는 이유")}
         </label>
         <textarea
           id="switchingReason"
@@ -460,7 +511,8 @@ export default function ContactInquiryForm() {
 
       <div className="contact-form-block contact-form-block-switching">
         <label className="contact-form-label" htmlFor="title">
-          제목<span className="contact-form-required" aria-hidden="true">*</span>
+          {renderContactLabelText("title", "제목")}
+          <span className="contact-form-required" aria-hidden="true">*</span>
         </label>
         <input
           id="title"
@@ -475,7 +527,8 @@ export default function ContactInquiryForm() {
       {/* 문의 내용 CKEditor 블록 */}
       <div className="contact-form-block">
         <label className="contact-form-label">
-          문의 내용<span className="contact-form-required" aria-hidden="true">*</span>
+          {renderContactLabelText("inquiryContent", "문의 내용")}
+          <span className="contact-form-required" aria-hidden="true">*</span>
         </label>
         <textarea
           name="inquiryContent"
@@ -497,10 +550,10 @@ export default function ContactInquiryForm() {
       {/* 제출 상태/제출 버튼 영역 */}
       <div className="contact-form-actions">
         <p className="contact-form-required-notice">
-          <span className="contact-form-required" aria-hidden="true">*</span> 표시는 필수값입니다.
+          <span className="contact-form-required" aria-hidden="true">*</span> 표시는 필수 항목입니다.
         </p>
         <button type="submit" className="contact-form-submit" disabled={isSubmitting || feedbackModal.open}>
-          {isSubmitting ? "제출중..." : "제출하기"}
+          {isSubmitting ? "문의중..." : "문의하기"}
         </button>
       </div>
 

@@ -2,15 +2,14 @@
 
 /* 급식서비스 페이지 배경/스크롤 공통 설정 */
 .catering_page {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   scrollbar-gutter: stable;
 }
 
 /* 급식서비스 페이지 헤더 톤(메인과 같은 화이트 헤더) */
 .catering_page .site-header-light {
   border-bottom: none;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
+  background-color: transparent;
 }
 
 /* 급식서비스 각 화면 공통 프레임(한 화면 한 섹션) */
@@ -20,12 +19,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 급식서비스 첫 화면 헤더 높이 확보 */
 .catering_screen_with_header {
-  padding-top: calc(156px + 0.1rem);
+  padding-top: calc(var(--site-header-height) + 0.1rem);
 }
 
 /* 급식서비스 섹션 본문 수직 중앙 정렬 */
@@ -80,6 +79,24 @@
   margin: 0 auto;
 }
 
+/* 1번 화면: 흐름도 전체가 위에서 아래로 진입 */
+#catering_flow .catering_screen_inner {
+  opacity: 0;
+  animation: catering_flow_section_enter 1.05s cubic-bezier(0.16, 0.84, 0.28, 1) both;
+}
+
+/* 1번 화면: 전체 흐름도 진입 애니메이션 */
+@keyframes catering_flow_section_enter {
+  from {
+    opacity: 0;
+    transform: translateY(-110px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 1번 화면: 전체 흐름도 본문을 아래로 이동 */
 #catering_flow .catering_screen_body {
   padding-top: clamp(2.1rem, 4.9vh, 3.8rem);
@@ -100,26 +117,15 @@
   line-height: 1.3;
   white-space: nowrap;
   overflow: visible;
-  opacity: 0;
-  transform: translateY(16px) scale(0.97);
-  animation: catering_flow_node_enter 0.54s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  animation-delay: calc(0.08s + (var(--catering-flow-node-order, 0) * 0.16s));
+  opacity: 1;
+  transform: none;
+  animation: none;
 }
 
-/* 1번 화면: 마인드맵 노드 순차 생성 애니메이션 */
-@keyframes catering_flow_node_enter {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
+/* 1번 화면: 마인드맵 노드 진입 애니메이션 */
 /* 1번 화면: 모션 축소 환경에서는 즉시 표시 */
 @media (prefers-reduced-motion: reduce) {
+  #catering_flow .catering_screen_inner,
   .catering_flow_node {
     opacity: 1;
     transform: none;
@@ -135,8 +141,7 @@
 
   .catering_flow_path,
   .catering_flow_svg_arrowhead {
-    stroke-dasharray: none;
-    stroke-dashoffset: 0;
+    opacity: 1;
     animation: none;
   }
 }
@@ -183,7 +188,7 @@
 /* 1번 화면: 중앙 검증/구성 셀 위치 */
 .catering_flow_node_center_top {
   left: 33%;
-  top: 20%;
+  top: 21%;
   width: 300px;
 }
 
@@ -287,6 +292,7 @@
 }
 
 /* 1번 화면: 흐름 연결선 스타일(굵기/색상 통일) */
+/* --catering-flow-line-length: 각 경로의 실제 SVG 좌표 길이 — dasharray/dashoffset을 동일하게 맞춰 애니메이션 전 구간이 선 그리기에 사용되도록 함 */
 .catering_flow_path {
   fill: none;
   stroke: var(--catering-flow-line-color);
@@ -294,10 +300,10 @@
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: catering_flow_line_draw 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  animation-delay: calc(0.04s + (var(--catering-flow-line-order, 0) * 0.26s));
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  animation: none;
 }
 
 /* 1번 화면: 화살표 머리 스타일 */
@@ -308,22 +314,13 @@
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: catering_flow_line_draw 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  animation-delay: calc(0.04s + (var(--catering-flow-line-order, 0) * 0.26s));
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  animation: none;
 }
 
-/* 1번 화면: 흐름선 순차 그리기 애니메이션 */
-@keyframes catering_flow_line_draw {
-  from {
-    stroke-dashoffset: 1000;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
+/* 1번 화면: 흐름선 페이드인 애니메이션 */
 /* 1번 화면: 데스크톱/모바일 흐름선 세트 기본 토글 */
 .catering_flow_lines_default {
   display: inline;
@@ -390,7 +387,7 @@
 
 /* 2번 화면: 섹션 진입 시 이미지 래퍼 오른쪽에서 슬라이드 인 */
 .catering_stage_panel_visible .catering_stage_image_wrap {
-  animation: catering_stage_image_enter 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: catering_stage_image_enter 1.05s cubic-bezier(0.16, 0.84, 0.28, 1) both;
 }
 
 /* 2번 화면: 섹션 진입 시 텍스트 아래에서 위로 진입 */
@@ -553,6 +550,33 @@
   animation: catering_compare_enter 0.62s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+/* 3번 화면: 모집-채용-입사-관리 카드는 더 빠르게 진입 */
+.catering_process_card.catering_compare_visible {
+  animation-duration: 0.28s;
+}
+
+/* 5번 화면: 상단 카드 묶음이 잠깐 숨겨진 뒤 한꺼번에 올라오는 진입 */
+@keyframes catering_research_list_enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--catering-research-lift-offset) + var(--catering-research-top-extra-lift) + 96px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(calc(var(--catering-research-lift-offset) + var(--catering-research-top-extra-lift)));
+  }
+}
+
+.catering_research_list.catering_compare_visible {
+  animation: catering_research_list_enter 0.44s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 5번 화면: 중단/하단 카드 진입 속도 빠르게 */
+#catering_research .catering_safety_chip_row.catering_compare_visible,
+#catering_research .catering_recruit_blocks.catering_compare_visible {
+  animation-duration: 0.44s;
+}
+
 /* 3번 화면: 비교표/프로세스 섹션 전체 간격 */
 .catering_compare_inner {
   display: grid;
@@ -582,6 +606,7 @@
   font-size: clamp(14px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.3;
+  background-color: #ffffff;
 }
 
 /* 3번 화면: 비교표 3열 그리드 */
@@ -704,17 +729,30 @@
   border-top: 1px solid #d2d2d2;
 }
 
-/* 3번 화면: 카드 사이 화살표 이미지 */
+/* 3번 화면: 카드 사이 화살표 래퍼 */
 .catering_process_arrow {
   position: absolute;
   left: calc(100% + (var(--catering-process-gap) - var(--catering-process-arrow-length)) / 2);
   top: calc(var(--catering-process-head-height) / 2);
   transform: translateY(-50%);
-  width: var(--catering-process-arrow-length) !important;
-  height: auto !important;
+  width: var(--catering-process-arrow-length);
+  height: 20px;
   z-index: 3;
   pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.24s ease;
+}
+
+/* 화살표 이미지 래퍼 크기에 맞춤 */
+.catering_process_arrow_img {
+  width: 100% !important;
+  height: 100% !important;
   object-fit: contain;
+}
+
+/* 화살표 왼→오 드러남 */
+.catering_process_arrow_visible {
+  clip-path: inset(0 0% 0 0) !important;
 }
 
 /* 4번 화면: 교육 섹션 본문 레이아웃 */
@@ -739,8 +777,7 @@
   gap: 1.25rem;
 }
 
-/* 4번 화면: 라벨 진입 전 흐림 상태 */
-/* 4번 화면: 검정 라벨 셀 — 기본 흐린 상태, .catering_education_label_clear 부여 시 선명해짐 */
+/* 4번 화면: 정기/비정기 교육 라벨은 항상 선명하게 표시 */
 .catering_education_stat_label {
   border-radius: 0.75rem;
   background-color: var(--catering-dark-cell-color);
@@ -750,14 +787,14 @@
   font-weight: 700;
   line-height: 1;
   transform: translateY(-0.3rem);
-  opacity: 0.25;
-  filter: blur(2px);
-  transition: opacity 0.6s ease, filter 0.6s ease;
-}
-
-.catering_education_label_clear {
   opacity: 1;
   filter: blur(0px);
+  transition: transform 0.1s ease;
+}
+
+/* 4번 화면: 퍼센트 카운트업 중 라벨도 함께 강조 */
+.catering_education_stat_label.counting {
+  transform: translateY(-0.3rem) scale(1.06);
 }
 
 /* 4번 화면: 퍼센트 수치 텍스트 */
@@ -788,6 +825,7 @@
 /* 4번 화면: 카드 슬라이드 표시 영역 */
 .catering_education_cards_viewport {
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 /* 4번 화면: 좌우 화살표 버튼 */
@@ -797,7 +835,7 @@
   transform: translateY(-50%);
   border: none;
   background: transparent;
-  color: #d8d4cf;
+  color: #7a7470;
   font-size: 64px;
   line-height: 1;
   cursor: pointer;
@@ -830,6 +868,7 @@
   display: flex;
   justify-content: flex-start;
   gap: var(--catering-education-gap);
+  touch-action: pan-y;
 }
 
 /* 4번 화면: 카드 트랙을 실제로 한 칸씩 이동시키는 전환 */
@@ -876,13 +915,105 @@
   line-height: 1.45;
 }
 
-/* 5번 화면: 레시피/채용 섹션 본문 레이아웃 */
+/* 5번 화면: 레시피/채용 섹션 본문 레이아웃 (기존 단일 섹션용, 미사용 가능) */
 .catering_research_inner {
   --catering-research-lift-offset: -0.85rem;
   --catering-research-top-extra-lift: -0.45rem;
   display: grid;
   align-content: center;
   gap: clamp(2.7rem, 5.1vh, 4.8rem);
+}
+
+/* 5번 섹션(레시피 단독): 패딩 + 레이아웃 */
+.catering_research_section_inner {
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+/* 5번 섹션: SectionTitle 래퍼 — 부모가 이미 padding-inline 처리하므로 좌우/상단 패딩 제거 */
+.catering_research_section_inner .main-section-title-wrap {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: clamp(1.2rem, 2.5vh, 2rem);
+}
+
+.catering_research_section_inner .catering_research_list {
+  gap: clamp(2.8rem, 6vh, 5rem);
+  transform: none;
+}
+
+/* 5번 섹션: 설명 텍스트를 위생칩과 동일한 테두리 박스로 표시 */
+.catering_research_section_inner .catering_research_description {
+  border: 1.5px solid rgba(52, 43, 35, 0.55);
+  border-radius: 0.9rem;
+  padding: clamp(0.9rem, 2vh, 1.5rem) clamp(1rem, 2vw, 1.5rem);
+  background-color: #ffffff;
+  white-space: normal;
+  font-size: clamp(16px, 1.2vw, 23px);
+  line-height: 1.5;
+  max-width: none;
+  width: auto;
+  margin: 0;
+}
+
+/* 5번 섹션: 뱃지 폰트 상향 */
+.catering_research_section_inner .catering_research_badge {
+  font-size: clamp(16px, 1.2vw, 23px);
+}
+
+/* 6번 섹션(위생+채용 통합): 패딩 + 레이아웃 */
+.catering_safety_recruit_inner {
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+  display: grid;
+  align-content: center;
+  gap: clamp(2rem, 4vh, 3.5rem);
+}
+
+/* 6번 섹션: SectionTitle 래퍼 — 부모가 이미 padding-inline 처리하므로 좌우/상단 패딩 제거 */
+.catering_safety_subgroup .main-section-title-wrap,
+.catering_recruit_subgroup .main-section-title-wrap {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: clamp(0.8rem, 1.8vh, 1.5rem);
+}
+
+.catering_safety_recruit_inner .catering_safety_chip_row {
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  margin-top: 0;
+  transform: none;
+}
+
+.catering_safety_recruit_inner .catering_safety_chip {
+  padding: clamp(1.2rem, 2.5vh, 2rem) 1.4rem;
+  font-size: clamp(16px, 1.2vw, 23px);
+  line-height: 1.5;
+}
+
+.catering_safety_recruit_inner .catering_recruit_blocks {
+  gap: clamp(2rem, 4.5vw, 6rem);
+  margin-top: 0;
+}
+
+.catering_safety_recruit_inner .catering_recruit_block h3 {
+  font-size: clamp(26px, 2.1vw, 38px);
+}
+
+.catering_safety_recruit_inner .catering_recruit_block li {
+  font-size: clamp(16px, 1.2vw, 23px);
+}
+
+/* 모바일 교육 섹션: stats와 캐러셀 사이 구분선 (고객문의 바 동일 스타일, 양끝 인셋) */
+.catering_education_divider {
+  height: 4px;
+  border: 0;
+  background-color: #111111;
+  margin-top: clamp(0.8rem, 2vh, 1.5rem);
+  margin-bottom: 0;
+  margin-inline: clamp(1rem, 4vw, 2rem);
 }
 
 /* 5번 화면: 좌측 뱃지 + 우측 설명 3행 */
@@ -958,6 +1089,7 @@
   white-space: pre-line;
   font-size: clamp(14px, 0.98vw, 19px);
   line-height: 1.35;
+  background-color: #ffffff;
 }
 
 /* 5번 화면: 하단 2개 채용 블록 */
@@ -983,7 +1115,13 @@
   text-align: center;
   font-size: clamp(22px, 1.65vw, 30px);
   font-weight: 800;
-  color: #111111;
+  color: #000000 !important;
+}
+
+/* 채용 블록 h3 — 전역 h3{text-white} 완전 차단 */
+#catering_research .catering_recruit_block h3,
+#catering_safety_mobile .catering_recruit_block h3 {
+  color: #000000 !important;
 }
 
 /* 5번 화면: 채용 블록 목록 */
@@ -1162,11 +1300,20 @@
   }
 }
 
+/* 모바일 전용 요소: 데스크탑 기본 숨김 */
+.catering_process_mobile_only { display: none; }
+.catering_mobile_section { display: none; }
+.catering_mobile_section_title { display: none; }
+
+
+/* 데스크탑 전용 래퍼: 항상 표시 */
+.catering_education_desktop_content { display: contents; }
+
 /* 급식서비스 모바일 구간 보정 */
 @media (max-width: 768px) {
 /* 모바일: 첫 화면 헤더 오프셋 축소 */
   .catering_screen_with_header {
-    padding-top: calc(126px + 0.1rem);
+    padding-top: calc(var(--site-header-height-mobile) + 0.1rem);
   }
 
 /* 모바일: 흐름도 보드 폭/높이 보정 */
@@ -1238,21 +1385,21 @@
 /* 급식서비스 화면: 모바일 중단 2번 노드(사업장 메뉴 구성) */
   #catering_flow .catering_flow_node_center_mid {
     left: 21%;
-    top: 56%;
+    top: 54%;
     width: 58%;
   }
 
 /* 급식서비스 화면: 모바일 하단 1번 노드(운영 결과 분석) */
   #catering_flow .catering_flow_node_right_mid {
     left: 21%;
-    top: 72%;
+    top: 68%;
     width: 58%;
   }
 
 /* 급식서비스 화면: 모바일 하단 2번 노드(고객 입맛 식단 구성) */
   #catering_flow .catering_flow_node_right_end {
     left: 21%;
-    top: 86%;
+    top: 82%;
     width: 58%;
   }
 
@@ -1279,47 +1426,312 @@
     font-size: clamp(25px, 6vw, 34px);
   }
 
-/* 모바일: 상단 탭 1열 전환 */
+/* 모바일: 3번 섹션 전체 간격 축소 */
+  .catering_compare_inner {
+    gap: clamp(0.5rem, 1.2vh, 1rem);
+    padding-inline: 1rem;
+  }
+
+/* 모바일: 상단 탭 2열 유지 + 간격 축소 */
   .catering_compare_top_tabs {
-    grid-template-columns: 1fr;
-    gap: 0.7rem;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
 /* 모바일: 상단 탭 라벨 폭 확장 */
   .catering_compare_top_tabs span {
     min-width: 0;
     width: 100%;
+    padding: 0.55rem 0.6rem;
+    font-size: clamp(12px, 3.2vw, 14px);
   }
 
-/* 모바일: 비교표 행 묶음 1열 전환 */
-  .catering_compare_row_group {
-    grid-template-columns: 1fr;
-  }
-
-/* 모바일: 구분 셀 좌측 패딩 보정 */
-  .catering_compare_cell_side {
-    padding-left: 0.95rem;
-  }
-
-/* 모바일: 비교표 좌우 패딩 */
+/* 모바일: 비교표 리디자인 */
   .catering_compare_table {
-    padding-inline: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    padding-inline: 0;
+    margin-top: 0;
+    border-radius: 0;
+    overflow: visible;
+    border: none;
+    background-color: transparent;
+    box-shadow: 0 2px 16px 0 rgba(60,45,30,0.10);
   }
 
-/* 모바일: 프로세스 카드 1열 전환 */
-  .catering_process_row {
-    grid-template-columns: 1fr;
+/* 구분 헤더 숨김 */
+  .catering_compare_cell_head:first-child {
+    display: none;
   }
 
-/* 모바일: 교육 지표 1열 전환 */
+/* 일반업체 헤더 */
+  .catering_compare_cell_head:nth-child(2) {
+    background-color: #f0ede8;
+    color: #7a7167;
+    font-size: clamp(11px, 3vw, 13px);
+    font-weight: 600;
+    min-height: 40px;
+    border-radius: 0;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid #dedad4;
+  }
+
+/* 더채움 헤더 */
+  .catering_compare_cell_head:nth-child(3) {
+    background-color: var(--catering-table-dark-color);
+    color: #ffffff;
+    font-size: clamp(11px, 3vw, 13px);
+    font-weight: 700;
+    min-height: 40px;
+    border-radius: 0;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+  }
+
+/* 행 묶음: 전체 너비 + 2열 */
+  .catering_compare_row_group {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+
+/* 카테고리 레이블 */
+  .catering_compare_cell_side {
+    grid-column: 1 / -1;
+    background-color: #9e9b99 !important;
+    color: #ffffff !important;
+    justify-content: flex-start;
+    padding-left: 0.9rem;
+    font-size: clamp(10px, 2.6vw, 11px);
+    font-weight: 700;
+    min-height: 24px;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    border-top: 1px solid #c8c4be;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+/* 일반업체 값 셀 */
+  .catering_compare_cell {
+    min-height: 46px;
+    font-size: clamp(11px, 2.8vw, 12px);
+    padding: 0.45rem 0.65rem;
+    background-color: #f7f5f2;
+    color: #888078;
+    font-weight: 400;
+    border-top: 1px solid #eae6e0;
+    text-align: center;
+    justify-content: center;
+  }
+
+/* 더채움 값 셀 */
+  .catering_compare_row_group .catering_compare_cell:last-child {
+    background-color: #fdfcfb;
+    color: var(--catering-table-dark-color);
+    font-weight: 700;
+    border-left: 2px solid var(--catering-table-dark-color);
+    border-top: 1px solid #e8e4de;
+  }
+
+/* 모바일: 헤더 둥근 모서리 재정의 */
+  .catering_compare_table > .catering_compare_cell_head:nth-child(1) {
+    border-top-left-radius: 0;
+  }
+  .catering_compare_table > .catering_compare_cell_head:nth-child(2) {
+    border-top-left-radius: 1rem;
+  }
+  .catering_compare_table > .catering_compare_cell_head:nth-child(3) {
+    border-top-right-radius: 1rem;
+  }
+/* 첫 카테고리 레이블은 상단 border 제거 */
+  .catering_compare_row_group:first-of-type .catering_compare_cell_side {
+    border-top: none;
+  }
+
+/* 마지막 행 셀 하단 모서리 */
+  .catering_compare_row_group:last-of-type .catering_compare_cell:nth-child(2) {
+    border-bottom-left-radius: 1rem;
+  }
+  .catering_compare_row_group:last-of-type .catering_compare_cell:last-child {
+    border-bottom-right-radius: 1rem;
+  }
+
+/* 모바일 전용 프로세스 카드: 데스크탑에서 숨김 */
+.catering_process_mobile_only {
+  display: none;
+}
+
+/* 섹션3 프로세스 카드: 모바일에서 숨김 */
+#catering_compare .catering_process_row {
+  display: none;
+}
+
+/* 모바일 전용 섹션(교육): 데스크탑에서 숨김 */
+.catering_mobile_section {
+  display: none;
+}
+
+/* 교육 지표+캐러셀 데스크탑 래퍼: 데스크탑에서 grid 참여 */
+.catering_education_desktop_content {
+  display: contents;
+}
+
+/* 모바일: 섹션3 프로세스 카드 숨기고 섹션4 모바일 전용 표시 */
+  #catering_compare .catering_process_row {
+    display: none;
+  }
+
+  .catering_process_mobile_only {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 0;
+    padding-inline: 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .catering_process_mobile_down_arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .catering_process_mobile_down_arrow .catering_process_arrow_img {
+    width: 18px !important;
+    height: 9px !important;
+    transform: rotate(90deg);
+  }
+
+@keyframes catering_mobile_process_enter {
+  from { opacity: 0; transform: translateY(-22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+  .catering_process_mobile_only .catering_process_card.catering_compare_visible,
+  .catering_process_mobile_down_arrow.catering_compare_visible {
+    animation-name: catering_mobile_process_enter;
+    animation-duration: 0.32s;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    animation-fill-mode: both;
+  }
+
+/* 모바일: 교육 지표+캐러셀 섹션4에서 숨기고 전용 섹션에서 표시 */
+  .catering_education_desktop_content {
+    display: none;
+  }
+
+/* 모바일: #catering_research 내 위생/채용 숨김 — 별도 모바일 섹션에서 표시 */
+  #catering_research .catering_safety_chip_row,
+  #catering_research .catering_recruit_blocks {
+    display: none;
+  }
+
+  .catering_mobile_section {
+    display: flex;
+    flex-direction: column;
+  }
+
+/* 모바일: 공통 섹션 제목 표시 */
+  .catering_mobile_section_title {
+    display: block;
+    padding-left: 2.25rem;
+    padding-right: 1.35rem;
+  }
+
+/* 모바일: 위생/채용 제목은 기존 padding-left: 0 규칙보다 우선 적용 */
+  #catering_research .catering_mobile_section_title,
+  #catering_safety_mobile .catering_safety_subgroup .catering_mobile_section_title,
+  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  #catering_safety_mobile .catering_safety_subgroup .catering_mobile_section_title,
+  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title {
+    margin-bottom: 1.1rem;
+  }
+
+/* 모바일: 제목과 본문을 배경 이미지보다 위 레이어에 고정 */
+  #catering_research .catering_screen_body,
+  #catering_safety_mobile .catering_screen_body {
+    position: relative;
+    z-index: 2;
+  }
+
+  #catering_research .catering_research_inner,
+  #catering_safety_mobile .catering_safety_recruit_inner {
+    position: relative;
+    z-index: 2;
+  }
+
+/* 모바일: 프로세스 카드 본문 최소 높이 축소 */
+  .catering_process_card_body {
+    min-height: 80px;
+    font-size: clamp(11px, 3vw, 13px);
+  }
+
+/* 모바일: 프로세스 카드 헤더 높이 축소 */
+  .catering_process_card_head {
+    height: 36px;
+    font-size: clamp(12px, 3.2vw, 14px);
+  }
+
+/* 모바일: 교육 지표 — 세로 flex로 행마다 독립 배치 */
   .catering_education_stats {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    align-items: center;
   }
 
-/* 모바일: 교육 카드 래퍼 좌우 패딩 */
+  /* 모바일: 각 행은 가로 flex, 라벨+값 고정 너비로 어떤 상황에도 이동 없음 */
+  .catering_education_stat_item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  /* 모바일: 라벨 — 고정 152px, transform/transition 완전 차단 */
+  .catering_education_stat_label {
+    width: 152px !important;
+    flex-shrink: 0 !important;
+    text-align: center;
+    white-space: nowrap;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .catering_education_stat_label.counting {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* 모바일: 값 — 고정 80px, transform/transition 완전 차단 */
+  .catering_education_stat_value {
+    width: 80px !important;
+    flex-shrink: 0 !important;
+    margin-top: 0;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .catering_education_stat_value.counting {
+    transform: none !important;
+    transition: none !important;
+  }
+
+/* 모바일: 교육 카드 래퍼 좌우 패딩 + 상단 여백 축소 */
   .catering_education_cards_wrap {
     padding-inline: 1.8rem;
+    margin-top: clamp(0.6rem, 1.5vh, 1.2rem);
+  }
+
+/* 모바일: 모바일 교육 섹션 inner 간격 축소 */
+  .catering_mobile_section .catering_education_inner {
+    gap: clamp(1.2rem, 2.5vh, 2rem);
   }
 
 /* 모바일: 교육 화살표 버튼 크기 축소 */
@@ -1329,57 +1741,191 @@
 
 /* 모바일: 왼쪽 화살표 버튼 위치 */
   .catering_education_nav_left {
-    left: 0;
+    left: 0.9rem;
   }
 
 /* 모바일: 오른쪽 화살표 버튼 위치 */
   .catering_education_nav_right {
-    right: 0;
+    right: 0.9rem;
+  }
+
+/* 모바일: 메뉴 연구 개발 섹션 좌우 여백 및 세로 간격 */
+  #catering_research .catering_research_inner {
+    width: 100%;
+    padding-inline: 0;
+    gap: clamp(2.35rem, 4.8vh, 3.45rem);
+  }
+
+/* 모바일: 메뉴 연구 개발 목록을 화면 안쪽에 안정적으로 배치 */
+  #catering_research .catering_research_list {
+    width: 100%;
+    padding-inline: 1.35rem 1.35rem;
+    padding-bottom: 4rem;
+    gap: clamp(0.85rem, 1.8vh, 1.15rem);
+    transform: none;
   }
 
 /* 모바일: 레시피 아이템 1열 전환 */
-  .catering_research_item {
+  #catering_research .catering_research_item {
     grid-template-columns: 1fr;
-    row-gap: 0.8rem;
+    row-gap: 0.45rem;
   }
 
-/* 모바일: 채용 블록 1열 전환 */
-  .catering_recruit_blocks {
+/* 모바일: 메뉴 연구 개발 카드 제목 */
+  #catering_research .catering_research_badge {
+    justify-self: stretch;
+    width: 100%;
+    min-height: 40px;
+    border-radius: 0.82rem;
+    padding: 0.68rem 0.9rem;
+    margin-bottom: 0.5rem;
+    font-size: clamp(14px, 3.7vw, 16px);
+    line-height: 1.2;
+  }
+
+/* 모바일: 메뉴 연구 개발 본문 텍스트 박스 */
+  #catering_research .catering_research_description {
+    width: 100%;
+    max-width: none;
+    border: 1.5px solid rgba(52, 43, 35, 0.62);
+    border-radius: 0.9rem;
+    padding: 0.8rem 0.95rem;
+    margin-bottom: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(63, 48, 38, 0.08);
+    white-space: pre-line;
+    font-size: clamp(14px, 3.7vw, 16px);
+    line-height: 1.45;
+    text-align: left;
+  }
+
+/* 모바일: 위생·안전 관리 및 채용안내 섹션 공통 여백 */
+  .catering_safety_recruit_inner {
+    width: 100%;
+    padding-inline: 0;
+    gap: clamp(1.55rem, 2.9vh, 2rem);
+    transform: translateY(-1.8rem);
+  }
+
+/* 모바일: 위생·안전 관리/채용안내 본문 그룹 */
+  .catering_safety_subgroup,
+  .catering_recruit_subgroup {
+    display: grid;
+    width: 100%;
+    gap: 0;
+  }
+
+/* 모바일: 위생 안내 텍스트 박스 */
+  .catering_safety_recruit_inner .catering_safety_chip_row {
     grid-template-columns: 1fr;
+    padding-inline: 1.5rem;
+    gap: 0.72rem;
+    margin-top: 0;
+    transform: none;
   }
 
-
-
-  /* 1. 이미지를 감싸는 부모 div 설정 */
-  .catering_stage_image_wrap {
-    position: relative; /* 자식 요소들의 기준점 */
-    width: 100%;        /* 적절한 크기 설정 */
-    height: 300px;      /* 예시 높이 */
-    background-color: #6c5ce7; /* 원하는 배경색 (이미지 로딩 전이나 여백에 보임) */
-    overflow: hidden;
+  .catering_safety_recruit_inner .catering_safety_chip {
+    padding: 0.82rem 0.95rem;
+    text-align: center;
+    font-size: clamp(14px, 3.7vw, 16px);
+    line-height: 1.45;
+    box-shadow: 0 8px 20px rgba(63, 48, 38, 0.08);
   }
 
-  /* 2. 이미지 위에 그레인 효과와 색상을 덮는 가상 요소 */
-  .catering_stage_image_wrap::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    
-    /* 필터 효과: 아래 정의된 SVG 노이즈를 불러옵니다 */
-    filter: url(#noiseFilter);
-    
-    /* 그레인 강도 조절 (0.1 ~ 0.2 사이 추천) */
-    opacity: 0.15;
-    
-    /* 마우스 클릭 등이 이미지에 전달되도록 설정 */
-    pointer-events: none;
-    z-index: 1;
+/* 모바일: 채용안내 카드 목록 */
+  .catering_safety_recruit_inner .catering_recruit_blocks {
+    grid-template-columns: 1fr;
+    width: 100%;
+    padding-inline: 1.5rem;
+    gap: 0.85rem;
+    margin-top: 0;
   }
 
-  /* 3. 이미지 자체 스타일 (기존 유지) */
+  .catering_safety_recruit_inner .catering_recruit_block {
+    justify-items: start;
+    border: 1.5px solid rgba(52, 43, 35, 0.38);
+    border-radius: 0.95rem;
+    padding: 1rem 1.05rem;
+    background-color: #ffffff;
+    box-shadow: 0 10px 22px rgba(63, 48, 38, 0.08);
+    color: #111111;
+    opacity: 1;
+  }
+
+  .catering_safety_recruit_inner .catering_recruit_block h3 {
+    width: 100%;
+    text-align: left;
+    font-size: clamp(17px, 4.6vw, 20px);
+    color: #111111 !important;
+  }
+
+  .catering_safety_recruit_inner .catering_recruit_block ul {
+    margin-top: 0.7rem;
+    width: 100%;
+    max-width: none;
+  }
+
+  .catering_safety_recruit_inner .catering_recruit_block li {
+    font-size: clamp(14px, 3.7vw, 16px);
+    line-height: 1.42;
+    color: #111111;
+  }
+
+/* 모바일: 2번 섹션 이미지 — 세로 스택에 맞게 아래에서 위로 페이드인 */
+@keyframes catering_stage_image_enter_mobile {
+  from { opacity: 0; transform: translateY(48px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+  .catering_stage_panel_visible .catering_stage_image_wrap {
+    animation-name: catering_stage_image_enter_mobile;
+    animation-duration: 0.72s;
+  }
+
+/* 모바일: 접시 이미지 크기 및 위치*/
   .catering_stage_image {
-    object-fit: cover; /* 이미지가 찌그러지지 않게 꽉 채움 */
-    z-index: 0;
+    width: var(--catering-plate-width, 110%) !important;
+    height: var(--catering-plate-height, 100%) !important;
+  }
+  .catering_stage_image_left,
+  .catering_stage_image_center,
+  .catering_stage_image_right {
+    --catering-plate-right: -55%;
+    --catering-plate-top: 50%;
+  }
+
+/* 모바일: 툴팁 — right:0 대신 앵커 중앙 기준 가운데 정렬로 변경 (right:0이면 왼쪽으로 밀려 잘림) */
+  .catering-hover-tooltip,
+  .catering-hover-tooltip-right {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(12px);
+  }
+
+  .catering_flow_node_hover_anchor:is(:hover, :focus-visible, :focus-within) .catering-hover-tooltip {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .catering-hover-tooltip::before {
+    /* 툴팁이 앵커 중앙 정렬이므로 노드 우측 끝에 맞춰 right 보정 */
+    right: calc(min(44vw, 160px) - 30vw + 2.1rem);
+    left: auto;
+    transform: none;
+  }
+
+/* 모바일: 단계 텍스트 왼쪽 정렬 및 크기 축소 */
+  .catering_stage_text {
+    margin-left: 1rem;
+    margin-right: auto;
+    width: min(72%, 260px);
+  }
+
+  .catering_stage_text strong {
+    font-size: clamp(15px, 4vw, 18px);
+  }
+
+  .catering_stage_text p {
+    font-size: clamp(13px, 3.5vw, 15px);
+    min-height: 0;
   }
 }

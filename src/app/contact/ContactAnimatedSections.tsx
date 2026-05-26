@@ -20,7 +20,7 @@ export function ContactQualitySectionAnimated({ children }: { children: React.Re
           observer.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.02 }
     );
 
     observer.observe(el);
@@ -53,7 +53,7 @@ export function ContactFormSectionAnimated({ children }: { children: React.React
           observer.disconnect();
         }
       },
-      { threshold: 0.18 }
+      { threshold: 0.02 }
     );
 
     observer.observe(el);

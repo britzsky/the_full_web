@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import { getPublicApiErrorMessage, requestPublicWebApi } from "@/app/lib/publicWebApi";
+import { toPlainTextFromCkEditor } from "@/app/contact/editorTextUtils";
 import ContactManageReplyEditor from "./ContactManageReplyEditor";
 
 type ContactManageSearchField = "title" | "businessName" | "managerName";
@@ -227,7 +228,7 @@ const toRecord = (row?: ContactApiInquiry | null): ContactInquiryRecord | null =
     mealType: normalizeText(row.mealType),
     businessType: normalizeText(row.businessType),
     switchingReason: normalizeText(row.switchingReason),
-    inquiryContent: normalizeText(row.inquiryContent),
+    inquiryContent: toPlainTextFromCkEditor(normalizeText(row.inquiryContent)),
     source: normalizeText(row.source),
     erpSyncTarget: normalizeText(row.erpSyncTarget),
     updatedAt: normalizeText(row.updatedAt),

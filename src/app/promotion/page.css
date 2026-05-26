@@ -3,13 +3,13 @@
 /* 홍보 화면: 페이지 전체 스크롤 컨테이너 영역 */
 .promotion-page {
   scrollbar-gutter: stable;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 홍보 화면: 상단 헤더 고정 높이 영역 */
 .promotion-header-shell {
-  min-height: 156px;
-  background-color: #ffffff;
+  min-height: var(--site-header-height);
+  background-color: #FAFAF8;
 }
 
 /* 홍보 화면: 스크린리더 전용 접근성 텍스트 영역 */
@@ -90,7 +90,7 @@
 
 /* 홍보 화면: 목록/상세/작성 섹션 공통 배경 영역 */
 .promotion-list-section, .promotion-detail-section, .promotion-form-section {
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 홍보 화면: 게시글 목록 섹션 여백 영역 */
@@ -141,7 +141,7 @@
   min-height: 46px;
   border: 1px solid rgba(39, 29, 19, 0.25);
   border-radius: 9999px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: clamp(14px, 0.95vw, 16px);
   line-height: 1;
@@ -157,7 +157,7 @@
   width: min(100%, 380px);
   border-radius: 9999px;
   padding-inline: 1rem;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
 }
 
 /* 홍보 화면: 검색어 입력 플레이스홀더 영역 */
@@ -216,7 +216,7 @@
 /* 홍보 화면: 아웃라인 버튼 스타일 영역 */
 .promotion-button-outline {
   border: 1px solid rgba(39, 29, 19, 0.28);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
 }
 
@@ -242,7 +242,7 @@
   min-height: 40px;
   border: 1px solid rgba(39, 29, 19, 0.2);
   border-radius: 9999px;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: 14px;
   font-weight: 700;
@@ -303,7 +303,7 @@
   height: 52px;
   border-bottom: 1px solid rgba(39, 29, 19, 0.14);
   color: #111111;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   text-align: center;
   font-size: clamp(14px, 0.95vw, 16px);
   font-weight: 700;
@@ -374,7 +374,7 @@
   min-width: 50px;
   min-height: 28px;
   border: 1px solid rgba(39, 29, 19, 0.24);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: 13px;
   font-weight: 700;
@@ -610,7 +610,7 @@
   display: grid;
   place-items: center;
   height: 100%;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   font-size: clamp(15px, 0.95vw, 16px);
   font-weight: 700;
 }
@@ -678,7 +678,7 @@
   width: 100%;
   border: 1px solid rgba(39, 29, 19, 0.33);
   border-radius: 0;
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: clamp(15px, 1vw, 17px);
   line-height: 1.35;
@@ -699,7 +699,7 @@
 .promotion-ckeditor-loading {
   min-height: clamp(260px, 38vh, 430px);
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #7b7b7b;
   font-family: var(--font-family-base);
   font-size: clamp(14px, 0.95vw, 16px);
@@ -711,14 +711,14 @@
 /* 홍보 화면: CKEditor 툴바 영역 */
 .promotion-form-ckeditor-shell .ck.ck-toolbar {
   border-color: rgba(39, 29, 19, 0.28);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   font-family: var(--font-family-base);
 }
 
 /* 홍보 화면: CKEditor 편집 본문 영역 */
 .promotion-form-ckeditor-shell .ck-editor__editable_inline {
   min-height: clamp(220px, 34vh, 330px);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-family: var(--font-family-base);
   font-size: clamp(15px, 1vw, 17px);
@@ -823,7 +823,7 @@
   margin: 0;
   min-height: 44px;
   border: 1px solid rgba(39, 29, 19, 0.33);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   font-size: clamp(15px, 1vw, 17px);
   line-height: 1.35;
@@ -890,7 +890,7 @@
   min-width: 0;
   max-width: 124px;
   border: 1px solid rgba(39, 29, 19, 0.2);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   padding: 0.42rem;
   display: grid;
   gap: 0.4rem;
@@ -959,7 +959,7 @@
 /* 홍보 화면: 첨부 이미지 삭제 버튼 영역 */
 .promotion-form-image-remove {
   border: 1px solid rgba(39, 29, 19, 0.28);
-  background-color: #ffffff;
+  background-color: #FAFAF8;
   color: #111111;
   align-self: stretch;
   display: inline-flex;
@@ -1100,6 +1100,6 @@
 @media (max-width: 768px) {
   /* 홍보 화면: 상단 헤더 고정 높이 영역 */
   .promotion-header-shell {
-    min-height: 126px;
+    min-height: var(--site-header-height-mobile);
   }
 }

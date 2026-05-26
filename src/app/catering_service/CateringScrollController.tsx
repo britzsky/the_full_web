@@ -28,10 +28,15 @@ export default function CateringScrollController({
       return;
     }
 
-    // 섹션 선택자에 해당하는 전체 섹션 요소 배열
+    // 모바일에서는 스냅 스크롤이 빠르게 완료되므로 threshold를 낮춰 옵저버가 확실히 발동하도록 함
+    const isMobile = window.innerWidth <= 768;
+    const observerThreshold = isMobile ? 0.15 : 0.3;
+    const looseThreshold = isMobile ? 0.1 : 0.2;
+
+    // 섹션 선택자에 해당하는 전체 섹션 요소 배열 (display:none 제외)
     const sectionElements = Array.from(
       containerElement.querySelectorAll<HTMLElement>(sectionSelector)
-    );
+    ).filter((el) => el.offsetParent !== null || el.offsetHeight > 0);
 
     if (sectionElements.length === 0) {
       return;
@@ -111,10 +116,23 @@ export default function CateringScrollController({
       animationFrameId = window.requestAnimationFrame(step);
     };
 
+    // 터치 중 여부 추적 (터치 스크롤 시 wheel preventDefault 생략)
+    let isTouching = false;
+    const onTouchStart = () => { isTouching = true; };
+    const onTouchEnd = () => { isTouching = false; };
+    containerElement.addEventListener("touchstart", onTouchStart, { passive: true });
+    containerElement.addEventListener("touchend", onTouchEnd, { passive: true });
+    containerElement.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
     // 휠 이벤트 핸들러 (트랙패드 소량 입력 누적 후 섹션 단위 이동 처리)
     const handleWheel = (event: WheelEvent) => {
       // 핀치 줌 (ctrlKey) 미차단
       if (event.ctrlKey) {
+        return;
+      }
+
+      // 터치 스크롤 중 wheel 이벤트는 네이티브 snap 스크롤에 위임
+      if (isTouching) {
         return;
       }
 
@@ -203,9 +221,9 @@ export default function CateringScrollController({
             });
             return;
           }
-          // 아래로 스크롤 진입 시 패널당 0.45s 간격 순차 애니메이션
+          // 아래로 진입할 때 1번 이미지가 움직이는 중에 2번, 3번 이미지가 이어서 들어오도록 간격을 좁힌다.
           stagePanels.forEach((panel, index) => {
-            const delay = `${index * 0.45}s`;
+            const delay = `${index * 0.18}s`;
             const image = panel.querySelector<HTMLElement>(".catering_stage_image_wrap");
             const text = panel.querySelector<HTMLElement>(".catering_stage_text");
             // visible 제거 후 reflow 강제 → 동일 클래스 재부여 시 animation 재실행
@@ -217,7 +235,7 @@ export default function CateringScrollController({
           });
         });
       },
-      { root: containerElement, threshold: 0.3 }
+      { root: containerElement, threshold: observerThreshold }
     );
 
     const stageSection = containerElement.querySelector<HTMLElement>("#catering_stage");
@@ -249,6 +267,8 @@ export default function CateringScrollController({
             });
             processCards.forEach((card) => {
               card.style.animationDelay = "";
+              const arrow = card.querySelector<HTMLElement>(".catering_process_arrow");
+              if (arrow) arrow.classList.remove("catering_process_arrow_visible");
               card.classList.add("catering_compare_hidden");
               card.classList.remove("catering_compare_visible");
             });
@@ -262,23 +282,48 @@ export default function CateringScrollController({
             el.classList.remove("catering_compare_hidden");
             el.classList.add("catering_compare_visible");
           });
-          // 프로세스 카드+화살표 0.32s 간격 순차 진입 (탭+테이블 후 0.55s 지연 시작)
+          // 프로세스 카드는 모집→채용→입사→관리 흐름이 빠르게 이어지도록 간격을 짧게 둔다.
+          const cardStep = 0.18;
+          const cardBaseDelay = 0.15;
           processCards.forEach((card, i) => {
             card.classList.remove("catering_compare_visible");
             void card.offsetWidth;
-            card.style.animationDelay = scrollDirection.down ? `${0.55 + i * 0.32}s` : "0s";
+            const cardDelay = scrollDirection.down ? cardBaseDelay + i * cardStep : 0;
+            card.style.animationDelay = `${cardDelay}s`;
             card.classList.remove("catering_compare_hidden");
             card.classList.add("catering_compare_visible");
+            // 화살표는 카드가 보이기 시작한 직후 빠르게 왼쪽에서 오른쪽으로 드러난다.
+            const arrow = card.querySelector<HTMLElement>(".catering_process_arrow");
+            if (arrow) {
+              arrow.classList.remove("catering_process_arrow_visible");
+              if (scrollDirection.down) {
+                window.setTimeout(() => {
+                  arrow.classList.add("catering_process_arrow_visible");
+                }, (cardDelay + 0.12) * 1000);
+              } else {
+                arrow.classList.add("catering_process_arrow_visible");
+              }
+            }
           });
         });
       },
-      { root: containerElement, threshold: 0.3 }
+      { root: containerElement, threshold: observerThreshold }
     );
 
     const compareSection = containerElement.querySelector<HTMLElement>("#catering_compare");
     if (compareSection) compareObserver.observe(compareSection);
 
-    // 4번 섹션: 라벨 흐림→선명 전환, 퍼센트 카운트업, 캐러셀 진입 애니메이션
+    // 4번 섹션: 모바일 전용 프로세스 카드 + 화살표 애니메이션
+    const mobileProcessCards = Array.from(
+      containerElement.querySelectorAll<HTMLElement>("#catering_education .catering_process_card")
+    );
+    const mobileProcessArrows = Array.from(
+      containerElement.querySelectorAll<HTMLElement>("#catering_education .catering_process_mobile_down_arrow")
+    );
+    mobileProcessCards.forEach((card) => card.classList.add("catering_compare_hidden"));
+    mobileProcessArrows.forEach((arrow) => arrow.classList.add("catering_compare_hidden"));
+
+    // 4번 섹션: 퍼센트 카운트업과 캐러셀 진입 애니메이션
     const statLabels = Array.from(
       containerElement.querySelectorAll<HTMLElement>("#catering_education .catering_education_stat_label")
     );
@@ -289,13 +334,11 @@ export default function CateringScrollController({
 
     // 초기 캐러셀 숨김 상태 설정 (라벨은 CSS 기본값이 흐린 상태)
     if (educationCarousel) educationCarousel.classList.add("catering_compare_hidden");
-    // 라벨 선명 전환 타이머 ID (재진입 시 이전 타이머 취소용)
-    let labelClearTimeoutId = 0;
-
     // 0%에서 target까지 duration(ms) 동안 ease-out cubic 카운트업
-    const countUp = (el: HTMLElement, target: number, duration: number) => {
+    const countUp = (el: HTMLElement, target: number, duration: number, label?: HTMLElement) => {
       const start = performance.now();
       el.classList.add("counting");
+      label?.classList.add("counting");
       const step = (now: number) => {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
@@ -306,6 +349,7 @@ export default function CateringScrollController({
           requestAnimationFrame(step);
         } else {
           el.classList.remove("counting");
+          label?.classList.remove("counting");
         }
       };
       requestAnimationFrame(step);
@@ -315,10 +359,20 @@ export default function CateringScrollController({
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) {
-            // 이탈 방향 무관하게 라벨/퍼센트 초기 상태 복원 (재진입 시 항상 애니메이션 재실행)
-            window.clearTimeout(labelClearTimeoutId);
-            statLabels.forEach((el) => el.classList.remove("catering_education_label_clear"));
+            // 이탈 방향 무관하게 퍼센트 초기 상태 복원 (재진입 시 항상 애니메이션 재실행)
             statValues.forEach((el) => { el.textContent = `0%`; });
+            statLabels.forEach((el) => el.classList.remove("counting"));
+            // 모바일 프로세스 카드/화살표 리셋
+            mobileProcessCards.forEach((card) => {
+              card.style.animationDelay = "";
+              card.classList.add("catering_compare_hidden");
+              card.classList.remove("catering_compare_visible");
+            });
+            mobileProcessArrows.forEach((arrow) => {
+              arrow.style.animationDelay = "";
+              arrow.classList.add("catering_compare_hidden");
+              arrow.classList.remove("catering_compare_visible");
+            });
             // 캐러셀은 위로 이탈 시 리셋 없음
             if (!scrollDirection.down) return;
             if (educationCarousel) {
@@ -328,24 +382,35 @@ export default function CateringScrollController({
             }
             return;
           }
-          // 퍼센트 카운트업 (아래 진입 시 1800ms 카운트업, 위 진입 시 즉시 완료값 표시)
-          statValues.forEach((el) => {
-            const target = parseInt(el.dataset.target ?? "0");
-            if (scrollDirection.down) {
-              countUp(el, target, 1800);
-            } else {
-              el.textContent = `${target}%`;
+          // 모바일 프로세스 카드 순차 진입 — 화살표[i]는 카드[i+1]과 같은 딜레이로 함께 진입
+          mobileProcessCards.forEach((card, i) => {
+            card.classList.remove("catering_compare_visible");
+            void card.offsetWidth;
+            const delay = scrollDirection.down ? i * 0.2 : 0;
+            card.style.animationDelay = `${delay}s`;
+            card.classList.remove("catering_compare_hidden");
+            card.classList.add("catering_compare_visible");
+            // arrow[i-1]은 card[i]와 같은 타이밍에 등장
+            const prevArrow = mobileProcessArrows[i - 1];
+            if (prevArrow) {
+              prevArrow.classList.remove("catering_compare_visible");
+              void prevArrow.offsetWidth;
+              prevArrow.style.animationDelay = `${delay}s`;
+              prevArrow.classList.remove("catering_compare_hidden");
+              prevArrow.classList.add("catering_compare_visible");
             }
           });
-          // 카운트업 900ms 시점 라벨 선명 전환 (퍼센트 차오르는 동안 함께 선명해짐)
-          window.clearTimeout(labelClearTimeoutId);
-          if (scrollDirection.down) {
-            labelClearTimeoutId = window.setTimeout(() => {
-              statLabels.forEach((el) => el.classList.add("catering_education_label_clear"));
-            }, 900);
-          } else {
-            statLabels.forEach((el) => el.classList.add("catering_education_label_clear"));
-          }
+
+          // 퍼센트 카운트업 (아래 진입 시 1800ms 카운트업, 위 진입 시 즉시 완료값 표시)
+          statValues.forEach((el, index) => {
+            const target = parseInt(el.dataset.target ?? "0");
+            if (scrollDirection.down) {
+              countUp(el, target, 1800, statLabels[index]);
+            } else {
+              el.textContent = `${target}%`;
+              statLabels[index]?.classList.remove("counting");
+            }
+          });
           // 캐러셀 0.9s 지연 후 아래에서 올라오는 진입 애니메이션
           if (educationCarousel) {
             educationCarousel.classList.remove("catering_compare_visible");
@@ -356,51 +421,156 @@ export default function CateringScrollController({
           }
         });
       },
-      { root: containerElement, threshold: 0.3 }
+      { root: containerElement, threshold: observerThreshold }
     );
 
     const educationSection = containerElement.querySelector<HTMLElement>("#catering_education");
     if (educationSection) educationObserver.observe(educationSection);
 
-    // 5번 섹션: 상단(레시피 목록)/중단(위생 칩)/하단(채용 블록) 0.4s 간격 순차 진입
-    const researchGroups = [
-      containerElement.querySelector<HTMLElement>("#catering_research .catering_research_list"),
-      containerElement.querySelector<HTMLElement>("#catering_research .catering_safety_chip_row"),
-      containerElement.querySelector<HTMLElement>("#catering_research .catering_recruit_blocks"),
-    ].filter(Boolean) as HTMLElement[];
+    // 모바일 전용 교육 섹션: 퍼센트 카운트업 + 캐러셀 진입
+    const mobileEduStatLabels = Array.from(
+      containerElement.querySelectorAll<HTMLElement>("#catering_education_mobile .catering_education_stat_label")
+    );
+    const mobileEduStatValues = Array.from(
+      containerElement.querySelectorAll<HTMLElement>("#catering_education_mobile .catering_education_stat_value")
+    );
+    const mobileEduCarousel = containerElement.querySelector<HTMLElement>("#catering_education_mobile .catering_education_cards_wrap");
+    const mobileEduDivider = containerElement.querySelector<HTMLElement>("#catering_education_mobile .catering_education_divider");
 
-    // 초기 세 그룹 숨김 상태 설정
-    researchGroups.forEach((el) => el.classList.add("catering_compare_hidden"));
+    if (mobileEduCarousel) mobileEduCarousel.classList.add("catering_compare_hidden");
+    if (mobileEduDivider) mobileEduDivider.classList.add("catering_compare_hidden");
+
+    const mobileEduObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            mobileEduStatValues.forEach((el) => { el.textContent = "0%"; });
+            mobileEduStatLabels.forEach((el) => el.classList.remove("counting"));
+            if (!scrollDirection.down) return;
+            if (mobileEduCarousel) {
+              mobileEduCarousel.style.animationDelay = "";
+              mobileEduCarousel.classList.add("catering_compare_hidden");
+              mobileEduCarousel.classList.remove("catering_compare_visible");
+            }
+            if (mobileEduDivider) {
+              mobileEduDivider.style.animationDelay = "";
+              mobileEduDivider.classList.add("catering_compare_hidden");
+              mobileEduDivider.classList.remove("catering_compare_visible");
+            }
+            return;
+          }
+          mobileEduStatValues.forEach((el, index) => {
+            const target = parseInt(el.dataset.target ?? "0");
+            if (scrollDirection.down) {
+              countUp(el, target, 1800, mobileEduStatLabels[index]);
+            } else {
+              el.textContent = `${target}%`;
+              mobileEduStatLabels[index]?.classList.remove("counting");
+            }
+          });
+          if (mobileEduDivider) {
+            mobileEduDivider.classList.remove("catering_compare_visible");
+            void mobileEduDivider.offsetWidth;
+            mobileEduDivider.style.animationDelay = scrollDirection.down ? "0.9s" : "0s";
+            mobileEduDivider.classList.remove("catering_compare_hidden");
+            mobileEduDivider.classList.add("catering_compare_visible");
+          }
+          if (mobileEduCarousel) {
+            mobileEduCarousel.classList.remove("catering_compare_visible");
+            void mobileEduCarousel.offsetWidth;
+            mobileEduCarousel.style.animationDelay = scrollDirection.down ? "0.9s" : "0s";
+            mobileEduCarousel.classList.remove("catering_compare_hidden");
+            mobileEduCarousel.classList.add("catering_compare_visible");
+          }
+        });
+      },
+      { root: containerElement, threshold: observerThreshold }
+    );
+
+    const mobileEduSection = containerElement.querySelector<HTMLElement>("#catering_education_mobile");
+    if (mobileEduSection) mobileEduObserver.observe(mobileEduSection);
+
+    // 5번 섹션: 레시피(상단) → 위생칩(중단) → 채용블록(하단) 순차 진입
+    const researchList = containerElement.querySelector<HTMLElement>("#catering_research .catering_research_list");
+    const safetyChipRow = containerElement.querySelector<HTMLElement>("#catering_research .catering_safety_chip_row");
+    const recruitBlocks = containerElement.querySelector<HTMLElement>("#catering_research .catering_recruit_blocks");
+    const researchAnimItems = [
+      { el: researchList,  delay: 0.20 },
+      { el: safetyChipRow, delay: 0.45 },
+      { el: recruitBlocks, delay: 0.70 },
+    ];
+    researchAnimItems.forEach(({ el }) => {
+      if (el) el.classList.add("catering_compare_hidden");
+    });
 
     const researchObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) {
-            // 위로 스크롤 이탈 시 리셋 없음
             if (!scrollDirection.down) return;
-            // 아래로 스크롤 이탈 시 숨김 상태 복원
-            researchGroups.forEach((el) => {
+            researchAnimItems.forEach(({ el }) => {
+              if (!el) return;
               el.style.animationDelay = "";
               el.classList.add("catering_compare_hidden");
               el.classList.remove("catering_compare_visible");
             });
             return;
           }
-          // 세 그룹 0.7s 간격 순차 진입
-          researchGroups.forEach((el, i) => {
+          researchAnimItems.forEach(({ el, delay }) => {
+            if (!el) return;
             el.classList.remove("catering_compare_visible");
             void el.offsetWidth;
-            el.style.animationDelay = scrollDirection.down ? `${i * 0.7}s` : "0s";
+            el.style.animationDelay = scrollDirection.down ? `${delay}s` : "0s";
             el.classList.remove("catering_compare_hidden");
             el.classList.add("catering_compare_visible");
           });
         });
       },
-      { root: containerElement, threshold: 0.3 }
+      { root: containerElement, threshold: looseThreshold }
     );
 
     const researchSection = containerElement.querySelector<HTMLElement>("#catering_research");
     if (researchSection) researchObserver.observe(researchSection);
+
+    // 모바일 전용 위생/채용 섹션 애니메이션
+    const mobileSafetyChipRow = containerElement.querySelector<HTMLElement>("#catering_safety_mobile .catering_safety_chip_row");
+    const mobileRecruitBlocks = containerElement.querySelector<HTMLElement>("#catering_safety_mobile .catering_recruit_blocks");
+    const mobileSafetyAnimItems = [
+      { el: mobileSafetyChipRow, delay: 0.20 },
+      { el: mobileRecruitBlocks, delay: 0.45 },
+    ];
+    mobileSafetyAnimItems.forEach(({ el }) => {
+      if (el) el.classList.add("catering_compare_hidden");
+    });
+
+    const mobileSafetyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            if (!scrollDirection.down) return;
+            mobileSafetyAnimItems.forEach(({ el }) => {
+              if (!el) return;
+              el.style.animationDelay = "";
+              el.classList.add("catering_compare_hidden");
+              el.classList.remove("catering_compare_visible");
+            });
+            return;
+          }
+          mobileSafetyAnimItems.forEach(({ el, delay }) => {
+            if (!el) return;
+            el.classList.remove("catering_compare_visible");
+            void el.offsetWidth;
+            el.style.animationDelay = scrollDirection.down ? `${delay}s` : "0s";
+            el.classList.remove("catering_compare_hidden");
+            el.classList.add("catering_compare_visible");
+          });
+        });
+      },
+      { root: containerElement, threshold: looseThreshold }
+    );
+
+    const mobileSafetySectionEl = containerElement.querySelector<HTMLElement>("#catering_safety_mobile");
+    if (mobileSafetySectionEl) mobileSafetyObserver.observe(mobileSafetySectionEl);
 
     // 언마운트 시 진행 중 애니메이션 프레임/타이머/이벤트/옵저버 전체 정리
     return () => {
@@ -408,10 +578,15 @@ export default function CateringScrollController({
       window.clearTimeout(wheelResetTimeoutId);
       containerElement.removeEventListener("wheel", handleWheel);
       containerElement.removeEventListener("scroll", handleScroll);
+      containerElement.removeEventListener("touchstart", onTouchStart);
+      containerElement.removeEventListener("touchend", onTouchEnd);
+      containerElement.removeEventListener("touchcancel", onTouchEnd);
       stageObserver.disconnect();
       compareObserver.disconnect();
       educationObserver.disconnect();
+      mobileEduObserver.disconnect();
       researchObserver.disconnect();
+      mobileSafetyObserver.disconnect();
     };
   }, [containerId, sectionSelector]);
 

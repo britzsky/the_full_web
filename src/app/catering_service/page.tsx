@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SectionTitle from "@/app/components/Common/SectionTitle";
 import CateringEducationCarousel from "./CateringEducationCarousel";
 import CateringScrollController from "./CateringScrollController";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
@@ -14,6 +15,7 @@ type CateringFlowNode = {
   text: string;
   type: "dark" | "outline";
   className: string;
+  delay: string;
   tooltip?: string;
 };
 
@@ -84,15 +86,16 @@ export const metadata: Metadata = {
 };
 
 // 1번 화면 메뉴구성 흐름도 배치 데이터
+// delay: Phase1(0s)=좌측3노드+현장중심 / Phase3(2.3s)=본사+사업장 / Phase4(3.2s~)=이후 순차
 const cateringFlowNodes: CateringFlowNode[] = [
-  { text: "고객의 특성 분석", type: "dark", className: "catering_flow_node_left_top" },
-  { text: "고객의 Needs 파악", type: "dark", className: "catering_flow_node_left_mid" },
-  { text: "기존 운영메뉴의 분석", type: "dark", className: "catering_flow_node_left_bottom" },
-  { text: "본사 메뉴팀의 메뉴 구성 검증", type: "dark", className: "catering_flow_node_center_top" },
-  { text: "사업장 메뉴 구성", type: "dark", className: "catering_flow_node_center_mid" },
-  { text: "운영 결과 분석", type: "dark", className: "catering_flow_node_right_mid" },
-  { text: "고객 입맛 식단 구성", type: "dark", className: "catering_flow_node_right_end" },
-  { text: "현장중심의 메뉴 구성", type: "outline", className: "catering_flow_node_top_right", tooltip: "연령, 성별, 근무 형태 등 각 사업장의 특성을 반영한 맞춤형 메뉴를 제공합니다. \n 3개월 단위 메뉴 분석을 통해 지속적으로 메뉴를 개선하며, 전문 영양사의 일일 모니터링으로 고객의 니즈를 빠르게 반영합니다." },
+  { text: "고객의 특성 분석",           type: "dark",    className: "catering_flow_node_left_top",    delay: "0s"   },
+  { text: "고객의 Needs 파악",          type: "dark",    className: "catering_flow_node_left_mid",    delay: "0s"   },
+  { text: "기존 운영메뉴의 분석",       type: "dark",    className: "catering_flow_node_left_bottom", delay: "0s"   },
+  { text: "본사 메뉴팀의 메뉴 구성 검증", type: "dark",  className: "catering_flow_node_center_top",  delay: "2.3s" },
+  { text: "사업장 메뉴 구성",           type: "dark",    className: "catering_flow_node_center_mid",  delay: "2.3s" },
+  { text: "운영 결과 분석",             type: "dark",    className: "catering_flow_node_right_mid",   delay: "4.7s" },
+  { text: "고객 입맛 식단 구성",        type: "dark",    className: "catering_flow_node_right_end",   delay: "5.6s" },
+  { text: "현장중심의 메뉴 구성",       type: "outline", className: "catering_flow_node_top_right",   delay: "0s",  tooltip: "연령, 성별, 근무 형태 등 각 사업장의 특성을 반영한 맞춤형 메뉴를 제공합니다. \n 3개월 단위 메뉴 분석을 통해 지속적으로 메뉴를 개선하며, 전문 영양사의 일일 모니터링으로 고객의 니즈를 빠르게 반영합니다." },
 ];
 
 // 2번 화면 체계적 메뉴관리 3단계 데이터
@@ -176,16 +179,16 @@ const cateringResearchItems: CateringResearchItem[] = [
   {
     label: "표준레시피 시스템",
     description:
-      "급식에 자주 활용되는 주요 메뉴 2000여개의 레시피를 설계하여 \n 식사 품질 균일화 표준 레시피를 전 사업장 배포하여 관리",
+      "급식에 자주 활용되는 주요 메뉴 2000여개의 레시피를 설계하여 식사 품질 균일화 표준 레시피를 전 사업장 배포하여 관리",
   },
   {
     label: "글로벌 트렌드 연구",
     description:
-      "현장 출신 담당자들이 빠르게 변화하는 메뉴 트렌드를 캐치하여 유행하는 \n디저트 혹은 이국적인 메뉴를 특식으로 제공",
+      "현장 출신 담당자들이 빠르게 변화하는 메뉴 트렌드를 캐치하여 유행하는 디저트 혹은 이국적인 메뉴를 특식으로 제공",
   },
   {
     label: "건강메뉴 제공",
-    description: "식약처 권장 나트륨 기준을 지키며 매끼 표준염도계를 사용하여 \n저염 조리법으로 건강 메뉴를 제공",
+    description: "식약처 권장 나트륨 기준을 지키며 매끼 표준염도계를 사용하여 저염 조리법으로 건강 메뉴를 제공",
   },
 ];
 
@@ -216,7 +219,7 @@ export default async function CateringServicePage() {
   return (
     <main
       id="catering_scroll"
-      className="catering_page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-white text-[#111111]"
+      className="catering_page h-[100svh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#FAFAF8] text-[#111111]"
     >
       <CateringScrollController containerId="catering_scroll" sectionSelector="[data-catering-section]" />
 
@@ -226,6 +229,15 @@ export default async function CateringServicePage() {
         data-catering-section
         className="catering_screen catering_screen_with_header snap-start relative"
       >
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
         <SiteHeader
           leftItems={cateringHeaderLeftItems}
           rightItems={cateringHeaderRightItems}
@@ -237,14 +249,14 @@ export default async function CateringServicePage() {
           <div className="catering_screen_inner">
             {/* 노드/연결선 좌표 보드 */}
             <div className="catering_flow_board">
-              {cateringFlowNodes.map((node, index) => (
+              {cateringFlowNodes.map((node) => (
                 <div
                   key={node.text}
                   className={`catering_flow_node ${node.className} ${
                     node.type === "outline" ? "catering_flow_node_outline" : "catering_flow_node_dark"
                   } ${node.tooltip ? "catering_flow_node_hover_anchor" : ""}`}
                   tabIndex={node.tooltip ? 0 : undefined}
-                  style={{ ["--catering-flow-node-order" as any]: index } as CSSProperties}
+                  style={{ ["--catering-flow-delay" as any]: node.delay } as CSSProperties}
                 >
                   <span>{node.text}</span>
                   {node.tooltip ? (
@@ -263,72 +275,76 @@ export default async function CateringServicePage() {
               >
                 {/* 데스크톱/태블릿 흐름선 세트 */}
                 <g className="catering_flow_lines_default">
+                  {/* 좌측 3노드 완료(~0.7s) 후 세로 연결선 */}
                   <path
                     d="M13.4 13.5 V67.5"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 0 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "0.8s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
+                  {/* 중앙 노드 완료(~3.0s) 후 Needs→중앙 가로선 + 중앙 세로선 동시 등장 */}
                   <path
                     d="M13.4 40.5 H44.2"
                     className="catering_flow_path catering_flow_needs_line_default"
-                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "3.1s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
                   <path
                     d="M13.4 40.5 H44.3"
                     className="catering_flow_path catering_flow_needs_line_small"
-                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "3.1s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
                   <path
-                    d="M44.4 25.5 V53.5"
+                    d="M44.4 26.5 V53.5"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 2 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "3.1s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
+                  {/* 운영결과 노드 완료(~5.4s) 후 연결선 */}
                   <path
                     d="M44.4 53.5 H68.2"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 3 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "5.5s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
+                  {/* 고객입맛 노드 완료(~6.3s) 후 연결선 */}
                   <path
                     d="M68.2 53.5 H88.2"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 4 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "6.4s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
-                  {/* 기본 화면: 화살표 */}
+                  {/* 기본 화면: 피드백 루프 전체 동시 등장 */}
                   <g className="catering_flow_arrow_default">
                     <path
                       d="M88.2 53.5 V77.8 H44.4"
                       className="catering_flow_path"
-                      style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
+                      style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                     />
                     <path
                       d="M44.4 61.2 V77.8"
                       className="catering_flow_path"
-                      style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
+                      style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                     />
                     <path
                       d="M42.8 63.4 L44.4 60.8 L46 63.4"
                       className="catering_flow_svg_arrowhead"
-                      style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                      style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                     />
                   </g>
 
-                  {/* 작은 화면: 화살표 */}
+                  {/* 작은 화면: 피드백 루프 전체 동시 등장 */}
                   <g className="catering_flow_arrow_small">
                     <path
                       d="M88.2 60.7 V80.4 H44.4"
                       className="catering_flow_path"
-                      style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
+                      style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                     />
                     <path
                       d="M44.4 64.6 V80.4"
                       className="catering_flow_path"
-                      style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
+                      style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                     />
                     <g transform="translate(0 3.4)">
                       <path
                         d="M42.8 63.4 L44.4 60.8 L46 63.4"
                         className="catering_flow_svg_arrowhead"
-                        style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                        style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                       />
                     </g>
                   </g>
@@ -336,50 +352,55 @@ export default async function CateringServicePage() {
 
                 {/* 모바일 흐름선 세트 */}
                 <g className="catering_flow_lines_mobile">
-                  {/* 상단 3개 분석 노드를 본사/사업장 사이 연결선에 합류 */}
+                  {/* 좌측 3노드 완료 후 세로선: 노드 top(20%)에서 시작해 노드 내부는 뒤에 숨고 바닥부터 보임 */}
                   <path
-                    d="M17 29 V52"
+                    d="M17 25 V34"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 0 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "0.8s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
                   <path
-                    d="M50 29 V52"
+                    d="M50 25 V40"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 1 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "0.8s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
                   />
                   <path
-                    d="M83 29 V52"
+                    d="M83 25 V34"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 2 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "0.8s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
+                  />
+                  {/* 가로 집합선 */}
+                  <path
+                    d="M17 34 H83"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-delay" as any]: "0.8s", ["--catering-flow-line-duration" as any]: "0.5s" } as CSSProperties}
+                  />
+                  {/* 중앙 노드 완료(~3.0s) 후: 노드 top(40%)에서 시작 */}
+                  <path
+                    d="M50 40 V54"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-delay" as any]: "3.1s", ["--catering-flow-line-duration" as any]: "0.4s" } as CSSProperties}
+                  />
+                  {/* 운영결과 노드 완료 후: 노드 top(54%)에서 시작 */}
+                  <path
+                    d="M50 54 V68"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-delay" as any]: "5.5s", ["--catering-flow-line-duration" as any]: "0.4s" } as CSSProperties}
                   />
                   <path
-                    d="M17 52 H83"
+                    d="M50 68 V82"
                     className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 3 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "6.3s", ["--catering-flow-line-duration" as any]: "0.4s" } as CSSProperties}
+                  />
+                  {/* 피드백 루프 */}
+                  <path
+                    d="M50 86 H95 V58 H82"
+                    className="catering_flow_path"
+                    style={{ ["--catering-flow-delay" as any]: "7.0s", ["--catering-flow-line-duration" as any]: "0.6s" } as CSSProperties}
                   />
                   <path
-                    d="M50 48 V56"
-                    className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 4 } as CSSProperties}
-                  />
-
-                  {/* 사업장 메뉴 구성 이후 하단 결과 노드로 순차 연결 */}
-                  <path
-                    d="M50 65 V86"
-                    className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 5 } as CSSProperties}
-                  />
-
-                  {/* 고객 입맛 식단 구성에서 사업장 메뉴 구성으로 피드백 루프 */}
-                  <path
-                    d="M50 95 H88 V60 H50"
-                    className="catering_flow_path"
-                    style={{ ["--catering-flow-line-order" as any]: 6 } as CSSProperties}
-                  />
-                  <path
-                    d="M52.2 58.6 L49.8 60 L52.2 61.4"
+                    d="M84.2 56.6 L81.8 58 L84.2 59.4"
                     className="catering_flow_svg_arrowhead"
-                    style={{ ["--catering-flow-line-order" as any]: 7 } as CSSProperties}
+                    style={{ ["--catering-flow-delay" as any]: "7.5s" } as CSSProperties}
                   />
                 </g>
               </svg>
@@ -418,7 +439,16 @@ export default async function CateringServicePage() {
       </section>
 
       {/* 3번 화면 메뉴개발/품질연구 표 + 프로세스 */}
-      <section id="catering_compare" data-catering-section className="catering_screen snap-start">
+      <section id="catering_compare" data-catering-section className="catering_screen snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
         {/* 비교표/프로세스 본문 래퍼 */}
         <div className="catering_screen_body">
           {/* 비교표와 프로세스 묶음 컨테이너 */}
@@ -448,7 +478,7 @@ export default async function CateringServicePage() {
               ))}
             </div>
 
-            {/* 모집-채용-입사-관리 운영 프로세스 카드 */}
+            {/* 모집-채용-입사-관리 운영 프로세스 카드 (데스크탑) */}
             <div className="catering_process_row">
               {cateringProcessCards.map((card, index) => (
                 <article key={card.title} className="catering_process_card">
@@ -462,13 +492,15 @@ export default async function CateringServicePage() {
                     ))}
                   </div>
                   {index < cateringProcessCards.length - 1 && (
-                    <Image
-                      src="/images/catering_service/arrow_1.svg"
-                      alt="다음 단계"
-                      width={40}
-                      height={20}
-                      className="catering_process_arrow"
-                    />
+                    <div className="catering_process_arrow">
+                      <Image
+                        src="/images/catering_service/arrow_1.svg"
+                        alt="다음 단계"
+                        width={40}
+                        height={20}
+                        className="catering_process_arrow_img"
+                      />
+                    </div>
                   )}
                 </article>
               ))}
@@ -478,10 +510,75 @@ export default async function CateringServicePage() {
       </section>
 
       {/* 4번 화면 교육/소통 지표 */}
-      <section id="catering_education" data-catering-section className="catering_screen snap-start">
+      <section id="catering_education" data-catering-section className="catering_screen snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image
+            src="/images/main/main_last_1.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="page-bg-image"
+          />
+        </div>
         {/* 교육 지표/본문 래퍼 */}
         <div className="catering_screen_body">
-          {/* 교육 섹션 콘텐츠 컨테이너 */}
+          <div className="catering_screen_inner catering_education_inner">
+            {/* 모집-채용-입사-관리 운영 프로세스 카드 (모바일 전용) */}
+            <div className="catering_process_row catering_process_mobile_only">
+              {cateringProcessCards.flatMap((card, index) => {
+                const cardEl = (
+                  <article key={card.title} className="catering_process_card">
+                    <div className="catering_process_card_head">{card.title}</div>
+                    <div
+                      className="catering_process_card_body"
+                      style={{ ["--process-row-count" as any]: card.lines.length } as CSSProperties}
+                    >
+                      {card.lines.map((line) => (
+                        <p key={`${card.title}-${line}`}>{line}</p>
+                      ))}
+                    </div>
+                  </article>
+                );
+                if (index < cateringProcessCards.length - 1) {
+                  return [
+                    cardEl,
+                    <div key={`arrow-${index}`} className="catering_process_mobile_down_arrow">
+                      <Image
+                        src="/images/catering_service/arrow_1.svg"
+                        alt="다음 단계"
+                        width={40}
+                        height={20}
+                        className="catering_process_arrow_img"
+                      />
+                    </div>,
+                  ];
+                }
+                return [cardEl];
+              })}
+            </div>
+
+            {/* 교육 지표 + 캐러셀: 데스크탑에서 표시, 모바일에서 숨김 */}
+            <div className="catering_education_desktop_content">
+              <div className="catering_education_stats">
+                {cateringEducationStats.map((item) => (
+                  <article key={item.label} className="catering_education_stat_item">
+                    <span className="catering_education_stat_label">{item.label}</span>
+                    <strong className="catering_education_stat_value" data-target={item.value}>0%</strong>
+                  </article>
+                ))}
+              </div>
+              <CateringEducationCarousel cards={cateringEducationCards} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 모바일 전용: 교육 지표 + 캐러셀 섹션 */}
+      <section id="catering_education_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+        </div>
+        <div className="catering_screen_body">
           <div className="catering_screen_inner catering_education_inner">
             <div className="catering_education_stats">
               {cateringEducationStats.map((item) => (
@@ -491,20 +588,21 @@ export default async function CateringServicePage() {
                 </article>
               ))}
             </div>
-
-            {/* 교육/소통 카드 슬라이드 영역 */}
+            <hr className="catering_education_divider" aria-hidden="true" />
             <CateringEducationCarousel cards={cateringEducationCards} />
           </div>
         </div>
       </section>
 
-      {/* 5번 화면 레시피/위생/채용 */}
-      <section id="catering_research" data-catering-section className="catering_screen snap-start">
-        {/* 레시피/안전/채용 본문 래퍼 */}
+      {/* 5번 화면 레시피/위생/채용 (데스크탑: 전체, 모바일: 레시피만) */}
+      <section id="catering_research" data-catering-section className="catering_screen snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+        </div>
         <div className="catering_screen_body">
-          {/* 마지막 섹션 콘텐츠 컨테이너 */}
           <div className="catering_screen_inner catering_research_inner">
-            {/* 표준레시피/트렌드/건강메뉴 설명 행 */}
+            
+            <SectionTitle wrapClassName="catering_mobile_section_title" englishLabel="Menu R&D">메뉴 연구 개발</SectionTitle>
             <div className="catering_research_list">
               {cateringResearchItems.map((item) => (
                 <article key={item.label} className="catering_research_item">
@@ -513,8 +611,7 @@ export default async function CateringServicePage() {
                 </article>
               ))}
             </div>
-
-            {/* 위생/안전 강조 박스 3개 */}
+            {/* 위생/채용: 데스크탑 그대로, 모바일은 CSS로만 숨김 */}
             <div className="catering_safety_chip_row">
               {cateringSafetyChips.map((item) => (
                 <div key={item} className="catering_safety_chip">
@@ -522,8 +619,6 @@ export default async function CateringServicePage() {
                 </div>
               ))}
             </div>
-
-            {/* 정규직 채용/긴급인력 안내 블록 */}
             <div className="catering_recruit_blocks">
               {cateringRecruitBlocks.map((block) => (
                 <article key={block.title} className="catering_recruit_block">
@@ -535,6 +630,44 @@ export default async function CateringServicePage() {
                   </ul>
                 </article>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 모바일 전용: 위생/채용 섹션 */}
+      <section id="catering_safety_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+        </div>
+        <div className="catering_screen_body">
+          <div className="catering_screen_inner catering_safety_recruit_inner">
+            {/* 모바일 위생·안전 관리 안내 영역 */}
+            <div className="catering_safety_subgroup">
+              <SectionTitle wrapClassName="catering_mobile_section_title" englishLabel="Hygiene & Safety">위생·안전 관리</SectionTitle>
+              <div className="catering_safety_chip_row">
+                {cateringSafetyChips.map((item) => (
+                  <div key={item} className="catering_safety_chip">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* 모바일 채용 안내 영역 */}
+            <div className="catering_recruit_subgroup">
+              <SectionTitle wrapClassName="catering_mobile_section_title" englishLabel="Recruitment Guide">채용안내</SectionTitle>
+              <div className="catering_recruit_blocks">
+                {cateringRecruitBlocks.map((block) => (
+                  <article key={block.title} className="catering_recruit_block">
+                    <h3>{block.title}</h3>
+                    <ul>
+                      {block.lines.map((line) => (
+                        <li key={`${block.title}-${line}`}>{line}</li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>
