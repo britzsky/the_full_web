@@ -2,7 +2,9 @@
 // nodemailer/sharp 등 Node.js 전용 처리가 필요한 이메일 미리보기는 이 경로로 Next.js 서버가 직접 처리
 import { NextResponse } from "next/server";
 import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
-import { getContactInquiryById } from "@/app/contact/inquiryStore";
+import { resolveErpMailAuthPassword } from "@/app/contact/erpMailAuth";
+import { getContactInquiryById, resolveContactReplyMailRuntimeConfig } from "@/app/contact/inquiryStore";
+import { buildContactReplyEmailPreview } from "@/app/contact/replyEmailSender";
 import { getContactManageAccess, getSessionUserId } from "@/app/lib/adminAccess";
 
 export const runtime = "nodejs";
@@ -64,11 +66,41 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   }
 
   const resolvedUserId = await resolveReplyUserId(request, body.userId);
+  const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
 
-  // DEBUG: ERP MailAuth 직접 호출해서 실제 응답 확인
-  const erpDebugUrl = `${process.env.ERP_API_BASE_URL || "http://localhost:8080"}/Internal/User/MailAuth?user_id=${resolvedUserId}`;
-  const erpDebugRes = await fetch(erpDebugUrl, { cache: "no-store" })
-    .then((r) => r.json() as Promise<unknown>)
-    .catch((e: unknown) => ({ fetchError: String(e) }));
-  return NextResponse.json({ _erpDebug: erpDebugRes, _url: erpDebugUrl }, { status: 500 });
+  try {
+    const smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
+      userId: resolvedUserId,
+    });
+    const preview = buildContactReplyEmailPreview(
+      {
+        toEmail: inquiry.email,
+        inquiryId,
+        inquiryTitle: inquiry.title,
+        inquiryContent: inquiry.inquiryContent,
+        businessName: inquiry.businessName,
+        managerName: inquiry.managerName,
+        replyContent: content,
+        replyUserId: resolvedUserId,
+        editorContentWidthPx: Number(body.editorContentWidthPx),
+        smtpPassword: resolvedSmtpPassword,
+        smtpHost: smtpRuntimeConfig.smtpHost,
+        smtpPort: smtpRuntimeConfig.smtpPort,
+        smtpSecure: smtpRuntimeConfig.smtpSecure,
+        smtpAuthUser: smtpRuntimeConfig.smtpUser,
+        mailFrom: smtpRuntimeConfig.mailFrom,
+        mailReplyTo: smtpRuntimeConfig.mailReplyTo,
+      },
+      { logoMode: "preview" }
+    );
+
+    return NextResponse.json(preview);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "이메일 미리보기 설정 중 오류가 발생했습니다.",
+      },
+      { status: 500 }
+    );
+  }
 }

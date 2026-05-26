@@ -8,17 +8,34 @@ type InternalUserMailAuthPayload = {
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
 // ERP API 기본 주소를 환경변수 또는 웹훅 URL 기준으로 해석한다.
+// 웹훅 URL에 nginx 라우팅 경로(/ERP 등)가 포함된 경우 이를 ERP_API_BASE_URL에 추가한다.
+// (운영 환경에서 포트 8080이 nginx일 때 /ERP/ 하위 경로만 Spring Boot로 프록시되므로)
 const getErpApiBaseUrl = () => {
   const configuredBaseUrl = normalizeText(process.env.ERP_API_BASE_URL);
-  if (configuredBaseUrl) {
-    return configuredBaseUrl.replace(/\/+$/, "");
-  }
-
   const webhookUrl = normalizeText(process.env.ERP_INQUIRY_WEBHOOK_URL);
+
+  // 웹훅 URL에서 nginx 프록시 경로 세그먼트 추출 (예: /ERP/ContactInquiryWebhook → /ERP)
+  let contextPath = "";
   if (webhookUrl) {
     try {
-      const { port } = new URL(webhookUrl);
-      return `http://localhost${port ? `:${port}` : ""}`;
+      const segments = new URL(webhookUrl).pathname.split("/").filter(Boolean);
+      contextPath = segments.length > 1 ? `/${segments[0]}` : "";
+    } catch {
+      // ignore
+    }
+  }
+
+  if (configuredBaseUrl) {
+    // ERP_API_BASE_URL이 설정된 경우 웹훅 경로 세그먼트를 추가
+    // 로컬: ERP_INQUIRY_WEBHOOK_URL 미설정 → contextPath="" → "http://localhost:8080"
+    // 운영: webhookUrl에 /ERP 포함 → contextPath="/ERP" → "http://localhost:8080/ERP"
+    return configuredBaseUrl.replace(/\/+$/, "") + contextPath;
+  }
+
+  if (webhookUrl) {
+    try {
+      const parsed = new URL(webhookUrl);
+      return `http://localhost${parsed.port ? `:${parsed.port}` : ""}${contextPath}`;
     } catch {
       return webhookUrl.replace(/\/+$/, "");
     }
@@ -41,7 +58,9 @@ export const resolveErpMailAuthPassword = async (userId: string, fallbackPasswor
   }
 
   try {
-    const endpoint = new URL("/Internal/User/MailAuth", `${erpApiBaseUrl}/`);
+    // new URL(path, base) 는 절대 경로(/로 시작)일 때 base의 경로를 무시하므로 문자열 직접 결합
+    const endpointUrl = `${erpApiBaseUrl}/Internal/User/MailAuth`;
+    const endpoint = new URL(endpointUrl);
     endpoint.searchParams.set("user_id", normalizedUserId);
 
     const internalApiSecret = normalizeText(process.env.ERP_INTERNAL_API_SECRET);
@@ -57,8 +76,7 @@ export const resolveErpMailAuthPassword = async (userId: string, fallbackPasswor
     });
 
     if (!response.ok) {
-      const errBody = await response.json().catch(() => ({})) as Record<string, unknown>;
-      throw new Error(`ERP MailAuth ${response.status}: ${JSON.stringify(errBody)}`);
+      return normalizedFallbackPassword;
     }
 
     const payload = (await response.json()) as InternalUserMailAuthPayload;
@@ -68,7 +86,7 @@ export const resolveErpMailAuthPassword = async (userId: string, fallbackPasswor
     }
 
     return normalizeText(payload.password) || normalizedFallbackPassword;
-  } catch (err) {
-    throw err instanceof Error ? err : new Error(String(err));
+  } catch {
+    return normalizedFallbackPassword;
   }
 };
