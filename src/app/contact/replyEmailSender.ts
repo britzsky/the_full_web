@@ -1,5 +1,7 @@
 import "server-only";
 
+import { readFileSync } from "fs";
+import { join } from "path";
 import * as nodemailer from "nodemailer";
 import type { SendMailOptions } from "nodemailer";
 import sharp from "sharp";
@@ -34,6 +36,15 @@ const normalizeText = (value: unknown) => (typeof value === "string" ? value.tri
 // 메일 본문 로고 URL 설정(첨부 없이 PNG URL로만 렌더)
 const MAIL_LOGO_URL = normalizeText(process.env.CONTACT_REPLY_LOGO_URL);
 const MAIL_LOGO_PUBLIC_PATH = "/images/logo/thefull_logo.png";
+// 이메일 발송 시 로고를 CID 인라인 첨부로 처리하기 위해 파일 시스템에서 미리 읽어둠
+const MAIL_LOGO_DATA_URI = (() => {
+  try {
+    const buf = readFileSync(join(process.cwd(), "public", MAIL_LOGO_PUBLIC_PATH));
+    return `data:image/png;base64,${buf.toString("base64")}`;
+  } catch {
+    return "";
+  }
+})();
 // 메일/미리보기 공통 로고 렌더 높이(px)
 const MAIL_LOGO_HEIGHT_PX = 70;
 // 메일/미리보기 공통 로고 인라인 스타일
@@ -738,6 +749,10 @@ const buildLogoMarkup = (mode: ContactReplyLogoRenderMode) => {
 
   if (MAIL_LOGO_URL) {
     return `<img src="${escapeHtml(MAIL_LOGO_URL)}" alt="더채움 로고" style="${MAIL_LOGO_INLINE_STYLE}" />`;
+  }
+
+  if (MAIL_LOGO_DATA_URI) {
+    return `<img src="${MAIL_LOGO_DATA_URI}" alt="더채움 로고" style="${MAIL_LOGO_INLINE_STYLE}" />`;
   }
 
   if (MAIL_LOGO_FALLBACK_PUBLIC_URL) {

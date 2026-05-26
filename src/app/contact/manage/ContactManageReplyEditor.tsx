@@ -81,6 +81,7 @@ export default function ContactManageReplyEditor({
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [isPreviewIframeReady, setIsPreviewIframeReady] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isSplitViewOpen, setIsSplitViewOpen] = useState(false);
   const [replyBaseContentWidthPx, setReplyBaseContentWidthPx] = useState<number | null>(null);
@@ -129,6 +130,15 @@ export default function ContactManageReplyEditor({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [previewModal.open]);
+
+  useEffect(() => {
+    // 미리보기 첫 클릭 시 라우트/모듈 초기화 지연으로 모달이 초기화되는 현상 방지
+    fetch(`/contact-api/manage/${inquiryId}/reply/preview`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: "" }),
+    }).catch(() => {});
+  }, [inquiryId]);
 
   // 문의관리 상세: 원래보기 상태의 에디터 본문 폭을 기준값(px)으로 측정
   const measureReplyEditorContentWidthPx = () => {
@@ -547,6 +557,7 @@ export default function ContactManageReplyEditor({
         throw new Error(payload.error ?? "이메일 미리보기를 불러오는 중 오류가 발생했습니다.");
       }
 
+      setIsPreviewIframeReady(false);
       setPreviewModal({
         open: true,
         subject: payload.subject ?? "",
@@ -735,6 +746,13 @@ export default function ContactManageReplyEditor({
                   title="답변 메일 미리보기"
                   className="contact-manage-preview-iframe"
                   srcDoc={previewModal.html}
+                  style={{ visibility: isPreviewIframeReady ? "visible" : "hidden" }}
+                  onLoad={(e) => {
+                    const doc = e.currentTarget.contentDocument;
+                    (doc?.fonts?.ready ?? Promise.resolve())
+                      .then(() => setIsPreviewIframeReady(true))
+                      .catch(() => setIsPreviewIframeReady(true));
+                  }}
                 />
               </div>
             </div>
