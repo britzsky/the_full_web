@@ -99,6 +99,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "이메일 미리보기 설정 중 오류가 발생했습니다.",
+        _debug: { resolvedUserId, hasSmtpPassword: Boolean(resolvedSmtpPassword) },
       },
       { status: 500 }
     );

@@ -20,7 +20,7 @@ type TriggerContactInquiryErpNotificationInput = {
 };
 
 // 별도 수신자가 없을 때 마지막 기본값으로 넣는 ERP 사용자
-const DEFAULT_CONTACT_ROUTE_USER_ID = "ww1";
+const DEFAULT_CONTACT_ROUTE_USER_ID = "sy9";
 
 // 문자열 입력 공백 제거
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
