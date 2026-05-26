@@ -57,7 +57,8 @@ export const resolveErpMailAuthPassword = async (userId: string, fallbackPasswor
     });
 
     if (!response.ok) {
-      return normalizedFallbackPassword;
+      const errBody = await response.json().catch(() => ({})) as Record<string, unknown>;
+      throw new Error(`ERP MailAuth ${response.status}: ${JSON.stringify(errBody)}`);
     }
 
     const payload = (await response.json()) as InternalUserMailAuthPayload;
@@ -67,7 +68,7 @@ export const resolveErpMailAuthPassword = async (userId: string, fallbackPasswor
     }
 
     return normalizeText(payload.password) || normalizedFallbackPassword;
-  } catch {
-    return normalizedFallbackPassword;
+  } catch (err) {
+    throw err instanceof Error ? err : new Error(String(err));
   }
 };
