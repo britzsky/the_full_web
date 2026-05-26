@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { NaverBlogPost } from "@/app/api/naver-blog/route";
-
-// 네이버 블로그 썸네일 없을 때 연결할 블로그 홈 URL
-const BLOG_HOME = "https://blog.naver.com/thefull1999";
+import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/route";
 
 // RSS pubDate 문자열을 화면 표시용 YYYY.MM.DD 형식으로 변환
 function formatBlogDate(pubDate: string): string {
@@ -32,7 +29,7 @@ export default function NaverBlogClient() {
 
   // 지정한 페이지의 네이버 블로그 게시글을 API에서 조회하는 함수
   const fetchPosts = useCallback(async (targetPage: number) => {
-    const response = await fetch(`/api/naver-blog?page=${targetPage}`);
+    const response = await fetch(`/social/naver-blog?page=${targetPage}`);
     if (!response.ok) throw new Error("fetch failed");
     return response.json() as Promise<{ posts: NaverBlogPost[]; hasMore: boolean }>;
   }, []);
@@ -110,7 +107,7 @@ export default function NaverBlogClient() {
           // 행 전체가 해당 블로그 게시글로 이동하는 링크
           <a
             key={`${post.link}-${index}`}
-            href={post.link || BLOG_HOME}
+            href={post.link || NAVER_BLOG_HOME}
             target="_blank"
             rel="noreferrer"
             className="naver-blog-row group"

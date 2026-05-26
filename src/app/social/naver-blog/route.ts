@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 
-// 네이버 블로그 아이디
+// 네이버 블로그 아이디 — RSS URL, 홈 URL 모두 여기서 파생
 const BLOG_ID = "thefull1999";
-// 네이버 블로그 RSS 피드 URL
-const RSS_URL = `https://rss.blog.naver.com/${BLOG_ID}.xml`;
+export const NAVER_BLOG_HOME = `https://blog.naver.com/${BLOG_ID}`;
 // 페이지당 게시글 수
 const PAGE_SIZE = 10;
 
@@ -101,7 +100,7 @@ export async function GET(request: Request) {
   const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
 
   try {
-    const rssResponse = await fetch(RSS_URL, {
+    const rssResponse = await fetch(`https://rss.blog.naver.com/${BLOG_ID}.xml`, {
       next: { revalidate: 300 },
       headers: { "User-Agent": "Mozilla/5.0 (compatible; NextJS/1.0)" },
     });

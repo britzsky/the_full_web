@@ -9,7 +9,7 @@ import SectionTitle from "../../Common/SectionTitle";
 import EmphasisCopy from "../../Common/EmphasisCopy";
 import { fetchInstagramFeed } from "../../../lib/instagramClient";
 import { appendContactManageMenu } from "../../Common/headerMenuUtils";
-import type { NaverBlogPost } from "@/app/api/naver-blog/route";
+import { NAVER_BLOG_HOME, type NaverBlogPost } from "@/app/social/naver-blog/route";
 
 // 타입 선언 영역
 // 메인 히어로의 제목/설명/배경이미지 한 세트를 표현
@@ -646,7 +646,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
     let isMounted = true;
     const load = async () => {
       try {
-        const res = await fetch("/api/naver-blog?page=1");
+        const res = await fetch("/social/naver-blog?page=1");
         if (!res.ok) throw new Error();
         const data = await res.json() as { posts: NaverBlogPost[]; hasMore: boolean };
         if (isMounted) setNaverPostsMain(data.posts);
@@ -2026,7 +2026,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     {naverPostsMain.slice(0, 3).map((post, index) => (
                       <a
                         key={`${post.link}-${index}`}
-                        href={post.link || "https://blog.naver.com/thefull1999"}
+                        href={post.link || NAVER_BLOG_HOME}
                         target="_blank"
                         rel="noreferrer"
                         className="main-naver-blog-row group"
