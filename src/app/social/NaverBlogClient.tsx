@@ -32,7 +32,7 @@ export default function NaverBlogClient() {
 
   // 지정한 페이지의 네이버 블로그 게시글을 API에서 조회하는 함수
   const fetchPosts = useCallback(async (targetPage: number) => {
-    const response = await fetch(`/api/naver-blog?page=${targetPage}`);
+    const response = await fetch(`:8081/api/naver-blog?page=${targetPage}`);
     if (!response.ok) throw new Error("fetch failed");
     return response.json() as Promise<{ posts: NaverBlogPost[]; hasMore: boolean }>;
   }, []);
