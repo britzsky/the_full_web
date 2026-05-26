@@ -99,7 +99,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "이메일 미리보기 설정 중 오류가 발생했습니다.",
-        _debug: { resolvedUserId, hasSmtpPassword: Boolean(resolvedSmtpPassword) },
+        _debug: {
+          resolvedUserId,
+          hasSmtpPassword: Boolean(resolvedSmtpPassword),
+          erpApiBaseUrl: process.env.ERP_API_BASE_URL || "(없음)",
+          erpWebhookUrl: process.env.ERP_INQUIRY_WEBHOOK_URL || "(없음)",
+        },
       },
       { status: 500 }
     );
