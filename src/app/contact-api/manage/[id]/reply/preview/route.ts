@@ -69,10 +69,26 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const resolvedSmtpPassword = await resolveErpMailAuthPassword(resolvedUserId);
 
   let smtpRuntimeConfig: Awaited<ReturnType<typeof resolveContactReplyMailRuntimeConfig>> | null = null;
+  let smtpConfigError: string | null = null;
   try {
     smtpRuntimeConfig = await resolveContactReplyMailRuntimeConfig({
       userId: resolvedUserId,
     });
+  } catch (e) {
+    smtpConfigError = e instanceof Error ? e.message : String(e);
+  }
+
+  if (!smtpRuntimeConfig) {
+    return NextResponse.json(
+      {
+        error: smtpConfigError ?? "SMTP 설정 조회 실패",
+        _debug: { resolvedUserId, hasSmtpPassword: !!resolvedSmtpPassword, smtpConfigError },
+      },
+      { status: 500 }
+    );
+  }
+
+  try {
     const preview = buildContactReplyEmailPreview(
       {
         toEmail: inquiry.email,
