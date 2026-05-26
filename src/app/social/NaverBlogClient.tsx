@@ -30,35 +30,9 @@ export default function NaverBlogClient() {
   // 다음 페이지 게시글 존재 여부: 더보기 버튼 노출 제어
   const [hasMore, setHasMore] = useState(false);
 
-  // the_full_web_api 기본 호출 주소
-  const DEFAULT_WEB_API_BASE_URL = "http://127.0.0.1:8090";
-
-  // 문자열 입력값 공백 정리
-  const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
-
-  // 예전 프론트 포트 주소가 남아 있어도 web_api 포트(8090)로 보정
-  const normalizeWebApiBaseUrl = (value: string) => {
-    const normalized = normalizeText(value).replace(/\/+$/, "");
-    if (!normalized) {
-      return "";
-    }
-
-    return normalized
-      .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost|52\.64\.151\.137|n\.thefull\.kr)):8081$/iu, "$1:8090")
-      .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3001$/iu, "$1:8090")
-      .replace(/^(https?:\/\/(?:127\.0\.0\.1|localhost)):3000$/iu, "$1:8090");
-  };
-
-  // the_full_web_api 베이스 URL(미설정 시 로컬 기본값 사용)
-  const getApiBaseUrl = () => {
-    const raw = normalizeWebApiBaseUrl(process.env.WEB_API_BASE_URL ?? "");
-    const baseUrl = raw || DEFAULT_WEB_API_BASE_URL;
-    return baseUrl.replace(/\/+$/, "");
-  };
-  
   // 지정한 페이지의 네이버 블로그 게시글을 API에서 조회하는 함수
   const fetchPosts = useCallback(async (targetPage: number) => {
-    const response = await fetch(`${getApiBaseUrl()}api/naver-blog?page=${targetPage}`);
+    const response = await fetch(`/api/naver-blog?page=${targetPage}`);
     if (!response.ok) throw new Error("fetch failed");
     return response.json() as Promise<{ posts: NaverBlogPost[]; hasMore: boolean }>;
   }, []);
