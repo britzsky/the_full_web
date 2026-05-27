@@ -82,7 +82,7 @@ export default function SocialTabsClient() {
             onClick={() => setActiveTab("instagram")}
           >
             <Image
-              src="/images/sns_logo/instagram.png"
+              src="/images/sns_logo/instagram.webp"
               alt="Instagram"
               width={28}
               height={28}
@@ -102,7 +102,7 @@ export default function SocialTabsClient() {
             onClick={() => setActiveTab("naver")}
           >
             <Image
-              src="/images/sns_logo/naver_blog.png"
+              src="/images/sns_logo/naver_blog.webp"
               alt="Naver Blog"
               width={28}
               height={28}

@@ -5,7 +5,7 @@
   --company-bg-offset: clamp(1.8rem, 3vh, 2.4rem);
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
-    url("/images/company_profile/company_profile_bg_1.png");
+    url("/images/company_profile/company_profile_bg_1.webp");
   background-position:
     center var(--company-bg-offset),
     center var(--company-bg-offset);

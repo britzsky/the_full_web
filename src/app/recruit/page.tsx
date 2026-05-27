@@ -41,22 +41,22 @@ const recruitProcessCards: {
   {
     title: "지원서 접수",
     badgeClassName: "recruit-process-badge-1",
-    iconSrc: "/images/recruit/regi.png",
+    iconSrc: "/images/recruit/regi.webp",
   },
   {
     title: "서류전형",
     badgeClassName: "recruit-process-badge-2",
-    iconSrc: "/images/recruit/paper.png",
+    iconSrc: "/images/recruit/paper.webp",
   },
   {
     title: "면접",
     badgeClassName: "recruit-process-badge-3",
-    iconSrc: "/images/recruit/interview.png",
+    iconSrc: "/images/recruit/interview.webp",
   },
   {
     title: "최종합격",
     badgeClassName: "recruit-process-badge-4",
-    iconSrc: "/images/recruit/job.png",
+    iconSrc: "/images/recruit/job.webp",
   },
 ];
 

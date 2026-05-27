@@ -103,21 +103,21 @@ const cateringStageCards: CateringStageCard[] = [
   {
     step: "STEP 01.",
     description: "기존 사업장 메뉴 구성 확인",
-    image: "/images/catering_service/catering_service_1.png",
+    image: "/images/catering_service/catering_service_1.webp",
     panelClassName: "catering_stage_panel_left",
     imageClassName: "catering_stage_image_left",
   },
   {
     step: "STEP 02.",
     description: "본사영양팀 주관 메뉴점검",
-    image: "/images/catering_service/catering_service_2.png",
+    image: "/images/catering_service/catering_service_2.webp",
     panelClassName: "catering_stage_panel_center",
     imageClassName: "catering_stage_image_center",
   },
   {
     step: "STEP 03.",
     description: "식단 재구성 의견 수렴 및\n정기적 메뉴 업그레이드",
-    image: "/images/catering_service/catering_service_3.png",
+    image: "/images/catering_service/catering_service_3.webp",
     panelClassName: "catering_stage_panel_right",
     imageClassName: "catering_stage_image_right",
   },
@@ -231,7 +231,7 @@ export default async function CateringServicePage() {
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -442,7 +442,7 @@ export default async function CateringServicePage() {
       <section id="catering_compare" data-catering-section className="catering_screen snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -513,7 +513,7 @@ export default async function CateringServicePage() {
       <section id="catering_education" data-catering-section className="catering_screen snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -576,7 +576,7 @@ export default async function CateringServicePage() {
       {/* 모바일 전용: 교육 지표 + 캐러셀 섹션 */}
       <section id="catering_education_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+          <Image src="/images/main/main_last_1.webp" alt="" fill sizes="100vw" className="page-bg-image" />
         </div>
         <div className="catering_screen_body">
           <div className="catering_screen_inner catering_education_inner">
@@ -597,7 +597,7 @@ export default async function CateringServicePage() {
       {/* 5번 화면 레시피/위생/채용 (데스크탑: 전체, 모바일: 레시피만) */}
       <section id="catering_research" data-catering-section className="catering_screen snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+          <Image src="/images/main/main_last_1.webp" alt="" fill sizes="100vw" className="page-bg-image" />
         </div>
         <div className="catering_screen_body">
           <div className="catering_screen_inner catering_research_inner">
@@ -638,7 +638,7 @@ export default async function CateringServicePage() {
       {/* 모바일 전용: 위생/채용 섹션 */}
       <section id="catering_safety_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <Image src="/images/main/main_last_1.png" alt="" fill sizes="100vw" className="page-bg-image" />
+          <Image src="/images/main/main_last_1.webp" alt="" fill sizes="100vw" className="page-bg-image" />
         </div>
         <div className="catering_screen_body">
           <div className="catering_screen_inner catering_safety_recruit_inner">

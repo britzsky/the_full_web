@@ -9,8 +9,8 @@ import GreetingSection from "./GreetingSection";
 import "./page.css";
 
 // 1번 화면 대표 인사 이미지 경로
-const companyGreetingImage = "/images/company_profile/ceo.png";
-const companyGreetingSignImage = "/images/company_profile/ceo_sign1.png";
+const companyGreetingImage = "/images/company_profile/ceo.webp";
+const companyGreetingSignImage = "/images/company_profile/ceo_sign1.webp";
 const companyName = "(주)\u2060더채움";
 
 // 1번 화면(대표 인사) 데이터
@@ -25,12 +25,12 @@ const companyVisionMission = [
   {
     title: "비전",
     description: "정직과 신뢰를 바탕으로 식음 서비스 분야에서\n고객에게 가장 신뢰받는 파트너가 됩니다.",
-    image: "/images/company_profile/vision.jpg",
+    image: "/images/company_profile/vision.webp",
   },
   {
     title: "미션",
     description: "모두가 행복한 식사문화를 누릴 수 있는\n안전하고 맛있는 식품과 서비스를 제공합니다.",
-    image: "/images/company_profile/mission.jpg",
+    image: "/images/company_profile/mission.webp",
   },
 ];
 

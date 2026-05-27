@@ -57,19 +57,19 @@ const cateringPanels = [
     title: "산업체",
     description:
       "근로자의 근무 환경과 활동량을 고려한 맞춤형 메뉴와\n테마 식단을 합리적인 가격으로 제공하여\n만족도 높은 급식 서비스를 실현합니다.",
-    image: "/images/business_area/business_area_1.jpg",
+    image: "/images/business_area/business_area_1.webp",
   },
   {
     title: "학교",
     description:
       "성장기 학생을 위한 균형 잡힌 영양 관리를\n최우선으로 하며, 철저한 위생 관리로\n안심할 수 있는 급식을 제공합니다.",
-    image: "/images/business_area/business_area_2.jpg",
+    image: "/images/business_area/business_area_2.webp",
   },
   {
     title: "요양원",
     description:
       "최상의 실버식 메뉴 편성을 기반으로 제철 식재료를\n활용한 식단과 다진찬, 갈찬, 죽 등 어르신의\n섭취 특성을 고려한 맞춤형 급식을 제공합니다.",
-    image: "/images/business_area/business_area_3.jpg",
+    image: "/images/business_area/business_area_3.webp",
   },
 ];
 
@@ -158,7 +158,7 @@ export default async function BusinessPage() {
         {/* 배경 이미지 — 섹션 전체(헤더 포함) 덮음 */}
         <div className="business-overview-background">
           <Image
-            src="/images/business_area/business_area_5.png"
+            src="/images/business_area/business_area_5.webp"
             alt="사업 영역 소개 배경 이미지"
             fill
             priority
@@ -209,7 +209,7 @@ export default async function BusinessPage() {
         >
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             <Image
-              src="/images/main/main_last_1.png"
+              src="/images/main/main_last_1.webp"
               alt=""
               fill
               sizes="100vw"
@@ -298,7 +298,7 @@ export default async function BusinessPage() {
       <section id="business-event" className="business-screen business-desktop-only snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -327,7 +327,7 @@ export default async function BusinessPage() {
               <div className="business-event-visual">
                 <div className="business-event-image-frame">
                   <Image
-                    src="/images/business_area/business_area_4.jpg"
+                    src="/images/business_area/business_area_4.webp"
                     alt="이벤트 이미지"
                     fill
                     quality={100}
@@ -353,7 +353,7 @@ export default async function BusinessPage() {
         <BusinessPanelReveal sectionId="business-mobile-event" />
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -377,7 +377,7 @@ export default async function BusinessPage() {
             <div className="business-mobile-event-visual">
               <div className="business-event-image-frame">
                 <Image
-                  src="/images/business_area/business_area_4.jpg"
+                  src="/images/business_area/business_area_4.webp"
                   alt="이벤트 이미지"
                   fill
                   quality={100}
@@ -431,7 +431,7 @@ export default async function BusinessPage() {
       <section id="business-distribution" className="business-screen business-desktop-only snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -506,7 +506,7 @@ export default async function BusinessPage() {
         <BusinessPanelReveal sectionId="business-mobile-distribution" />
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -533,7 +533,7 @@ export default async function BusinessPage() {
         <BusinessPanelReveal sectionId="business-mobile-criteria" />
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"

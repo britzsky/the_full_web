@@ -26,12 +26,12 @@ type InstagramMediaItem = {
 
 // 인스타그램 API 응답 실패 시 사용하는 기본 카드 데이터
 const fallbackSocialMedia: InstagramMediaItem[] = [
-  { id: "fallback-1", media_type: "IMAGE", media_url: "/images/social/social_1.jpg", label: "Social 1" },
-  { id: "fallback-2", media_type: "IMAGE", media_url: "/images/social/social_2.jpg", label: "Social 2" },
-  { id: "fallback-3", media_type: "IMAGE", media_url: "/images/social/social_3.jpg", label: "Social 3" },
-  { id: "fallback-4", media_type: "IMAGE", media_url: "/images/social/social_4.jpg", label: "Social 4" },
-  { id: "fallback-5", media_type: "IMAGE", media_url: "/images/social/social_5.jpg", label: "Social 5" },
-  { id: "fallback-6", media_type: "IMAGE", media_url: "/images/social/social_6.jpg", label: "Social 6" },
+  { id: "fallback-1", media_type: "IMAGE", media_url: "/images/social/social_1.webp", label: "Social 1" },
+  { id: "fallback-2", media_type: "IMAGE", media_url: "/images/social/social_2.webp", label: "Social 2" },
+  { id: "fallback-3", media_type: "IMAGE", media_url: "/images/social/social_3.webp", label: "Social 3" },
+  { id: "fallback-4", media_type: "IMAGE", media_url: "/images/social/social_4.webp", label: "Social 4" },
+  { id: "fallback-5", media_type: "IMAGE", media_url: "/images/social/social_5.webp", label: "Social 5" },
+  { id: "fallback-6", media_type: "IMAGE", media_url: "/images/social/social_6.webp", label: "Social 6" },
 ];
 
 // 캐러셀 게시물까지 포함해 실제 표시 가능한 미디어 목록으로 정규화

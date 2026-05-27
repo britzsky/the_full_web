@@ -70,7 +70,7 @@ export default async function ContactPage() {
     >
       <section className="contact-hero relative">
         <Image
-          src="/images/contact/contact_1.jpg"
+          src="/images/contact/contact_1.webp"
           alt="고객문의 배경"
           fill
           priority

@@ -128,19 +128,19 @@ const heroSlides: HeroSlide[] = [
     heading: "위탁급식이란?",
     description:
       "급식이 필요한 곳에서 전문적인 운영 체계, 맞춤형 서비스, 그리고 철저한 품질관리로 건강한 한 끼를 안정적으로 제공하는 서비스입니다.",
-    image: "/images/main/main_slide_1.jpg",
+    image: "/images/main/main_slide_1.webp",
   },
   {
     heading: "정성을 담은 운영 시스템",
     description:
       "현장 특성과 동선을 고려한 체계적인 급식 운영으로 식사 시간의 만족도와 효율을 동시에 높입니다.",
-    image: "/images/main/main_slide_2.jpg",
+    image: "/images/main/main_slide_2.webp",
   },
   {
     heading: "고객 감동을 만드는 한 끼",
     description:
       "신선한 식재료와 검증된 조리 프로세스로 안전하고 맛있는 식사를 매일 제공합니다.",
-    image: "/images/main/main_slide_3.jpg",
+    image: "/images/main/main_slide_3.webp",
   },
 ];
 
@@ -151,7 +151,7 @@ const serviceBlocks: ServiceBlock[] = [
     title: "위탁급식",
     descriptionHtml:
       "기업, 관공서, 요양원 등 다양한 기관을 대상으로 <strong>맞춤서비스</strong>를 제공합니다.<br />식단을 계획하고 위생 및 <strong>안전 규정</strong>을 철저히 준수하여 안심하고<br />식사를 즐길 수 있는 환경을 제공합니다.<br />고객은 효율적이고 편리한 <strong>급식 서비스</strong>를 즐길 수 있으며<br />위탁급식 <strong>비즈니스를 전문적으로</strong> 아우르는 솔루션을 경험할 수 있습니다.",
-    image: "/images/main/home_service_1.png",
+    image: "/images/main/home_service_1.webp",
     align: "left",
   },
   {
@@ -159,7 +159,7 @@ const serviceBlocks: ServiceBlock[] = [
     title: "식자재유통",
     descriptionHtml:
       "<strong>신선하고 다양한 식자재</strong>를 수급하여 고객에게 합리적인 가격으로 제공합니다.<br />가격 경쟁력을 유지하며 <strong>좋은 품질의 식재료</strong>를 안정적으로 공급합니다.<br />고객의 요구에 따라 <strong>다양한 상품 라인업</strong>을 제공하여<br />폭넓은 메뉴 구성이 가능하도록 지원합니다.",
-    image: "/images/main/home_service_2.png",
+    image: "/images/main/home_service_2.webp",
     reverse: true,
     align: "right",
   },
@@ -168,19 +168,19 @@ const serviceBlocks: ServiceBlock[] = [
     title: "메뉴개발",
     descriptionHtml:
       "전문적인 지식과 혁신적인 <strong>아이디어</strong>를 결합하여 <strong>제품의 품질</strong>,<br /><strong>안전성, 맛 모두를</strong> 충족시키는 메뉴를 개발합니다.",
-    image: "/images/main/home_service_3.png",
+    image: "/images/main/home_service_3.webp",
     align: "left",
   },
 ];
 
 // 소셜 API 실패 시 대체 카드 데이터
 const fallbackSocialMedia: InstagramMediaItem[] = [
-  { id: "fallback-1", media_type: "IMAGE", media_url: "/images/social/social_1.jpg", label: "Social 1" },
-  { id: "fallback-2", media_type: "IMAGE", media_url: "/images/social/social_2.jpg", label: "Social 2" },
-  { id: "fallback-3", media_type: "IMAGE", media_url: "/images/social/social_3.jpg", label: "Social 3" },
-  { id: "fallback-4", media_type: "IMAGE", media_url: "/images/social/social_4.jpg", label: "Social 4" },
-  { id: "fallback-5", media_type: "IMAGE", media_url: "/images/social/social_5.jpg", label: "Social 5" },
-  { id: "fallback-6", media_type: "IMAGE", media_url: "/images/social/social_6.jpg", label: "Social 6" },
+  { id: "fallback-1", media_type: "IMAGE", media_url: "/images/social/social_1.webp", label: "Social 1" },
+  { id: "fallback-2", media_type: "IMAGE", media_url: "/images/social/social_2.webp", label: "Social 2" },
+  { id: "fallback-3", media_type: "IMAGE", media_url: "/images/social/social_3.webp", label: "Social 3" },
+  { id: "fallback-4", media_type: "IMAGE", media_url: "/images/social/social_4.webp", label: "Social 4" },
+  { id: "fallback-5", media_type: "IMAGE", media_url: "/images/social/social_5.webp", label: "Social 5" },
+  { id: "fallback-6", media_type: "IMAGE", media_url: "/images/social/social_6.webp", label: "Social 6" },
 ];
 
 // 연혁 좌측 컬럼 데이터
@@ -235,7 +235,7 @@ const HEAD_OFFICE_NAME = "(주) 더채움 본사";
 // 카카오/네이버 지도 주소 검색에 사용되는 더채움 본사 도로명 주소
 const HEAD_OFFICE_ADDRESS = "경기도 수원시 세류로 32";
 // 오시는 길 지도 핀 안에 표시되는 더채움 로고 이미지
-const HEAD_OFFICE_MARKER_LOGO_SRC = "/images/logo/thefull_logo.png";
+const HEAD_OFFICE_MARKER_LOGO_SRC = "/images/logo/thefull_logo.webp";
 // 히어로 자동재생 간격 및 슬라이드 전환 소요 시간 상수
 const HERO_AUTOPLAY_DELAY_MS = 7000;
 const HERO_TRANSITION_DURATION_MS = 950;
@@ -1723,7 +1723,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       >
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <Image
-            src="/images/main/main_background_1.png"
+            src="/images/main/main_background_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -1877,7 +1877,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         {/* 소셜 섹션 배경 이미지와 화이트 오버레이 레이어 - 모바일에서 숨김 */}
         <div className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true">
           <Image
-            src="/images/social/social_background.png"
+            src="/images/social/social_background.webp"
             alt=""
             fill
             sizes="100vw"
@@ -1897,7 +1897,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 className={`social-sns-tab${activeMainSocialTab === "instagram" ? " social-sns-tab--active" : ""}`}
                 onClick={() => setActiveMainSocialTab("instagram")}
               >
-                <Image src="/images/sns_logo/instagram.png" alt="Instagram" width={28} height={28} className="social-sns-tab-logo" />
+                <Image src="/images/sns_logo/instagram.webp" alt="Instagram" width={28} height={28} className="social-sns-tab-logo" />
                 <span>Instagram</span>
               </button>
               <span className="social-sns-tab-divider" aria-hidden="true">|</span>
@@ -1907,7 +1907,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 className={`social-sns-tab${activeMainSocialTab === "naver" ? " social-sns-tab--active" : ""}`}
                 onClick={() => setActiveMainSocialTab("naver")}
               >
-                <Image src="/images/sns_logo/naver_blog.png" alt="Naver Blog" width={28} height={28} className="social-sns-tab-logo" />
+                <Image src="/images/sns_logo/naver_blog.webp" alt="Naver Blog" width={28} height={28} className="social-sns-tab-logo" />
                 <span>Naver Blog</span>
               </button>
               {mainSocialIndicatorStyle && (
@@ -2264,7 +2264,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           {/* 연혁 + 오시는 길 섹션 배경화면 */}
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
@@ -2461,7 +2461,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       >
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <Image
-            src="/images/main/main_last_1.png"
+            src="/images/main/main_last_1.webp"
             alt=""
             fill
             sizes="100vw"
