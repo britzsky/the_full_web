@@ -1120,7 +1120,8 @@
 
 /* 채용 블록 h3 — 전역 h3{text-white} 완전 차단 */
 #catering_research .catering_recruit_block h3,
-#catering_safety_mobile .catering_recruit_block h3 {
+#catering_safety_mobile .catering_recruit_block h3,
+#catering_recruit_mobile .catering_recruit_block h3 {
   color: #000000 !important;
 }
 
@@ -1643,25 +1644,29 @@
 /* 모바일: 위생/채용 제목은 기존 padding-left: 0 규칙보다 우선 적용 */
   #catering_research .catering_mobile_section_title,
   #catering_safety_mobile .catering_safety_subgroup .catering_mobile_section_title,
-  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title {
+  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title,
+  #catering_recruit_mobile .catering_recruit_subgroup .catering_mobile_section_title {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 
   #catering_safety_mobile .catering_safety_subgroup .catering_mobile_section_title,
-  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title {
+  #catering_safety_mobile .catering_recruit_subgroup .catering_mobile_section_title,
+  #catering_recruit_mobile .catering_recruit_subgroup .catering_mobile_section_title {
     margin-bottom: 1.1rem;
   }
 
 /* 모바일: 제목과 본문을 배경 이미지보다 위 레이어에 고정 */
   #catering_research .catering_screen_body,
-  #catering_safety_mobile .catering_screen_body {
+  #catering_safety_mobile .catering_screen_body,
+  #catering_recruit_mobile .catering_screen_body {
     position: relative;
     z-index: 2;
   }
 
   #catering_research .catering_research_inner,
-  #catering_safety_mobile .catering_safety_recruit_inner {
+  #catering_safety_mobile .catering_safety_recruit_inner,
+  #catering_recruit_mobile .catering_safety_recruit_inner {
     position: relative;
     z-index: 2;
   }

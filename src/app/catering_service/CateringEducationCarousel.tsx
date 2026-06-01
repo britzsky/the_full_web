@@ -30,6 +30,7 @@ export default function CateringEducationCarousel({ cards }: CateringEducationCa
   const [cardOffsets, setCardOffsets] = useState<number[]>([]);
   const [measuredCardCount, setMeasuredCardCount] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
 
   useEffect(() => {
     // 화면 폭에 따라 한 번에 보이는 카드 수를 조정한다.
@@ -144,6 +145,18 @@ export default function CateringEducationCarousel({ cards }: CateringEducationCa
     };
   }, [cardsPerPage, cards.length, trackCards.length]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (Math.abs(dx) < 40) return;
+    handleMove(dx < 0 ? 1 : -1);
+  };
+
   return (
     <div className="catering_education_cards_wrap">
       <button
@@ -157,7 +170,11 @@ export default function CateringEducationCarousel({ cards }: CateringEducationCa
       </button>
 
       {/* 교육 카드 표시 영역 */}
-      <div className="catering_education_cards_viewport">
+      <div
+        className="catering_education_cards_viewport"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           ref={trackRef}
           className={`catering_education_cards ${

@@ -201,9 +201,10 @@
   display: none;
 }
 
-/* 3번 화면: 전형안내 본문 폭 */
+/* 3번 화면: 전형안내 본문 폭 + 위로 보정 */
 .recruit-detail-inner {
   width: min(100%, 1220px);
+  transform: translateY(clamp(-1.8rem, -3.2vh, -1.1rem));
 }
 
 /* 3번 화면: 전형안내 목록 래퍼 */

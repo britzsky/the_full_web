@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
-import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import RecruitFloatingButtons from "./RecruitFloatingButtons";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
@@ -126,7 +126,7 @@ export default async function RecruitPage() {
             rightItems={recruitHeaderRightItems}
             lightBackground
         />
-        {/* <SectionTitle>인재상</SectionTitle> */}
+        <SectionTitle englishLabel="Our Talent">더채움 인재상</SectionTitle>
 
         {/* 1번 화면 본문 정렬 래퍼 */}
         <div className="recruit-screen-body">
@@ -189,6 +189,8 @@ export default async function RecruitPage() {
 
       {/* 3번 화면: 전형 상세 안내 */}
       <section id="recruit-detail" className="recruit-screen snap-start">
+        <SectionTitle englishLabel="Selection Guide">전형안내</SectionTitle>
+
         {/* 3번 화면 본문 정렬 래퍼 */}
         <div className="recruit-screen-body">
           {/* 3번 화면 콘텐츠 폭 컨테이너 */}
@@ -212,8 +214,8 @@ export default async function RecruitPage() {
       </section>
 
       <RecruitAnimObserver />
-      {/* 채용 페이지 공통 상단 이동 버튼 */}
-      <ScrollToTopButton targetId="recruit-scroll" />
+      {/* 채용 페이지 공통 상단 이동 버튼 + 고객문의 플로팅 버튼 */}
+      <RecruitFloatingButtons targetId="recruit-scroll" verticalSectionId="recruit-talent" />
     </main>
   );
 }

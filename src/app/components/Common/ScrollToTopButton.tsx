@@ -5,10 +5,11 @@ import Link from "next/link";
 // 공통 컴포넌트: 컴포넌트 전달값
 type ScrollToTopButtonProps = {
   targetId: string;
+  horizontal?: boolean;
 };
 
 // 공통 컴포넌트: ScrollToTopButton 함수 로직
-export default function ScrollToTopButton({ targetId }: ScrollToTopButtonProps) {
+export default function ScrollToTopButton({ targetId, horizontal }: ScrollToTopButtonProps) {
   // 스크롤 컨테이너 상단 이동
   const handleMoveTop = () => {
 // 공통 컴포넌트: targetElement 정의
@@ -27,8 +28,9 @@ export default function ScrollToTopButton({ targetId }: ScrollToTopButtonProps) 
   };
 
   return (
-    <div className="floating-action-buttons">
-      <Link href="/contact" className="contact-inquiry-button" aria-label="고객문의 페이지로 이동">
+    <div className={`floating-action-buttons${horizontal ? " floating-action-buttons--horizontal" : ""}`}>
+      <div className="floating-contact-arc">
+      <Link href="/contact" className="contact-inquiry-button floating-contact-inner" aria-label="고객문의 페이지로 이동">
         <svg
           className="contact-inquiry-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +49,7 @@ export default function ScrollToTopButton({ targetId }: ScrollToTopButtonProps) 
           />
         </svg>
       </Link>
+      </div>
 
       <button
         type="button"

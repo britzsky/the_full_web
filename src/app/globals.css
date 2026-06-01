@@ -481,6 +481,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  transform: translateY(-3rem);
 }
 
 /* 메인 첫 화면 텍스트를 남는 영역 기준으로 가운데에 배치 */
@@ -761,8 +762,8 @@
 /* 메인 네이버 블로그 썸네일: 소셜 페이지의 1/3 크기 */
 .main-naver-blog-thumb {
   flex-shrink: 0;
-  width: 140px;
-  height: 120px;
+  width: clamp(100px, 15vh, 150px);
+  height: clamp(86px, 13vh, 130px);
   overflow: hidden;
   background-color: #ede9e3;
 }
@@ -772,10 +773,9 @@
   flex: 1;
   min-width: 0;
   position: relative;
-  height: 120px;
+  height: clamp(86px, 13vh, 130px);
   display: flex;
   flex-direction: column;
-  padding-bottom: 1.6rem;
   overflow: hidden;
 }
 
@@ -810,7 +810,7 @@
 
 /* 메인 네이버 블로그 날짜 */
 .main-naver-blog-date {
-  font-size: 0.75rem;
+  font-size: clamp(0.68rem, 1.25vh, 0.8rem);
   color: #6b6460;
   letter-spacing: 0.06em;
   font-weight: 400;
@@ -819,7 +819,7 @@
 
 /* 메인 네이버 블로그 제목 */
 .main-naver-blog-title {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.6vh, 1rem);
   font-weight: 600;
   color: #111111;
   line-height: 1.4;
@@ -832,14 +832,14 @@
 
 /* 메인 네이버 블로그 본문 요약 래퍼 */
 .main-naver-blog-desc-wrap {
-  flex: 1;
   overflow: hidden;
   min-height: 0;
+  margin-top: auto;
 }
 
 /* 메인 네이버 블로그 본문 요약 */
 .main-naver-blog-desc {
-  font-size: 0.8rem;
+  font-size: clamp(0.72rem, 1.35vh, 0.86rem);
   color: #6b6460;
   line-height: 1.55;
   margin: 0;
@@ -851,10 +851,9 @@
 
 /* 메인 네이버 블로그 자세히 보기 */
 .main-naver-blog-more {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  font-size: 0.75rem;
+  display: block;
+  margin-top: 0.25rem;
+  font-size: clamp(0.72rem, 1.35vh, 0.84rem);
   color: #6b6460;
   letter-spacing: 0.04em;
 }
@@ -1215,6 +1214,7 @@
   width: 100%;
   max-width: 420px;
   margin: 0.95rem auto 0;
+  transform: translateY(-2.5rem);
 }
 
 /* 모바일 카드 화살표 버튼 */
@@ -2629,9 +2629,31 @@
   bottom: clamp(16px, 2.8vh, 30px);
   z-index: 45;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
-  align-items: flex-end;
+  align-items: center;
+}
+
+/* 고객문의 래퍼: scroll-to-top 중심을 축으로 회전 (기본: 90° → 버튼이 위에 위치) */
+.floating-contact-arc {
+  transform-origin: 76px 50%;
+  transform: rotate(90deg);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 고객문의 버튼: 래퍼 회전을 상쇄해 버튼이 항상 수평 유지 */
+.floating-contact-inner {
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 연혁 섹션: 원호를 따라 왼쪽으로 이동 */
+.floating-action-buttons--horizontal .floating-contact-arc {
+  transform: rotate(0deg);
+}
+.floating-action-buttons--horizontal .floating-contact-inner {
+  transform: rotate(0deg);
 }
 
 /* 우하단 문의하기 버튼 */

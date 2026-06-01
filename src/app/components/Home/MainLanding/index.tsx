@@ -295,6 +295,8 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
   const [serviceAnimationCycle, setServiceAnimationCycle] = useState(0);
   // 연혁 섹션 진입 애니메이션 재실행 트리거 카운터
   const [historyAnimationCycle, setHistoryAnimationCycle] = useState(0);
+  // 연혁 섹션 현재 활성 여부 (플로팅 버튼 레이아웃 전환용)
+  const [isHistorySection, setIsHistorySection] = useState(false);
   // 오시는 길 섹션 진입 애니메이션 재실행 트리거 카운터
   const [locationAnimationCycle, setLocationAnimationCycle] = useState(0);
   // 인스타그램 게시물 카드 목록 (API 응답 또는 fallback 데이터)
@@ -1017,6 +1019,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         }
 
         isHistorySectionVisibleRef.current = isVisible;
+        setIsHistorySection(isVisible);
       },
       {
         root: landingScrollRef.current,
@@ -2549,7 +2552,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
         </div>
       </section>
       {/* 페이지 최상단으로 스크롤하는 플로팅 버튼 */}
-      <ScrollToTopButton targetId="main-landing-scroll" />
+      <ScrollToTopButton targetId="main-landing-scroll" horizontal={isHistorySection} />
     </main>
   );
 };

@@ -131,6 +131,7 @@ export default function ContactManageReplyEditor({
     };
   }, [previewModal.open]);
 
+
   useEffect(() => {
     // 미리보기 첫 클릭 시 라우트/모듈 초기화 지연으로 모달이 초기화되는 현상 방지
     fetch(`/contact-api/manage/${inquiryId}/reply/preview`, {

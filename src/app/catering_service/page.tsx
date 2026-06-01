@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
-import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import CateringFloatingButtons from "./CateringFloatingButtons";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import CateringEducationCarousel from "./CateringEducationCarousel";
 import CateringScrollController from "./CateringScrollController";
@@ -635,7 +635,7 @@ export default async function CateringServicePage() {
         </div>
       </section>
 
-      {/* 모바일 전용: 위생/채용 섹션 */}
+      {/* 모바일 전용: 위생·안전 관리 섹션 */}
       <section id="catering_safety_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <Image src="/images/main/main_last_1.webp" alt="" fill sizes="100vw" className="page-bg-image" />
@@ -653,6 +653,17 @@ export default async function CateringServicePage() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 모바일 전용: 채용안내 섹션 */}
+      <section id="catering_recruit_mobile" data-catering-section className="catering_screen catering_mobile_section snap-start relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <Image src="/images/main/main_last_1.webp" alt="" fill sizes="100vw" className="page-bg-image" />
+        </div>
+        <div className="catering_screen_body">
+          <div className="catering_screen_inner catering_safety_recruit_inner">
             {/* 모바일 채용 안내 영역 */}
             <div className="catering_recruit_subgroup">
               <SectionTitle wrapClassName="catering_mobile_section_title" englishLabel="Recruitment Guide">채용안내</SectionTitle>
@@ -673,8 +684,8 @@ export default async function CateringServicePage() {
         </div>
       </section>
 
-      {/* 급식서비스 페이지 공통 상단 이동 버튼 */}
-      <ScrollToTopButton targetId="catering_scroll" />
+      {/* 급식서비스 페이지 공통 상단 이동 버튼 + 고객문의 플로팅 버튼 */}
+      <CateringFloatingButtons targetId="catering_scroll" verticalSectionId="catering_education" />
     </main>
   );
 }
