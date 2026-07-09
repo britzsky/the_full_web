@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 const WEB_API_BASE_URL = (process.env.WEB_API_BASE_URL ?? "http://127.0.0.1:8090").replace(/\/+$/, "");
 
 // 인스타그램 피드 조회 프록시 라우트
-// HTTPS 환경에서 브라우저가 HTTP API를 직접 호출하면 Mixed Content로 차단되므로
+// /api/* 경로는 Nginx가 Spring Boot로 라우팅하므로 /api/ 외부 경로를 사용한다.
+// HTTPS 환경에서 브라우저가 HTTP 백엔드를 직접 호출하면 Mixed Content로 차단되므로
 // Next.js 서버가 대신 백엔드를 호출하고 결과를 브라우저에 전달한다.
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;

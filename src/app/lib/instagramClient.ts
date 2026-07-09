@@ -31,7 +31,7 @@ export const fetchInstagramFeed = async <TItem = unknown>(options?: { limit?: nu
   }
 
   const queryString = params.toString();
-  const url = queryString ? `/api/instagram?${queryString}` : "/api/instagram";
+  const url = queryString ? `/instagram-proxy?${queryString}` : "/instagram-proxy";
 
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
