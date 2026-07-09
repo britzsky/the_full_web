@@ -205,7 +205,7 @@ export default function GreetingTyping({
           alt="CEO 서명"
           width={180}
           height={64}
-          quality={100}
+          quality={80}
           draggable={false}
           className={`company-greeting-signature-image greeting-sign-in${showSign ? " greeting-sign-in--visible" : ""}`}
         />

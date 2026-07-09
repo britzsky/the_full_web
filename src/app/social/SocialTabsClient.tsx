@@ -19,6 +19,8 @@ export default function SocialTabsClient() {
   const [activeTab, setActiveTab] = useState<SocialTab>(
     searchParams.get("tab") === "naver" ? "naver" : "instagram"
   );
+  // 네이버 탭은 첫 클릭 시 마운트 — 초기 로드 시 불필요한 API 호출 방지
+  const [naverMounted, setNaverMounted] = useState(searchParams.get("tab") === "naver");
   // 슬라이딩 인디케이터 위치 및 너비 상태
   const [indicatorStyle, setIndicatorStyle] = useState<IndicatorStyle | null>(null);
   // 초기 렌더링 여부 추적 (첫 마운트는 애니메이션 없이 배치)
@@ -99,7 +101,7 @@ export default function SocialTabsClient() {
             ref={naverRef}
             type="button"
             className={`social-sns-tab${activeTab === "naver" ? " social-sns-tab--active" : ""}`}
-            onClick={() => setActiveTab("naver")}
+            onClick={() => { setActiveTab("naver"); setNaverMounted(true); }}
           >
             <Image
               src="/images/sns_logo/naver_blog.webp"
@@ -128,10 +130,12 @@ export default function SocialTabsClient() {
           <div style={{ display: activeTab === "instagram" ? undefined : "none" }}>
             <SocialMediaClient />
           </div>
-          {/* 네이버 블로그 목록 */}
-          <div style={{ display: activeTab === "naver" ? undefined : "none" }}>
-            <NaverBlogClient />
-          </div>
+          {/* 네이버 블로그 목록: 첫 클릭 전까지 마운트하지 않음 */}
+          {naverMounted && (
+            <div style={{ display: activeTab === "naver" ? undefined : "none" }}>
+              <NaverBlogClient />
+            </div>
+          )}
         </div>
       </div>
     </>

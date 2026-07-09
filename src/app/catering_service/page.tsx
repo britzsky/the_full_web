@@ -423,7 +423,7 @@ export default async function CateringServicePage() {
                     src={card.image}
                     alt={card.step}
                     fill
-                    quality={100}
+                    quality={80}
                     unoptimized
                     sizes="(max-width: 1024px) 100vw, 33vw"
                     className="catering_stage_image"

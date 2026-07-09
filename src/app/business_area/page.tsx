@@ -253,7 +253,7 @@ export default async function BusinessPage() {
                     src={panel.image}
                     alt={`${panel.title} 급식서비스`}
                     fill
-                    quality={100}
+                    quality={80}
                     sizes="(max-width: 1024px) 100vw, 33vw"
                     className="object-cover business-catering-image"
                   />
@@ -280,7 +280,7 @@ export default async function BusinessPage() {
                   src={panel.image}
                   alt={`${panel.title} 급식서비스`}
                   fill
-                  quality={100}
+                  quality={80}
                   sizes="100vw"
                   className="object-cover business-catering-image"
                 />
@@ -331,7 +331,7 @@ export default async function BusinessPage() {
                     src="/images/business_area/business_area_4.webp"
                     alt="이벤트 이미지"
                     fill
-                    quality={100}
+                    quality={80}
                     sizes="(max-width: 1024px) 76vw, 26vw"
                     className="object-cover business-event-image"
                   />
@@ -381,7 +381,7 @@ export default async function BusinessPage() {
                   src="/images/business_area/business_area_4.webp"
                   alt="이벤트 이미지"
                   fill
-                  quality={100}
+                  quality={80}
                   sizes="100vw"
                   className="object-cover business-event-image"
                 />

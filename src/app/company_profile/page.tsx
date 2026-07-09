@@ -133,7 +133,7 @@ export default async function CompanyPage() {
                     src="/images/logo/thefull_logo.svg"
                     alt="더채움 로고 이미지"
                     fill
-                    quality={100}
+                    quality={80}
                     sizes="(max-width: 1024px) 94vw, 640px"
                     className="company-logo-image"
                   />

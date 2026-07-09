@@ -103,7 +103,7 @@ export default function PrivacyPolicyPage() {
                 <tbody>
                   <tr>
                     <td className="border border-[#d2b79a] px-4 py-2">지오유</td>
-                    <td className="border border-[#d2b79a] px-4 py-2">이메일 발송(고객 문의 접수 알림)</td>
+                    <td className="border border-[#d2b79a] px-4 py-2">이메일 발송</td>
                   </tr>
                 </tbody>
               </table>

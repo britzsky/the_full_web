@@ -56,7 +56,7 @@ export default function GreetingSection({
             src={greetingImage}
             alt="대표 인사 이미지"
             fill
-            quality={100}
+            quality={80}
             sizes="(max-width: 1024px) 86vw, 420px"
             className="company-greeting-image"
           />
@@ -94,7 +94,7 @@ export default function GreetingSection({
                   src={item.image}
                   alt={`${item.title} 아이콘`}
                   fill
-                  quality={100}
+                  quality={80}
                   sizes="96px"
                   className="company-vm-icon"
                 />

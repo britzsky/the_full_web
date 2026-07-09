@@ -1337,13 +1337,14 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       <section className="relative h-[100svh] min-h-[100svh] snap-start overflow-hidden !py-0">
         <div className="absolute inset-0 z-0">
           {/* 미표시 슬라이드 이미지 프리로드 (화면에 보이지 않음) */}
-          {heroSlides.map((slide) => (
+          {/* 첫 번째 슬라이드만 priority — LCP 이미지. 나머지는 브라우저 유휴 시간에 로드 */}
+          {heroSlides.map((slide, i) => (
             <Image
               key={`preload-${slide.image}`}
               src={slide.image}
               alt=""
               fill
-              priority
+              {...(i === 0 ? { priority: true } : { loading: "lazy" })}
               sizes="100vw"
               className="sr-only"
             />
@@ -1358,7 +1359,6 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                   src={previousSlide.image}
                   alt=""
                   fill
-                  priority
                   sizes="100vw"
                   className="hero-slide-image object-cover"
                 />
@@ -1768,7 +1768,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     src={item.image}
                     alt={item.title}
                     fill
-                    quality={100}
+                    quality={80}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
@@ -1808,7 +1808,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                   src={activeService.image}
                   alt={activeService.title}
                   fill
-                  quality={100}
+                  quality={80}
                   sizes="100vw"
                   className="object-cover"
                 />
