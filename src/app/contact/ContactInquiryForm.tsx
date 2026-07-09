@@ -549,9 +549,14 @@ export default function ContactInquiryForm() {
 
       {/* 제출 상태/제출 버튼 영역 */}
       <div className="contact-form-actions">
-        <p className="contact-form-required-notice">
-          <span className="contact-form-required" aria-hidden="true">*</span> 표시는 필수 항목입니다.
-        </p>
+        <div className="contact-form-notices">
+          <p className="contact-form-required-notice">
+            <span className="contact-form-required" aria-hidden="true">*</span> 표시는 필수 항목입니다.
+          </p>
+          <p className="contact-form-privacy-notice">
+            제출 시 <a href="/privacy_policy" target="_blank" rel="noreferrer" className="contact-form-privacy-link">개인정보처리방침</a>에 동의하는 것으로 간주됩니다.
+          </p>
+        </div>
         <button type="submit" className="contact-form-submit" disabled={isSubmitting || feedbackModal.open}>
           {isSubmitting ? "문의중..." : "문의하기"}
         </button>

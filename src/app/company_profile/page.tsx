@@ -192,7 +192,7 @@ export default async function CompanyPage() {
 
       {/* 회사소개 페이지 공통 상단 이동 버튼 */}
       <ScrollToTopButton targetId="company-scroll" />
-      <SiteFooter />
+      <SiteFooter className="mt-24" />
     </main>
   );
 }

@@ -19,7 +19,7 @@
     no-repeat,
     no-repeat;
   scrollbar-gutter: stable;
-  padding-bottom: calc(clamp(3.2rem, 5.2vh, 4.2rem) + env(safe-area-inset-bottom));
+  padding-bottom: 0;
 }
 
 /* 회사소개 페이지 헤더 톤 */
