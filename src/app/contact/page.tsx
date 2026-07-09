@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import ContactInquiryForm from "./ContactInquiryForm";
 import { ContactQualitySectionAnimated, ContactFormSectionAnimated } from "./ContactAnimatedSections";
@@ -120,6 +121,7 @@ export default async function ContactPage() {
       </ContactFormSectionAnimated>
 
       <ScrollToTopButton targetId="contact_scroll" />
+      <SiteFooter />
     </main>
   );
 }

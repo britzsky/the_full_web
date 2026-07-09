@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import CompanyProfileMotion from "./CompanyProfileMotion";
@@ -191,6 +192,7 @@ export default async function CompanyPage() {
 
       {/* 회사소개 페이지 공통 상단 이동 버튼 */}
       <ScrollToTopButton targetId="company-scroll" />
+      <SiteFooter />
     </main>
   );
 }

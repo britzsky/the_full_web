@@ -4,6 +4,7 @@ import PageNavigationLink from "@/app/components/Common/PageNavigationLink";
 import CommonSearchSelect from "@/app/components/Common/CommonSearchSelect";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import { getPromotionManagePermission } from "./permissions";
@@ -139,6 +140,7 @@ export default async function PromotionPage({ searchParams }: PromotionPageProps
       </section>
 
       <ScrollToTopButton targetId="promotion_scroll" />
+      <SiteFooter />
     </main>
   );
 }

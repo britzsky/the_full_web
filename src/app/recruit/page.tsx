@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import RecruitFloatingButtons from "./RecruitFloatingButtons";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
@@ -216,6 +217,7 @@ export default async function RecruitPage() {
       <RecruitAnimObserver />
       {/* 채용 페이지 공통 상단 이동 버튼 + 고객문의 플로팅 버튼 */}
       <RecruitFloatingButtons targetId="recruit-scroll" verticalSectionId="recruit-talent" />
+      <SiteFooter snap />
     </main>
   );
 }

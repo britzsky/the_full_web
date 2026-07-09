@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import { appendContactManageMenu } from "@/app/components/Common/headerMenuUtils";
 import { getContactManageAccess } from "@/app/lib/adminAccess";
 import SocialTabsClient from "./SocialTabsClient";
@@ -53,6 +54,7 @@ export default async function SocialPage() {
       </div>
 
       <ScrollToTopButton targetId="social_scroll" />
+      <SiteFooter />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { type TouchEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "../../Common/SiteHeader";
 import ScrollToTopButton from "../../Common/ScrollToTopButton";
+import SiteFooter from "../../Common/SiteFooter";
 import SectionTitle from "../../Common/SectionTitle";
 import EmphasisCopy from "../../Common/EmphasisCopy";
 import { fetchInstagramFeed } from "../../../lib/instagramClient";
@@ -2553,6 +2554,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
       </section>
       {/* 페이지 최상단으로 스크롤하는 플로팅 버튼 */}
       <ScrollToTopButton targetId="main-landing-scroll" horizontal={isHistorySection} />
+      <SiteFooter snap />
     </main>
   );
 };

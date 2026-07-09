@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import CateringFloatingButtons from "./CateringFloatingButtons";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import CateringEducationCarousel from "./CateringEducationCarousel";
 import CateringScrollController from "./CateringScrollController";
@@ -686,6 +687,7 @@ export default async function CateringServicePage() {
 
       {/* 급식서비스 페이지 공통 상단 이동 버튼 + 고객문의 플로팅 버튼 */}
       <CateringFloatingButtons targetId="catering_scroll" verticalSectionId="catering_education" />
+      <SiteFooter snap />
     </main>
   );
 }

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 // 공통 컴포넌트
 import SiteHeader, { SiteHeaderMenuItem } from "@/app/components/Common/SiteHeader";
 import ScrollToTopButton from "@/app/components/Common/ScrollToTopButton";
+import SiteFooter from "@/app/components/Common/SiteFooter";
 import SectionTitle from "@/app/components/Common/SectionTitle";
 import EmphasisCopy from "@/app/components/Common/EmphasisCopy";
 // 사업영역 전용 컴포넌트
@@ -575,6 +576,7 @@ export default async function BusinessPage() {
 
       {/* 상단 이동 버튼 */}
       <ScrollToTopButton targetId="business-scroll" />
+      <SiteFooter snap />
     </main>
   );
 }
