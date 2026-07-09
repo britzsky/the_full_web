@@ -1,7 +1,5 @@
 "use client";
 
-import { requestPublicWebApi } from "@/app/lib/publicWebApi";
-
 // 인스타그램 API 응답의 사용자 정보 필드
 type InstagramApiUser = {
   username?: string;
@@ -20,7 +18,9 @@ export type InstagramApiPayload<TItem = unknown> = {
   };
 };
 
-// 브라우저에서 the_full_web_api 인스타그램 공개 API 호출
+// 인스타그램 피드 조회
+// HTTPS 환경에서 Mixed Content 차단을 방지하기 위해
+// 브라우저가 백엔드를 직접 호출하지 않고 Next.js 프록시 라우트(/api/instagram)를 경유한다.
 export const fetchInstagramFeed = async <TItem = unknown>(options?: { limit?: number; after?: string }) => {
   const params = new URLSearchParams();
   if (options?.limit) {
@@ -31,12 +31,12 @@ export const fetchInstagramFeed = async <TItem = unknown>(options?: { limit?: nu
   }
 
   const queryString = params.toString();
-  const response = await requestPublicWebApi<InstagramApiPayload<TItem>>(
-    queryString ? `/instagram?${queryString}` : "/instagram"
-  );
+  const url = queryString ? `/api/instagram?${queryString}` : "/api/instagram";
+
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
-    throw new Error("Instagram API request failed.");
+    throw new Error("인스타그램 피드를 불러오지 못했습니다.");
   }
 
-  return response.payload as InstagramApiPayload<TItem>;
+  return (await response.json()) as InstagramApiPayload<TItem>;
 };
