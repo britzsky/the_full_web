@@ -24,11 +24,22 @@ const nextConfig = {
     return config;
   },
   images: {
-    qualities: [75, 100],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 3600,
+    qualities: [75, 80, 100],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "blogthumb.pstatic.net",
+      },
+      // 인스타그램 미디어 CDN — SocialMediaClient에서 <Image> 컴포넌트 사용에 필요
+      {
+        protocol: "https",
+        hostname: "**.cdninstagram.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.fbcdn.net",
       },
     ],
   },

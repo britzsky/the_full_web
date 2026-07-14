@@ -6,6 +6,7 @@
     "dev": "set WATCHPACK_POLLING=true&& next dev -H 0.0.0.0 -p 8081",
     "clean:next": "node scripts/clean-next-safe.cjs",
     "clean:next:force": "node scripts/clean-next-safe.cjs --force",
+    "images:webp": "node scripts/convert-images-to-webp.cjs",
     "dev:clean": "npm run clean:next && set WATCHPACK_POLLING=true&& next dev -H 0.0.0.0 -p 8081",
     "build:local": "node --env-file=.env.local ./node_modules/next/dist/bin/next build",
     "prebuild": "node -e \"const fs=require('fs'),path=require('path');fs.rmSync(path.join('.next','cache'),{recursive:true,force:true});const d=path.join('node_modules','ckeditor5','dist'),p=path.join('public');fs.copyFileSync(path.join(d,'ckeditor5.css'),path.join(p,'ckeditor5.css'));if(fs.existsSync(path.join(d,'ckeditor5.css.map')))fs.copyFileSync(path.join(d,'ckeditor5.css.map'),path.join(p,'ckeditor5.css.map'));\"",
@@ -49,6 +50,7 @@
     "@types/react-dom": "^18",
     "@types/react-slick": "^0.23.13",
     "postcss": "^8",
+    "sharp": "^0.34.2",
     "tailwindcss": "^4.1.8",
     "typescript": "^5"
   }
