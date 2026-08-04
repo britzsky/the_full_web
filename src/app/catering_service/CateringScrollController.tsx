@@ -162,14 +162,38 @@ export default function CateringScrollController({
       }
 
       const currentSectionIndex = getClosestSectionIndex();
+      const isScrollingDown = accumulatedWheelDelta > 0;
+      const lastSectionIndex = sectionElements.length - 1;
+      const lastSectionScrollTop = sectionElements[lastSectionIndex].offsetTop;
+      const maxScrollTop = containerElement.scrollHeight - containerElement.clientHeight;
+
+      // 마지막 섹션과 푸터 사이에서는 푸터 노출 위치를 별도 스크롤 단계로 처리한다.
+      if (currentSectionIndex === lastSectionIndex) {
+        if (isScrollingDown && containerElement.scrollTop < maxScrollTop - 1) {
+          scrollDirection.down = true;
+          accumulatedWheelDelta = 0;
+          lastScrollTop = containerElement.scrollTop;
+          animateToSection(maxScrollTop);
+          return;
+        }
+
+        if (!isScrollingDown && containerElement.scrollTop > lastSectionScrollTop + 1) {
+          scrollDirection.down = false;
+          accumulatedWheelDelta = 0;
+          lastScrollTop = containerElement.scrollTop;
+          animateToSection(lastSectionScrollTop);
+          return;
+        }
+      }
+
       // 누적 방향 기준 다음/이전 섹션 인덱스 (범위 클램프 포함)
       const nextSectionIndex = Math.min(
-        Math.max(currentSectionIndex + (accumulatedWheelDelta > 0 ? 1 : -1), 0),
-        sectionElements.length - 1
+        Math.max(currentSectionIndex + (isScrollingDown ? 1 : -1), 0),
+        lastSectionIndex
       );
 
       // IntersectionObserver 콜백 참조용 스크롤 방향 저장
-      scrollDirection.down = accumulatedWheelDelta > 0;
+      scrollDirection.down = isScrollingDown;
       accumulatedWheelDelta = 0;
 
       // 현재 섹션과 동일하면 이동 없음
