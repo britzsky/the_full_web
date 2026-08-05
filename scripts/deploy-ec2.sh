@@ -15,7 +15,7 @@ echo "[2/6] 최신 소스 반영"
 PREVIOUS_COMMIT="$(git rev-parse HEAD)"
 git fetch origin
 git checkout "$BRANCH"
-git pull --ff-only origin "$BRANCH"
+git reset --hard "origin/$BRANCH"
 CURRENT_COMMIT="$(git rev-parse HEAD)"
 
 echo "[3/6] 의존성 확인"
