@@ -1977,6 +1977,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                             alt={overlayText || `Instagram ${index + 1}`}
                             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                             loading="lazy"
+                            referrerPolicy="no-referrer"
                           />
                         )}
                         {isVideo && (
@@ -2146,6 +2147,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                     src={currentActiveSocialSlide.media_url}
                     alt={activeSocialMedia.caption ?? activeSocialMedia.label ?? "Instagram"}
                     className="h-full w-full object-contain"
+                    referrerPolicy="no-referrer"
                   />
                 )
               )}

@@ -440,6 +440,7 @@ export default function SocialMediaClient() {
                       alt={overlayText || `Instagram ${index + 1}`}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                       loading="lazy"
+                      referrerPolicy="no-referrer"
                     />
                   )}
 
@@ -531,6 +532,7 @@ export default function SocialMediaClient() {
                     src={currentActiveSocialSlide.media_url}
                     alt={activeSocialMedia.caption ?? activeSocialMedia.label ?? "Instagram"}
                     className="h-full w-full object-contain"
+                    referrerPolicy="no-referrer"
                   />
                 )
               )}
