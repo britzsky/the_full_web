@@ -234,7 +234,7 @@ const historyTimelineItems: HistoryItem[] = [...historyLeft, ...historyRight].so
 // 지도 표시에 사용되는 지점 기본 정보
 const HEAD_OFFICE_NAME = "(주) 더채움 본사";
 // 카카오/네이버 지도 주소 검색에 사용되는 더채움 본사 도로명 주소
-const HEAD_OFFICE_ADDRESS = "경기도 수원시 세류로 32";
+const HEAD_OFFICE_ADDRESS = "경기도 수원시 권선구 금호로 210, 4층";
 // 오시는 길 지도 핀 안에 표시되는 더채움 로고 이미지
 const HEAD_OFFICE_MARKER_LOGO_SRC = "/images/logo/thefull_logo.webp";
 // 히어로 자동재생 간격 및 슬라이드 전환 소요 시간 상수
@@ -2384,7 +2384,7 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                       <div className="grid grid-cols-[26px_92px_1fr] items-start gap-4 md:grid-cols-[26px_100px_1fr]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0 mt-0.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         <p className="main-location-label pt-0.5">{renderJustifiedLabel("소재지")}</p>
-                        <p className="main-location-value">경기도 수원시 세류로 32 404호 (본사)</p>
+                        <p className="main-location-value">경기도 수원시 권선구 금호로 210, 4층 (본사)</p>
                       </div>
                     </div>
                   </div>
