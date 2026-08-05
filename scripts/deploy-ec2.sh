@@ -2,11 +2,14 @@
 
 set -euo pipefail
 
-# SSH non-login shell에서는 ~/.bashrc가 로드되지 않으므로 nvm을 수동으로 초기화합니다.
-export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-  # shellcheck source=/dev/null
-  \. "$NVM_DIR/nvm.sh"
+# nvm.sh를 소싱하면 내부 exit 호출로 스크립트가 종료될 수 있으므로
+# nvm이 설치한 Node 디렉터리를 PATH에 직접 추가합니다.
+NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [ -d "$NVM_DIR/versions/node" ]; then
+  NODE_VERSION="$(ls "$NVM_DIR/versions/node" | sort -V | tail -1)"
+  if [ -n "$NODE_VERSION" ]; then
+    export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
+  fi
 fi
 
 APP_DIR="${APP_DIR:-/home/ec2-user/the_full_web}"
