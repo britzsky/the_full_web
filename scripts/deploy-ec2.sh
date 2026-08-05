@@ -2,6 +2,13 @@
 
 set -euo pipefail
 
+# SSH non-login shell에서는 ~/.bashrc가 로드되지 않으므로 nvm을 수동으로 초기화합니다.
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  # shellcheck source=/dev/null
+  \. "$NVM_DIR/nvm.sh"
+fi
+
 APP_DIR="${APP_DIR:-/home/ec2-user/the_full_web}"
 BRANCH="${BRANCH:-main}"
 SERVICE_NAME="${SERVICE_NAME:-the-full-web}"
