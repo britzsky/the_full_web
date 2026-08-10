@@ -59,7 +59,8 @@ export type PublicApiResponse<T> = {
 };
 
 // 브라우저에서 사용할 공개 API 상대 경로 정규화
-const getBrowserApiPath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
+// the_full_web_api에 server.servlet.context-path=/api 적용됨 → 항상 /api 프리픽스를 붙여야 함
+const getBrowserApiPath = (path: string) => `/api${path.startsWith("/") ? path : `/${path}`}`;
 
 // 브라우저에서 직접 호출할 web_api 베이스 주소 계산
 const getPublicWebApiBaseUrl = () => {
