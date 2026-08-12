@@ -3,7 +3,7 @@ import { isCkEditorContentMeaningful } from "@/app/contact/editorTextUtils";
 import { resolveErpMailAuthPassword } from "@/app/contact/erpMailAuth";
 import {
   getContactInquiryById,
-  markContactInquiryAnswered,
+  markContactReplyEmailSent,
   resolveContactReplyMailRuntimeConfig,
 } from "@/app/contact/inquiryStore";
 import { sendContactReplyEmail } from "@/app/contact/replyEmailSender";
@@ -92,16 +92,16 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       mailFrom: smtpRuntimeConfig.mailFrom,
       mailReplyTo: smtpRuntimeConfig.mailReplyTo,
     });
-    let answerSync: { completed: boolean; error?: string } = { completed: false };
+    let emailStatusSync: { completed: boolean; error?: string } = { completed: false };
     try {
-      // 답변 메일 발송이 끝난 뒤에만 문의 답변여부를 완료 상태로 반영
-      await markContactInquiryAnswered(inquiryId, resolvedUserId);
-      answerSync = { completed: true };
+      // 실제 메일 발송이 끝난 뒤 저장된 답변의 발송 상태를 반영한다.
+      await markContactReplyEmailSent(inquiryId, resolvedUserId);
+      emailStatusSync = { completed: true };
     } catch (error) {
-      console.error("[contact-manage-reply-send-answer-sync]", error);
-      answerSync = {
+      console.error("[contact-manage-reply-send-email-status-sync]", error);
+      emailStatusSync = {
         completed: false,
-        error: error instanceof Error ? error.message : "답변 완료 상태 반영 중 오류가 발생했습니다.",
+        error: error instanceof Error ? error.message : "이메일 발송 상태 반영 중 오류가 발생했습니다.",
       };
     }
 
@@ -113,7 +113,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         accepted: (mailResult.accepted || []).map((item: unknown) => String(item)),
         rejected: (mailResult.rejected || []).map((item: unknown) => String(item)),
       },
-      answerSync,
+      emailStatusSync,
     });
   } catch (error) {
     console.error("[contact-manage-reply-send]", error);

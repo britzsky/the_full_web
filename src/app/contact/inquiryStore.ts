@@ -56,6 +56,7 @@ export type ContactInquiryReplyRecord = {
   registeredAt: string;
   modifiedBy: string;
   modifiedAt: string;
+  emailSentYn: "Y" | "N";
 };
 
 // 문의 답변 저장 요청 모델
@@ -112,6 +113,7 @@ type ContactApiReply = {
   registeredAt?: string;
   modId?: string | null;
   modifiedAt?: string;
+  emailSentYn?: string;
 };
 
 // 백엔드(the_full_web_api) 문의 답변 메일 런타임 설정 응답 모델
@@ -403,6 +405,7 @@ const toReply = (row?: ContactApiReply | null): ContactInquiryReplyRecord | null
     registeredAt: normalizeText(row.registeredAt),
     modifiedBy: normalizeText(row.modId),
     modifiedAt: normalizeText(row.modifiedAt),
+    emailSentYn: normalizeText(row.emailSentYn).toUpperCase() === "Y" ? "Y" : "N",
   };
 };
 
@@ -547,8 +550,8 @@ export const upsertContactInquiryReply = async (inquiryId: number, input: Contac
   return savedReply;
 };
 
-// 답변 메일 발송 완료 후 문의 답변여부를 완료 상태로 반영
-export const markContactInquiryAnswered = async (inquiryId: number, userId?: string) => {
+// 답변 메일 발송 완료 후 저장된 답변의 이메일 발송 상태를 반영
+export const markContactReplyEmailSent = async (inquiryId: number, userId?: string) => {
   const parsedInquiryId = toPositiveInt(inquiryId);
   if (!parsedInquiryId) {
     throw new Error("문의 번호가 올바르지 않습니다.");
@@ -568,7 +571,7 @@ export const markContactInquiryAnswered = async (inquiryId: number, userId?: str
     throw new Error("문의 내역을 찾을 수 없습니다.");
   }
   if (!response.ok) {
-    throw new Error(getApiErrorMessage(response.payload, "답변 완료 상태 반영 중 오류가 발생했습니다."));
+    throw new Error(getApiErrorMessage(response.payload, "이메일 발송 상태 반영 중 오류가 발생했습니다."));
   }
 };
 

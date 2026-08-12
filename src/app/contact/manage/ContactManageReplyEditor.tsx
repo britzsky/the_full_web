@@ -23,6 +23,7 @@ type ContactInquiryReplyRecord = {
   registeredAt: string;
   modifiedBy: string;
   modifiedAt: string;
+  emailSentYn: "Y" | "N";
 };
 
 // 문의관리 상세 답변 에디터 props 모델
@@ -672,9 +673,9 @@ export default function ContactManageReplyEditor({
         tone: "success",
         heading: "발송 완료",
         message: payload.message ?? "이메일이 발송되었습니다.",
-        caption: "답변 저장은 별도로 진행해 주세요.",
+        caption: "확인을 누르면 이메일 발송 상태가 갱신됩니다.",
         nextPath: "",
-        shouldRefresh: false,
+        shouldRefresh: true,
         shouldClosePreview: true,
       });
     } catch (error) {
@@ -862,6 +863,15 @@ export default function ContactManageReplyEditor({
               {isDeleting ? "삭제중..." : "문의삭제"}
             </button>
             <div className="contact-manage-reply-actions-right">
+              <span
+                className={`contact-manage-reply-email-status ${
+                  initialReply?.emailSentYn === "Y"
+                    ? "contact-manage-reply-email-status-sent"
+                    : "contact-manage-reply-email-status-pending"
+                }`}
+              >
+                {initialReply?.emailSentYn === "Y" ? "발송여부: 발송완료" : "발송여부: 미발송"}
+              </span>
               <button
                 type="button"
                 className="contact-manage-reply-button contact-manage-reply-button-preview"

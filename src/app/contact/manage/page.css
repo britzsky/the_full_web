@@ -738,6 +738,32 @@
   margin-left: auto;
 }
 
+/* 문의관리 상세 답변 이메일의 실제 발송 여부 표시 */
+.contact-manage-reply-email-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: clamp(12px, 0.82vw, 14px);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.contact-manage-reply-email-status-sent {
+  border-color: rgba(31, 122, 73, 0.34);
+  background-color: rgba(31, 122, 73, 0.1);
+  color: #17653c;
+}
+
+.contact-manage-reply-email-status-pending {
+  border-color: rgba(174, 98, 14, 0.34);
+  background-color: rgba(174, 98, 14, 0.1);
+  color: #8a4d0b;
+}
+
 /* 문의관리 상세 답변 버튼 공통 스타일 */
 .contact-manage-reply-button {
   display: inline-flex;

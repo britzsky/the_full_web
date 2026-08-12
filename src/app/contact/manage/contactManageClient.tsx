@@ -51,6 +51,7 @@ type ContactInquiryReplyRecord = {
   registeredAt: string;
   modifiedBy: string;
   modifiedAt: string;
+  emailSentYn: "Y" | "N";
 };
 
 // 문의 목록/상세 API 응답을 프론트 화면 모델로 바꾸기 전 원본 형태
@@ -86,6 +87,7 @@ type ContactApiReply = {
   registeredAt?: string;
   modId?: string | null;
   modifiedAt?: string;
+  emailSentYn?: string;
 };
 
 // 문의관리 목록 CSR 새로고침 기준값
@@ -251,6 +253,7 @@ const toReply = (row?: ContactApiReply | null): ContactInquiryReplyRecord | null
     registeredAt: normalizeText(row.registeredAt),
     modifiedBy: normalizeText(row.modId),
     modifiedAt: normalizeText(row.modifiedAt),
+    emailSentYn: normalizeText(row.emailSentYn).toUpperCase() === "Y" ? "Y" : "N",
   };
 };
 
