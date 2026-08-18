@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.4rem 1rem 0.6rem;
+  padding: 2.2rem 1rem 0.6rem;
 }
 
 .contact-ig-logo-link {
@@ -266,7 +266,7 @@ select.contact-ig-field {
    이 폭보다 넓으면 데스크톱(웹 브라우저로 직접 접속한 경우 등) 레이아웃을 그대로 쓴다. */
 @media (max-width: 560px) {
   .contact-ig-header {
-    padding: 1.1rem 1rem 0.4rem;
+    padding: 1.7rem 1rem 0.4rem;
   }
 
   .contact-ig-hero {

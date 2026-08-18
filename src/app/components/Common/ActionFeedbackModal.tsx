@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ActionFeedbackModal.module.css";
 
@@ -27,6 +28,13 @@ export default function ActionFeedbackModal({
   confirmLabel = "확인",
   onConfirm,
 }: ActionFeedbackModalProps) {
+  // 모달 오픈 시 포커스 해제(모바일 키보드 닫기 안전장치)
+  useEffect(() => {
+    if (open && typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [open]);
+
   if (!open || typeof document === "undefined") {
     return null;
   }

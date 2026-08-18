@@ -129,6 +129,11 @@ export default function ContactInstagramForm() {
       return;
     }
 
+    // 포커스 해제(모바일 키보드 조기 닫기)
+    if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     const formElement = event.currentTarget;
     // 1차 검증: 5개 항목의 HTML required 속성 기준으로 브라우저 기본 검증을 먼저 통과
     // 실패 시 CSS의 contact-ig-form-show-validation 클래스가 붙어 미입력 칸에 빨간 테두리가 표시됨
