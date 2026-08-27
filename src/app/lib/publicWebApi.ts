@@ -1,5 +1,5 @@
-// 운영 ERP IP 도메인
-const PROD_ERP_HOST = "52.64.151.137";
+// 운영 ERP IP/도메인 (the-full-api WebConfig.java CORS 허용 목록과 동일하게 유지)
+const PROD_ERP_HOSTS = ["52.64.151.137", "thefull.kr", "www.thefull.kr", "remote.thefull.kr"];
 // 운영 the_full_web 서버 IP (nginx가 thefull.co.kr → 이 서버의 8080으로 라우팅)
 const PROD_WEB_HOST = "3.106.34.4";
 // 운영 공개 웹 도메인 (구 도메인 n.thefull.kr은 더 이상 사용하지 않음)
@@ -19,9 +19,9 @@ export const resolvePublicWebBaseUrlFromEnv = (...candidates: Array<string | und
     try {
       const parsedUrl = new URL(normalizedCandidate);
 
-      // 운영 ERP IP, 운영 the_full_web 서버 IP, 운영 도메인이면 공개 웹 도메인으로 연결한다.
+      // 운영 ERP IP/도메인, 운영 the_full_web 서버 IP, 운영 도메인이면 공개 웹 도메인으로 연결한다.
       if (
-        parsedUrl.hostname === PROD_ERP_HOST ||
+        PROD_ERP_HOSTS.includes(parsedUrl.hostname) ||
         parsedUrl.hostname === PROD_WEB_HOST ||
         parsedUrl.hostname === "thefull.co.kr" ||
         parsedUrl.hostname === "www.thefull.co.kr"
