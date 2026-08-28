@@ -245,6 +245,218 @@
   align-items: center;
 }
 
+/* 식사 구분은 복수 선택과 기타 입력이 세로로 늘어날 수 있어 라벨을 상단에 맞춘다. */
+.contact-form-row-meal-type {
+  align-items: start;
+}
+
+.contact-form-row-meal-type > .contact-form-label {
+  padding-top: 0.8rem;
+}
+
+/* 식사 구분 체크박스와 기타 입력을 하나의 선택 카드 영역으로 구성 */
+.contact-form-meal-type-field {
+  box-sizing: border-box;
+  display: grid;
+  gap: 0.8rem;
+  min-height: var(--contact-field-height);
+  padding: 0.72rem;
+  border: 1px solid rgba(67, 56, 47, 0.15);
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 237, 0.82));
+  box-shadow: 0 7px 20px rgba(67, 56, 47, 0.055);
+}
+
+.contact-form-meal-guide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.15rem;
+}
+
+.contact-form-meal-guide-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #6d6259;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.contact-form-meal-guide-text svg {
+  color: #8a735f;
+  flex-shrink: 0;
+}
+
+.contact-form-meal-selected-count {
+  flex-shrink: 0;
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  background-color: rgba(67, 56, 47, 0.08);
+  color: #65584d;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contact-form-meal-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.62rem;
+}
+
+.contact-form-meal-option {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.contact-form-meal-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.contact-form-meal-option-label {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.62rem;
+  border: 1px solid rgba(67, 56, 47, 0.22);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #43382f;
+  font-size: var(--contact-label-size);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(67, 56, 47, 0.035);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.contact-form-meal-option-label:hover {
+  transform: translateY(-1px);
+  border-color: rgba(67, 56, 47, 0.42);
+  background-color: #ffffff;
+  box-shadow: 0 7px 16px rgba(67, 56, 47, 0.09);
+}
+
+.contact-form-meal-option-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background-color: rgba(138, 115, 95, 0.11);
+  color: #7c6552;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.contact-form-meal-option-text {
+  min-width: 0;
+}
+
+.contact-form-meal-option-check {
+  width: 21px;
+  height: 21px;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(67, 56, 47, 0.2);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.64);
+  color: transparent;
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.contact-form-meal-checkbox:checked + .contact-form-meal-option-label {
+  transform: translateY(-1px);
+  border-color: #4a3c31;
+  background: linear-gradient(145deg, #55463a, #3f342b);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(67, 56, 47, 0.2);
+}
+
+.contact-form-meal-checkbox:checked + .contact-form-meal-option-label .contact-form-meal-option-icon {
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.contact-form-meal-checkbox:checked + .contact-form-meal-option-label .contact-form-meal-option-check {
+  border-color: rgba(255, 255, 255, 0.62);
+  background-color: #ffffff;
+  color: #43382f;
+}
+
+.contact-form-meal-checkbox:focus-visible + .contact-form-meal-option-label {
+  outline: 3px solid rgba(138, 115, 95, 0.28);
+  outline-offset: 3px;
+}
+
+.contact-form-meal-other-wrap {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.72rem;
+  border: 1px solid rgba(138, 115, 95, 0.18);
+  border-radius: 10px;
+  background-color: rgba(246, 240, 233, 0.72);
+}
+
+.contact-form-meal-other-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #574b41;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contact-form-meal-other-input-wrap {
+  position: relative;
+}
+
+.contact-form-meal-other-field {
+  max-width: 100%;
+  padding-right: 4.2rem;
+  border-color: rgba(67, 56, 47, 0.26);
+  background-color: #ffffff;
+}
+
+.contact-form-meal-other-count {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  color: #8b8178;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.contact-form-meal-type-field-invalid {
+  border-width: 2.5px;
+  border-color: #d04f4f;
+  box-shadow: 0 0 0 3px rgba(208, 79, 79, 0.08);
+}
+
 /* 연락처 3칸 입력 레이아웃 */
 .contact-form-phone-composite {
   display: grid;
@@ -568,6 +780,10 @@ select.contact-form-field {
     row-gap: 0.5rem;
   }
 
+  .contact-form-row-meal-type > .contact-form-label {
+    padding-top: 0;
+  }
+
   .contact-form-phone-composite {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
     column-gap: 0.5rem;
@@ -682,6 +898,27 @@ select.contact-form-field {
 
   .contact-form-notice {
     text-align: center;
+  }
+
+  /* 모바일 식사 구분: 선택 카드를 2열로 배치하고 안내 문구를 줄바꿈한다. */
+  .contact-form-meal-type-field {
+    padding: 0.68rem;
+  }
+
+  .contact-form-meal-guide {
+    align-items: flex-start;
+  }
+
+  .contact-form-meal-guide-text {
+    max-width: 68%;
+  }
+
+  .contact-form-meal-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-form-meal-option-label {
+    min-height: 56px;
   }
 
   /* 모바일 이메일 입력: 아이디/도메인/선택 박스를 한 묶음으로 정리 */

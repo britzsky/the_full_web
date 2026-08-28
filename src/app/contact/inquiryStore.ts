@@ -10,6 +10,8 @@ type ContactInquiryInput = {
   currentMealPrice: string;
   desiredMealPrice: string;
   dailyMealCount: string;
+  mealTypes?: string[];
+  mealTypeOther?: string;
   mealType: string;
   businessType: string;
   switchingReason?: string;
@@ -140,6 +142,14 @@ type ApiResponse<T> = {
 
 // 입력값을 문자열로 안전하게 정규화
 const normalizeText = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+
+// 고객문의 식사 구분 배열을 백엔드 요청 형식에 맞게 정규화
+const normalizeMealTypes = (value: unknown) => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  return value.map(normalizeText).filter(Boolean);
+};
 
 // KST(Asia/Seoul) 기준 yyyy-mm-dd hh:mm:ss 문자열 생성
 const toKstDateTimeString = (value: unknown) => {
@@ -419,6 +429,8 @@ export const createContactInquiry = async (input: ContactInquiryInput) => {
     currentMealPrice: normalizeText(input.currentMealPrice),
     desiredMealPrice: normalizeText(input.desiredMealPrice),
     dailyMealCount: normalizeText(input.dailyMealCount),
+    mealTypes: normalizeMealTypes(input.mealTypes),
+    mealTypeOther: normalizeText(input.mealTypeOther),
     mealType: normalizeText(input.mealType),
     businessType: normalizeText(input.businessType),
     switchingReason: normalizeText(input.switchingReason),

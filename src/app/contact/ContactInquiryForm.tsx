@@ -25,7 +25,8 @@ type ContactInquiryFormValues = {
   currentMealPrice: string;
   desiredMealPrice: string;
   dailyMealCount: string;
-  mealType: string;
+  mealTypes: string[];
+  mealTypeOther: string;
   businessType: string;
   switchingReason: string;
   title: string;
@@ -45,6 +46,14 @@ type FeedbackModalState = {
 type ContactFieldEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
 const PHONE_PREFIX_OPTIONS = ["010", "011", "016", "017", "018", "019"];
+const MEAL_TYPE_OPTIONS = ["조식", "중식", "석식", "기타"];
+const MEAL_TYPE_OTHER = "기타";
+const MEAL_TYPE_ICONS: Record<string, string> = {
+  조식: "mdi:weather-sunset-up",
+  중식: "mdi:white-balance-sunny",
+  석식: "mdi:weather-night",
+  기타: "mdi:dots-horizontal-circle-outline",
+};
 const EMAIL_DOMAIN_DIRECT = "DIRECT_INPUT";
 const EMAIL_DOMAIN_OPTIONS = [
   "naver.com",
@@ -129,7 +138,8 @@ const initialValues: ContactInquiryFormValues = {
   currentMealPrice: "",
   desiredMealPrice: "",
   dailyMealCount: "",
-  mealType: "",
+  mealTypes: [],
+  mealTypeOther: "",
   businessType: "",
   switchingReason: "",
   title: "",
@@ -173,6 +183,22 @@ export default function ContactInquiryForm() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 조식·중식·석식·기타를 복수로 선택하고 기타 해제 시 직접 입력값도 함께 초기화
+  const handleMealTypeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked, value } = event.target;
+    setFormValues((prev) => {
+      const selectedMealTypes = checked
+        ? MEAL_TYPE_OPTIONS.filter((mealType) => mealType === value || prev.mealTypes.includes(mealType))
+        : prev.mealTypes.filter((mealType) => mealType !== value);
+
+      return {
+        ...prev,
+        mealTypes: selectedMealTypes,
+        mealTypeOther: value === MEAL_TYPE_OTHER && !checked ? "" : prev.mealTypeOther,
+      };
+    });
+  };
+
   // 문의 제출 API 호출 핸들러
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -190,6 +216,14 @@ export default function ContactInquiryForm() {
 
     const phoneNumber = `${formValues.phonePrefix}-${formValues.phoneMiddle}-${formValues.phoneLast}`;
     const email = `${formValues.emailLocalPart}@${formValues.emailDomain}`;
+    // 기존 단일 문자열 API와도 호환되도록 선택 항목을 관리 화면 표시 형식으로 조합한다.
+    const mealType = formValues.mealTypes
+      .map((selectedMealType) =>
+        selectedMealType === MEAL_TYPE_OTHER
+          ? `${MEAL_TYPE_OTHER}: ${formValues.mealTypeOther.trim()}`
+          : selectedMealType
+      )
+      .join(", ");
 
     if (!PHONE_NUMBER_PATTERN.test(phoneNumber)) {
       setFeedbackModal({
@@ -230,7 +264,9 @@ export default function ContactInquiryForm() {
           currentMealPrice: formValues.currentMealPrice,
           desiredMealPrice: formValues.desiredMealPrice,
           dailyMealCount: formValues.dailyMealCount,
-          mealType: formValues.mealType,
+          mealTypes: formValues.mealTypes,
+          mealTypeOther: formValues.mealTypeOther.trim(),
+          mealType,
           businessType: formValues.businessType,
           switchingReason: formValues.switchingReason,
           title: formValues.title,
@@ -285,6 +321,7 @@ export default function ContactInquiryForm() {
     <form
       className={`contact-inquiry-form${showValidationErrors ? " contact-inquiry-form-show-validation" : ""}`}
       onSubmit={handleSubmit}
+      noValidate
       suppressHydrationWarning
     >
       {/* 기본 문의 항목(2열 그리드) */}
@@ -450,26 +487,85 @@ export default function ContactInquiryForm() {
           />
         </div>
 
-        <div className="contact-form-row">
-          <label className="contact-form-label" htmlFor="mealType">
+        <div className="contact-form-row contact-form-row-meal-type">
+          <div className="contact-form-label" id="mealTypeLabel">
             {renderContactLabelText("mealType", "식사 구분")}
             <span className="contact-form-required" aria-hidden="true">*</span>
-          </label>
-          <select
-            id="mealType"
-            name="mealType"
-            value={formValues.mealType}
-            onChange={handleValueChange}
-            className="contact-form-field"
-            required
+          </div>
+          <div
+            className={`contact-form-meal-type-field${
+              showValidationErrors && formValues.mealTypes.length === 0
+                ? " contact-form-meal-type-field-invalid"
+                : ""
+            }`}
+            role="group"
+            aria-labelledby="mealTypeLabel"
           >
-            <option value="" disabled>
-              조식 / 중식 / 석식 중 택 1
-            </option>
-            <option value="조식">조식</option>
-            <option value="중식">중식</option>
-            <option value="석식">석식</option>
-          </select>
+            {/* 식사 구분 복수 선택 버튼 영역 */}
+            <div className="contact-form-meal-guide">
+              <span className="contact-form-meal-guide-text">
+                <Icon icon="mdi:gesture-tap-button" width="17" height="17" aria-hidden="true" />
+                필요한 식사를 모두 선택해 주세요.
+              </span>
+              <span className="contact-form-meal-selected-count">
+                {formValues.mealTypes.length > 0 ? `${formValues.mealTypes.length}개 선택` : "복수 선택 가능"}
+              </span>
+            </div>
+            <div className="contact-form-meal-options">
+              {MEAL_TYPE_OPTIONS.map((mealTypeOption, index) => {
+                const optionId = `mealType-${index}`;
+                const isChecked = formValues.mealTypes.includes(mealTypeOption);
+
+                return (
+                  <span className="contact-form-meal-option" key={mealTypeOption}>
+                    <input
+                      id={optionId}
+                      type="checkbox"
+                      name="mealTypes"
+                      value={mealTypeOption}
+                      checked={isChecked}
+                      onChange={handleMealTypeChange}
+                      className="contact-form-meal-checkbox"
+                      required={index === 0 && formValues.mealTypes.length === 0}
+                    />
+                    <label className="contact-form-meal-option-label" htmlFor={optionId}>
+                      <span className="contact-form-meal-option-icon" aria-hidden="true">
+                        <Icon icon={MEAL_TYPE_ICONS[mealTypeOption]} width="21" height="21" />
+                      </span>
+                      <span className="contact-form-meal-option-text">{mealTypeOption}</span>
+                      <span className="contact-form-meal-option-check" aria-hidden="true">
+                        <Icon icon="mdi:check" width="15" height="15" />
+                      </span>
+                    </label>
+                  </span>
+                );
+              })}
+            </div>
+
+            {formValues.mealTypes.includes(MEAL_TYPE_OTHER) && (
+              <div className="contact-form-meal-other-wrap">
+                <label className="contact-form-meal-other-label" htmlFor="mealTypeOther">
+                  <Icon icon="mdi:pencil-outline" width="17" height="17" aria-hidden="true" />
+                  기타 식사 구분
+                </label>
+                <div className="contact-form-meal-other-input-wrap">
+                  <input
+                    id="mealTypeOther"
+                    name="mealTypeOther"
+                    value={formValues.mealTypeOther}
+                    onChange={handleValueChange}
+                    className="contact-form-field contact-form-meal-other-field"
+                    placeholder="예: 야식, 간식"
+                    maxLength={50}
+                    required
+                  />
+                  <span className="contact-form-meal-other-count" aria-hidden="true">
+                    {formValues.mealTypeOther.length}/50
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="contact-form-row">

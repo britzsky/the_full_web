@@ -11,6 +11,8 @@ type ContactInquiryPayload = {
   currentMealPrice: string;
   desiredMealPrice: string;
   dailyMealCount: string;
+  mealTypes?: string[];
+  mealTypeOther?: string;
   mealType: string;
   businessType: string;
   switchingReason?: string;
@@ -42,6 +44,14 @@ const normalizeText = (value: unknown) => {
     return "";
   }
   return value.trim();
+};
+
+// 식사 구분 배열에서 문자열 항목만 공백 제거 후 전달
+const normalizeMealTypes = (value: unknown) => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  return value.map(normalizeText).filter(Boolean);
 };
 
 // 입력값을 KST 고정 문자열로 변환
@@ -104,6 +114,8 @@ export async function POST(request: Request) {
     currentMealPrice: normalizeText(body.currentMealPrice),
     desiredMealPrice: normalizeText(body.desiredMealPrice),
     dailyMealCount: normalizeText(body.dailyMealCount),
+    mealTypes: normalizeMealTypes(body.mealTypes),
+    mealTypeOther: normalizeText(body.mealTypeOther),
     mealType: normalizeText(body.mealType),
     businessType: normalizeText(body.businessType),
     switchingReason: normalizeText(body.switchingReason),
