@@ -267,6 +267,43 @@ export default function PrivacyPolicyPage() {
             </p>
           </section>
 
+          {/* 제14조: 채움원(더채움 출퇴근 애플리케이션) 계정·데이터 삭제 - 앱스토어(Google Play) 계정 삭제 링크 요구사항 대응 */}
+          <section id="account-deletion">
+            <h2 className="mb-3 text-base font-semibold text-[#1b140f]">
+              제14조 채움원(더채움 출퇴근 애플리케이션) 계정 및 데이터 삭제
+            </h2>
+            <p>
+              채움원 이용자는 아래 방법으로 본인의 계정 정보 및 수집된 데이터에 대한 삭제를 요청할 수 있습니다.
+            </p>
+            <div className="mt-3 space-y-3">
+              <div>
+                <p className="font-medium text-[#1b140f]">삭제 요청 방법</p>
+                <p className="mt-1 text-[#5a4a3a]">
+                  아래 개인정보 보호책임자에게 전화 또는 이메일로 &quot;채움원 계정 삭제 요청&quot;임을 밝히고
+                  성명, 소속 업장, 휴대폰번호 뒷자리를 알려주시면 확인 후 처리해 드립니다.
+                </p>
+                <div className="mt-2 rounded-lg border border-[#d2b79a] bg-[#f9f5f0] px-5 py-4 space-y-1">
+                  <p><strong>성명:</strong> 손경원</p>
+                  <p><strong>연락처:</strong> 031-223-7324</p>
+                  <p><strong>이메일:</strong> kw1@thefull.co.kr</p>
+                </div>
+              </div>
+              <div>
+                <p className="font-medium text-[#1b140f]">삭제되는 데이터</p>
+                <p className="mt-1 text-[#5a4a3a]">
+                  이름, 휴대폰번호 뒷자리, 기기 식별자, 등록기기 승인 정보, 출퇴근 위치정보(GPS) 및 출퇴근 기록
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-[#1b140f]">보관되는 데이터 및 보관 기간</p>
+                <p className="mt-1 text-[#5a4a3a]">
+                  삭제 요청을 받으면 지체 없이 파기합니다. 다만 근로기준법 등 관계 법령에 따라 보존 의무가 있는
+                  출퇴근 기록은 요청 시점과 무관하게 기록 생성일로부터 최대 3년간 보관 후 파기합니다.
+                </p>
+              </div>
+            </div>
+          </section>
+
         </div>
       </div>
 
