@@ -42,6 +42,7 @@ export default function PrivacyPolicyPage() {
             <ul className="mt-3 list-disc pl-5 space-y-1">
               <li>고객 문의(위탁급식 견적·상담 요청) 접수 및 처리</li>
               <li>문의에 대한 회신 및 상담 결과 안내</li>
+              <li>출퇴근 관리(더채움 출퇴근 애플리케이션 이하 &quot;채움원&quot;)</li>
             </ul>
           </section>
 
@@ -62,6 +63,10 @@ export default function PrivacyPolicyPage() {
                 <p className="font-medium text-[#1b140f]">자동 수집 정보</p>
                 <p className="mt-1 text-[#5a4a3a]">서비스 이용 기록, 접속 로그, 쿠키(카카오 지도 SDK 연동 시 자동 생성)</p>
               </div>
+              <div>
+                <p className="font-medium text-[#1b140f]">출퇴근 관리(채움원) 수집 항목</p>
+                <p className="mt-1 text-[#5a4a3a]">이름, 휴대폰번호 뒷자리, 출퇴근 위치정보(GPS), 기기 식별자</p>
+              </div>
             </div>
           </section>
 
@@ -74,6 +79,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul className="mt-3 list-disc pl-5 space-y-1">
               <li>고객 문의 처리 목적: 문의 접수일로부터 <strong>3년</strong></li>
+              <li>출퇴근 관리 목적: 기록 생성일로부터 <strong>3년</strong></li>
               <li>단, 관계 법령에 의해 보존할 필요가 있는 경우 해당 기간 동안 보관합니다.</li>
             </ul>
           </section>
@@ -234,7 +240,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="mb-3 text-base font-semibold text-[#1b140f]">제12조 개인정보 유출 등에 대한 조치</h2>
             <p>
-              회사는 개인정보의 분실·도난·유출(누설)·위조·변조·훼손(이하 &quot;유출등&quot;)이 발생하였거나 발생한
+              회사는 개인정보의 분실·도난·유출(누설)·위조·변조·훼손(이하 &quot;유출 등&quot;)이 발생하였거나 발생한
               것으로 의심되는 경우, 그 사실을 알게 된 즉시 다음 각 호의 사항을 지체 없이 해당 정보주체에게 알리고
               피해 최소화를 위한 필요한 조치를 취합니다.
             </p>
