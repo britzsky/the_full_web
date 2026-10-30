@@ -15,7 +15,7 @@ export default function SiteFooter({ snap = false, className = "" }: SiteFooterP
         >
           개인정보처리방침
         </Link>
-        <p className="mt-2 text-xs text-[#9e8f80]">© 2025 (주)더채움. All rights reserved.</p>
+        <p className="mt-2 text-xs text-[#9e8f80]">© 2025 주식회사 더채움. All rights reserved.</p>
       </footer>
     );
   }
@@ -28,7 +28,7 @@ export default function SiteFooter({ snap = false, className = "" }: SiteFooterP
       >
         개인정보처리방침
       </Link>
-      <p className="mt-2 text-xs text-[#9e8f80]">© 2025 (주)더채움. All rights reserved.</p>
+      <p className="mt-2 text-xs text-[#9e8f80]">© 2025 주식회사 더채움. All rights reserved.</p>
     </footer>
   );
 }

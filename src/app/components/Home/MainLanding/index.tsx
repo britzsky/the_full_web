@@ -2366,12 +2366,12 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                       <div className="grid grid-cols-[26px_92px_1fr] items-center gap-4 md:grid-cols-[26px_100px_1fr]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                         <p className="main-location-label">{renderJustifiedLabel("회사명")}</p>
-                        <p className="main-location-value">(주) 더채움</p>
+                        <p className="main-location-value">주식회사 더채움</p>
                       </div>
                       <div className="grid grid-cols-[26px_92px_1fr] items-center gap-4 md:grid-cols-[26px_100px_1fr]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                         <p className="main-location-label">{renderJustifiedLabel("사업자명")}</p>
-                        <p className="main-location-value">875 - 87 - 02546</p>
+                        <p className="main-location-value">875 - 87 - 02456</p>
                       </div>
                       <div className="grid grid-cols-[26px_92px_1fr] items-center gap-4 md:grid-cols-[26px_100px_1fr]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -2526,12 +2526,12 @@ const MainLanding = ({ canManageContact }: MainLandingProps) => {
                 <div className="grid grid-cols-[26px_80px_1fr] items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                   <p className="main-location-label">{renderJustifiedLabel("회사명")}</p>
-                  <p className="main-location-value">(주) 더채움</p>
+                  <p className="main-location-value">주식회사 더채움</p>
                 </div>
                 <div className="grid grid-cols-[26px_80px_1fr] items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                   <p className="main-location-label">{renderJustifiedLabel("사업자명")}</p>
-                  <p className="main-location-value">875 - 87 - 02546</p>
+                  <p className="main-location-value">875 - 87 - 02456</p>
                 </div>
                 <div className="grid grid-cols-[26px_80px_1fr] items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="main-location-label shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
